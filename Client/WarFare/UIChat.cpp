@@ -825,6 +825,7 @@ CUIChat2::CUIChat2()
 
 bool CUIChat2::Load(HANDLE hFile)
 {
+
 	if (false == CN3UIBase::Load(hFile)) return false;
 	m_pBtn_Fold = GetChildByID("btn_on");			__ASSERT(m_pBtn_Fold, "NULL UI Component!!");
 	return true;

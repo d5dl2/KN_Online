@@ -78,7 +78,8 @@ public:
 	class CWarMessage*			m_pWarMessage;					// 전쟁관련 메시지
 	class CLightMgr*			m_pLightMgr;
 
-	   
+	class CWhisperManager*		m_pWhisperMgr;
+
 	//..
 	BOOL		m_bLoadComplete;							// 로딩이 완료되었나??
 	

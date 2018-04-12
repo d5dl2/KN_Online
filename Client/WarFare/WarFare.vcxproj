@@ -248,8 +248,10 @@
     <ClCompile Include="UIVarious.cpp" />
     <ClCompile Include="UIWareHouseDlg.cpp" />
     <ClCompile Include="UIWarp.cpp" />
+    <ClCompile Include="UIWhisperOpenDlg.cpp" />
     <ClCompile Include="WarFareMain.cpp" />
     <ClCompile Include="WarMessage.cpp" />
+    <ClCompile Include="WhisperManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APISocket.h" />
@@ -357,7 +359,9 @@
     <ClInclude Include="UIVarious.h" />
     <ClInclude Include="UIWareHouseDlg.h" />
     <ClInclude Include="UIWarp.h" />
+    <ClInclude Include="UIWhisperOpenDlg.h" />
     <ClInclude Include="WarMessage.h" />
+    <ClInclude Include="WhisperManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
