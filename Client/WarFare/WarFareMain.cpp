@@ -96,7 +96,7 @@ int SDL_main(int argc, char** argv)
 	CN3Base::s_Options.bWindowCursor = ini.GetBool("Cursor", "WindowCursor", true);
 																	   
 	// NOTE: should we show window full screen?
-	CN3Base::s_Options.bWindowMode = ini.GetBool("Screen", "WindowMode", false);
+	CN3Base::s_Options.bWindowMode = ini.GetBool("Screen", "WindowMode", true);
 
 	srand((uint32_t) time(NULL));
 
