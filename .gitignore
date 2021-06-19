@@ -56,3 +56,6 @@ Client/dataxx/Chr/canon.n3anim
 /Server/AIServer/Debug
 /Server/scripting/Debug
 /Server/shared/Debug
+/Server/GameServer/Debug
+Debug/
+Release/
