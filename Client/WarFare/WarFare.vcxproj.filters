@@ -279,6 +279,12 @@
     <ClCompile Include="UICmdEdit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UIWhisperOpenDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WhisperManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameProcedure.h">
@@ -598,6 +604,12 @@
     </ClInclude>
     <ClInclude Include="IMouseWheelInputDlg.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIWhisperOpenDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WhisperManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -56,7 +56,7 @@
 #include "UIQuestMenu.h"
 #include "UIQuestTalk.h"
 #include "UIDead.h"
-
+#include "WhisperManager.h"
 #include "SubProcPerTrade.h"
 #include "CountableItemEditDlg.h"
 #include "MagicSkillMng.h"
@@ -161,12 +161,14 @@ CGameProcMain::CGameProcMain()				// r기본 생성자.. 각 변수의 역활은 헤더 참조..
 	m_pUIQuestTalk = new CUIQuestTalk();
 	m_pUIDead = new CUIDead();
 
+
 	m_pSubProcPerTrade = new CSubProcPerTrade();
 	m_pMagicSkillMng = new CMagicSkillMng(this);
 	m_pTargetSymbol = new CN3Shape(); // 플레이어가 타겟으로 잡은 캐릭터의 위치위에 그리면 된다..
 	m_pWarMessage = new CWarMessage;
 
 	m_pLightMgr = new CLightMgr;
+	m_pWhisperMgr = new CWhisperManager();
 }
 
 CGameProcMain::~CGameProcMain()
@@ -210,13 +212,14 @@ CGameProcMain::~CGameProcMain()
 	delete m_pUIQuestMenu;
 	delete m_pUIQuestTalk;
 	delete m_pUIDead;
-
 	delete m_pSubProcPerTrade;
 	delete m_pMagicSkillMng;
 	delete m_pWarMessage;
 	delete m_pTargetSymbol; // 플레이어가 타겟으로 잡은 캐릭터의 위치위에 그리면 된다..
 
 	delete m_pLightMgr;
+
+	delete m_pWhisperMgr;
 }
 
 void CGameProcMain::Release()
@@ -263,7 +266,6 @@ void CGameProcMain::ReleaseUIs()
 	m_pUIWarp->Release();
 	m_pUIInn->Release();
 	m_pUICreateClanName->Release();
-
 	CN3UIBase::DestroyTooltip();
 }
 
@@ -272,7 +274,7 @@ void CGameProcMain::Init()
 	CGameProcedure::Init();
 	m_pLightMgr->Release();
 	s_pEng->SetDefaultLight(m_pLightMgr->Light(0), m_pLightMgr->Light(1), m_pLightMgr->Light(2));
-
+	
 	int i = 0;
 	for (uint32_t resource = IDS_CMD_WHISPER; resource <= IDS_CMD_LOCATION; resource++)
 		::_LoadStringFromResource(resource, s_szCmdMsg[i++]);
@@ -295,6 +297,7 @@ void CGameProcMain::Init()
 	s_SndMgr.ReleaseStreamObj(&(CGameProcedure::s_pSnd_BGM));
 
 	if(m_pWarMessage) m_pWarMessage->InitFont();
+	 
 	this->InitUI(); // 국가에 따라 다른 UI 로딩...
 	this->InitZone(s_pPlayer->m_InfoExt.iZoneCur, s_pPlayer->Position()); // 존 로딩..
 
@@ -483,8 +486,9 @@ void CGameProcMain::Tick()
 
 #ifdef _DEBUG
 	if(s_pLocalInput->IsKeyPressed(SDL_SCANCODE_F11))
-	{
-		uint8_t byBuff[32];
+	{	
+		m_pWhisperMgr->IncomingMessage((rand() % 33) + "q", "asdasdasd");
+		/*uint8_t byBuff[32];
 		int iOffset = 0;
 		CAPISocket::MP_AddByte(byBuff, iOffset, WIZ_TEST_PACKET);
 		s_pSocket->Send(byBuff, iOffset);
@@ -505,7 +509,7 @@ void CGameProcMain::Tick()
 				pNPC->m_vPosFromServer.x,
 				pNPC->m_vPosFromServer.z );
 			CLogWriter::Write(szBuff);
-		}
+		}*/
 
 	}
 #endif
@@ -2126,7 +2130,10 @@ bool CGameProcMain::MsgRecv_Chat(Packet& pkt)
 	switch(eCM)
 	{
 	case N3_CHAT_NORMAL:	crChat = D3DCOLOR_ARGB(255,255,255,255);	break;
-	case N3_CHAT_PRIVATE:	crChat = D3DCOLOR_ARGB(255, 128, 255, 255);/*D3DCOLOR_ARGB(255,192,192,0);*/		break;
+	case N3_CHAT_PRIVATE:	
+		m_pWhisperMgr->IncomingMessage(szName, szMsg);
+		break;
+		//crChat = D3DCOLOR_ARGB(255, 128, 255, 255);/*D3DCOLOR_ARGB(255,192,192,0);*/		break;
 	case N3_CHAT_PARTY:		crChat = D3DCOLOR_ARGB(255,0,192,192);		break;
 	case N3_CHAT_FORCE:		crChat = D3DCOLOR_ARGB(255,0,192,192);		break;
 	//case N3_CHAT_SHOUT:	crChat = D3DCOLOR_ARGB(255,255,0,0);		break;
@@ -3767,6 +3774,9 @@ void CGameProcMain::InitUI()
 	m_pUIChatDlg2->LoadFromFile(pTbl->szChat2);
 	m_pUIChatDlg2->SetStyle(UISTYLE_FOCUS_UNABLE | UISTYLE_HIDE_UNABLE);
 	m_pUIChatDlg2->SetVisibleWithNoSound(false);
+
+	m_pWhisperMgr->SetFileNames(pTbl->szOpenChat, pTbl->szCloseChat);
+	m_pWhisperMgr->SetDefaultPos(150, 500);
 
 	m_pUIMsgDlg->Init(s_pUIMgr);
 	m_pUIMsgDlg->LoadFromFile(pTbl->szMsgOutput);
