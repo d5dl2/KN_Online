@@ -99,7 +99,7 @@ BOOL CN3UIEdit::CreateEditWindow(HWND hParent, RECT rect)
 
 	s_hWndParent = hParent;
 	s_hWndEdit = CreateWindow("EDIT", "EditWindow", WS_CHILD|WS_TABSTOP|ES_LEFT|ES_WANTRETURN, rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top, hParent, NULL, NULL, NULL);
-	s_lpfnEditProc = (WNDPROC)SetWindowLong(s_hWndEdit, GWL_WNDPROC, (uint32_t)(CN3UIEdit::EditWndProc));
+	s_lpfnEditProc = (WNDPROC)SetWindowLong(s_hWndEdit, GWLP_WNDPROC, (uint32_t)(CN3UIEdit::EditWndProc));
 
 	// Set the edit control's text size to the maximum.
 	::SendMessage(s_hWndEdit, EM_LIMITTEXT, 0, 0);
