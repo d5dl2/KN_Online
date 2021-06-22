@@ -13,7 +13,7 @@
 #include <map>
 
 #include "My_3DStruct.h" // _ASSERT
-
+#include "shared/DebugUtils.h"
 template <typename Type> class CN3TableBase
 {
 public:

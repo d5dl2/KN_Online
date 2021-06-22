@@ -14,6 +14,7 @@
 #include "My_3DStruct.h"
 #include "N3Mng.h"
 #include "N3AlphaPrimitiveManager.h"
+#include "shared/DebugUtils.h"
 #ifdef _N3GAME
 #include "LogWriter.h"
 #endif

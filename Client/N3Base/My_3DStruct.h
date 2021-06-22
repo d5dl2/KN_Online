@@ -1105,40 +1105,6 @@ const uint32_t OBJ_ANIM_CONTROL			= 0x40000000;
 
 
 
-#include "CrtDbg.h"
-
-#ifndef _DEBUG
-//#define __ASSERT(expr, expMessage) SDL_assert(expr)
-#define __ASSERT(expr, expMessage) \
-if(!(expr)) {\
-	printf("ERROR-> %s\n%s: %d\n\n", expMessage, __FILE__, __LINE__);\
-}
-//system("pause");\
-
-#else
-
-#define __ASSERT(expr, expMessage) \
-if(!(expr)) {\
-	printf("ERROR-> %s\n%s: %d\n\n", expMessage, __FILE__, __LINE__);\
-}
-//system("pause");\
-
-/*
-#define __ASSERT(expr, expMessage) \
-if(!(expr)) \
-{ \
-	_CrtDbgReport(_CRT_ASSERT, __FILE__, __LINE__, "N3 Custom Assert Functon", expMessage); \
-	char __szErr[512]; \
-	sprintf(__szErr, "  ---- N3 Assert Warning (File:%s, Line:%d) ---- \n", __FILE__, __LINE__); \
-	OutputDebugString(__szErr); \
-	sprintf(__szErr, "    : %s\n", expMessage); \
-	OutputDebugString(__szErr); \
-	_CrtDbgBreak(); \
-}
-*/
-#endif
-
-
 D3DCOLOR		_RGB_To_D3DCOLOR(COLORREF cr, float fAlpha);
 COLORREF		_D3DCOLOR_To_RGB(D3DCOLOR cr);
 COLORREF		_D3DCOLORVALUE_To_RGB(const D3DCOLORVALUE& cr);

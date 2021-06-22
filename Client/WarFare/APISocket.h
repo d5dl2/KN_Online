@@ -9,12 +9,20 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "My_3DStruct.h"
-#include "N3Base.h"
-#include "GameDef.h"
+#include "shared/DebugUtils.h"
+#include "DInput.h"
+#include <string>
+#include "shared/types.h"
+#include "shared/Packet.h"
+
+typedef unsigned char Uint8;
+typedef unsigned short Uint16;
+typedef unsigned int Uint32;
+typedef unsigned long Uint64;
 
 #include <queue>
-#include <string>
+
+
 
 #define WM_SOCKETMSG	(WM_USER+1)
 #define RECEIVE_BUF_SIZE	262144 // 최대 버퍼..
@@ -22,6 +30,15 @@
 #define _CRYPTION		// 암호화 사용
 #ifdef _CRYPTION
 #include "shared/JvCryption.h"
+#endif
+
+#ifdef _DEBUG
+struct __SocketStatisics
+{
+	uint32_t dwTime;
+	int iSize;
+};
+#include <vector>
 #endif
 
 class BB_CircularBuffer  
@@ -189,15 +206,7 @@ public:
 	}
 };
 
-#ifdef _DEBUG
-struct __SocketStatisics
-{
-	uint32_t dwTime;
-	int iSize;
-};
-#include <vector>
-#include <string>
-#endif
+
 
 class CAPISocket  
 {

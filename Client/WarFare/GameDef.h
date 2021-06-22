@@ -8,15 +8,7 @@
 #include "shared/version.h"
 #include "N3Base.h"
 
-// TODO: Shift this logic into a separate header and generally clean this shared logic up
-#ifndef ASSERT
-#if defined(_DEBUG)
-#define ASSERT assert
-#include <assert.h>
-#else
-#define ASSERT
-#endif
-#endif
+
 #include "shared/Packet.h"
 
 const int CURRENT_VERSION = 1298;//1068; // 현재 버전
