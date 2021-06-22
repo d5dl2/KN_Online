@@ -19,6 +19,9 @@ static char THIS_FILE[]=__FILE__;
 CUINationSelectDlg::CUINationSelectDlg()
 {
 	m_pProcNationSelectRef = NULL;
+	m_pBtnKarus = NULL;
+	m_pBtnElmorad = NULL;
+	m_pBtnBack = NULL;
 }
 
 CUINationSelectDlg::~CUINationSelectDlg()
@@ -32,9 +35,9 @@ bool CUINationSelectDlg::Load(HANDLE hFile)
 {
 	bool bSuccess = CN3UIBase::Load(hFile);
 
-	m_pBtnKarus = this->GetChildByID("btn_karus_selection");	__ASSERT(m_pBtnKarus, "NULL UI Component!!");
-	m_pBtnElmorad = this->GetChildByID("btn_elmo_selection");	__ASSERT(m_pBtnElmorad, "NULL UI Component!!"); // 
-	m_pBtnBack = this->GetChildByID("btn_back");	__ASSERT(m_pBtnElmorad, "NULL UI Component!!"); // 
+	m_pBtnKarus = this->GetChildByID("btn_karus_selection");			__ASSERT(m_pBtnKarus, "NULL UI Component!!");
+	m_pBtnElmorad = this->GetChildByID("btn_elmo_selection");		__ASSERT(m_pBtnElmorad, "NULL UI Component!!");
+	m_pBtnBack = this->GetChildByID("btn_back");						__ASSERT(m_pBtnBack, "NULL UI Component!!");
 	RECT rc = this->GetRegion();
 	int iX = ((int)s_CameraData.vp.Width - (rc.right - rc.left))/2;
 	int iY = ((int)s_CameraData.vp.Height - (rc.bottom - rc.top))/2;
@@ -67,4 +70,5 @@ bool CUINationSelectDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 
 	return true;
 }
+
 
