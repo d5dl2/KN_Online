@@ -119,14 +119,6 @@ bool CUILogIn::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 			return ReceiveMessage(m_pBtn_Connect, UIMSG_BUTTON_CLICK);
 		}
 	}
-	else if (dwMsg == UIMSG_EDIT_TAB)
-	{
-		// TEMP(srmeier): there is a weird issue where the key inputs aren't going
-		// through CGameProcedure::ProcessUIKeyInput() so CUILogIn::OnKeyPress() isn't
-		// being called...
-		FocusCircular();
-		return true;
-	}
 
 	return false;
 }
@@ -210,7 +202,7 @@ void CUILogIn::FocusToID()
 {
 	if (m_pEdit_id) m_pEdit_id->SetFocus();
 }
-
+int count = 0;
 void CUILogIn::FocusCircular()
 {
 	if (NULL == m_pEdit_id || NULL == m_pEdit_pw) return;
@@ -219,6 +211,8 @@ void CUILogIn::FocusCircular()
 		m_pEdit_pw->SetFocus();
 	else
 		m_pEdit_id->SetFocus();
+
+	count++;
 }
 
 void CUILogIn::InitEditControls()
@@ -397,10 +391,6 @@ bool CUILogIn::OnKeyPress(int iKey)
 		case DIK_TAB:
 			FocusCircular();
 			return true;
-			//		case DIK_NUMPADENTER:
-			//		case DIK_RETURN:
-			//			CGameProcedure::s_pProcLogIn->MsgSend_AccountLogIn(LIC_KNIGHTONLINE);
-			//			return true;
 		}
 	}
 	else if (!m_bOpenningNow && m_pGroup_ServerList && m_pGroup_ServerList->IsVisible())
