@@ -4,7 +4,6 @@
 #include "N3Eng.h"
 #include "N3Light.h"
 #include "LogWriter.h"
-#include "SDL2/SDL_syswm.h"
 
 //-----------------------------------------------------------------------------
 CN3Eng::CN3Eng(void)
@@ -35,8 +34,15 @@ CN3Eng::CN3Eng(void)
 		exit(-1);
 	}
 
-	if(s_szPath.empty())
-		PathSet(SDL_GetBasePath());
+	if (s_szPath.empty())
+	{
+		char szPath[256];
+		char szDrive[_MAX_DRIVE], szDir[_MAX_DIR];
+		::GetModuleFileName(NULL, szPath, 256);
+		_splitpath(szPath, szDrive, szDir, NULL, NULL);
+		sprintf(szPath, "%s%s", szDrive, szDir);
+		this->PathSet(szPath); // 경로 설정..	
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -262,36 +268,11 @@ void CN3Eng::SetProjection(float fNear, float fFar, float fLens, float fAspect)
 
 
 //-----------------------------------------------------------------------------
-bool CN3Eng::Init(BOOL bWindowed, SDL_Window* pWindow, uint32_t dwWidth, uint32_t dwHeight, uint32_t dwBPP, BOOL bUseHW)
+bool CN3Eng::Init(BOOL bWindowed, HWND hWnd, DWORD dwWidth, DWORD dwHeight, DWORD dwBPP, BOOL bUseHW)
 {
-	/*
-	SDL_Renderer* s_pSDLRenderer;
-
-	s_pSDLRenderer = SDL_CreateRenderer(
-		pWindow, -1,
-		SDL_RENDERER_ACCELERATED|
-		SDL_RENDERER_PRESENTVSYNC
-	);
-
-	if(s_pSDLRenderer == NULL) {
-		fprintf(stderr, "ER: %s\n", SDL_GetError());
-		exit(-1);
-	}
-
-	s_lpD3DDev = SDL_RenderGetD3D9Device(s_pSDLRenderer);
-	s_lpD3DDev->GetDirect3D(&m_lpD3D);
-	*/
-
-	//
-
 	memset(&s_ResrcInfo, 0, sizeof(__ResrcInfo)); // Rendering Information 초기화..
 
-	SDL_SysWMinfo info;
-	SDL_VERSION(&info.version);
-	SDL_GetWindowWMInfo(pWindow, &info);
-
-	s_hWndBase = info.info.win.window; // TODO: Remove this when we move away from DX
-	s_pWindow = pWindow;
+	s_hWndBase = hWnd;
 
 	// FIX (srmeier): I really have no idea what the second arguement here should be
 	int nAMC = m_lpD3D->GetAdapterModeCount(0, D3DFMT_X8R8G8B8); // 디스플레이 모드 카운트

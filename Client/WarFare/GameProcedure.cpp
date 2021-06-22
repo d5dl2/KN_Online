@@ -1,4 +1,4 @@
-// GameProcedure.cpp: implementation of the CGameProcedure class.
+ï»¿// GameProcedure.cpp: implementation of the CGameProcedure class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -56,15 +56,15 @@ static char THIS_FILE[]=__FILE__;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-CN3SndObjStream*	CGameProcedure::s_pSnd_BGM = NULL;			// ¸ŞÀÎ ¹è°æÀ½¾Ç Æ÷ÀÎÅÍ..
-CLocalInput*		CGameProcedure::s_pLocalInput = NULL;		// ¸¶¿ì½º¿Í Å°º¸µå ÀÔ·Â °´Ã¼ .. Direct Input À» ½è´Ù.
-CAPISocket*			CGameProcedure::s_pSocket = NULL;			// ¸ŞÀÎ ¼ÒÄÏ °´Ã¼
-CAPISocket*			CGameProcedure::s_pSocketSub = NULL;		// ¼­ºê ¼ÒÄÏ °´Ã¼
+CN3SndObjStream*	CGameProcedure::s_pSnd_BGM = NULL;			// Â¸ÃÃ€Ã Â¹Ã¨Â°Ã¦Ã€Â½Â¾Ã‡ Ã†Ã·Ã€ÃÃ…Ã..
+CLocalInput*		CGameProcedure::s_pLocalInput = NULL;		// Â¸Â¶Â¿Ã¬Â½ÂºÂ¿Ã Ã…Â°ÂºÂ¸ÂµÃ¥ Ã€Ã”Â·Ã‚ Â°Â´ÃƒÂ¼ .. Direct Input Ã€Â» Â½Ã¨Â´Ã™.
+CAPISocket*			CGameProcedure::s_pSocket = NULL;			// Â¸ÃÃ€Ã Â¼Ã’Ã„Ã Â°Â´ÃƒÂ¼
+CAPISocket*			CGameProcedure::s_pSocketSub = NULL;		// Â¼Â­ÂºÃª Â¼Ã’Ã„Ã Â°Â´ÃƒÂ¼
 CGameEng*			CGameProcedure::s_pEng = NULL;				// 3D Wrapper Engine
 CN3FXMgr*			CGameProcedure::s_pFX = NULL;
 
 CUIManager*			CGameProcedure::s_pUIMgr = NULL;			// UI Manager
-CUILoading*			CGameProcedure::s_pUILoading = NULL;		// ·Îµù¹Ù..
+CUILoading*			CGameProcedure::s_pUILoading = NULL;		// Â·ÃÂµÃ¹Â¹Ã™..
 CUIMessageBoxManager*	CGameProcedure::s_pMsgBoxMgr = NULL;		// MessageBox Manager
 //bool				CGameProcedure::s_bUseSpeedHack = false;
 
@@ -79,26 +79,26 @@ CGameProcMain*				CGameProcedure::s_pProcMain = NULL;
 CGameProcOption*			CGameProcedure::s_pProcOption = NULL;
 CGameCursor*				CGameProcedure::s_pGameCursor = NULL;
 
-SDL_Cursor*	CGameProcedure::s_hCursorNormal    = NULL;
-SDL_Cursor*	CGameProcedure::s_hCursorNormal1   = NULL;
-SDL_Cursor*	CGameProcedure::s_hCursorClick     = NULL;
-SDL_Cursor*	CGameProcedure::s_hCursorClick1    = NULL;
-SDL_Cursor*	CGameProcedure::s_hCursorAttack    = NULL;
-SDL_Cursor*	CGameProcedure::s_hCursorPreRepair = NULL;
-SDL_Cursor*	CGameProcedure::s_hCursorNowRepair = NULL;
+HCURSOR	CGameProcedure::s_hCursorNormal = NULL;
+HCURSOR	CGameProcedure::s_hCursorNormal1 = NULL;
+HCURSOR	CGameProcedure::s_hCursorClick = NULL;
+HCURSOR	CGameProcedure::s_hCursorClick1 = NULL;
+HCURSOR	CGameProcedure::s_hCursorAttack = NULL;
+HCURSOR	CGameProcedure::s_hCursorPreRepair = NULL;
+HCURSOR	CGameProcedure::s_hCursorNowRepair = NULL;
+HCURSOR	CGameProcedure::m_hPrevGameCursor = NULL;
 
-e_LogInClassification CGameProcedure::s_eLogInClassification; // Á¢¼ÓÇÑ ¼­ºñ½º.. MGame, Daum, KnightOnLine ....
-std::string	CGameProcedure::s_szAccount = ""; // °èÁ¤ ¹®ÀÚ¿­..
-std::string	CGameProcedure::s_szPassWord = ""; // °èÁ¤ ºñ¹ø..
-std::string	CGameProcedure::s_szServer = ""; // ¼­¹ö ¹®ÀÚ¿­..
+e_LogInClassification CGameProcedure::s_eLogInClassification; // ÃÂ¢Â¼Ã“Ã‡Ã‘ Â¼Â­ÂºÃ±Â½Âº.. MGame, Daum, KnightOnLine ....
+std::string	CGameProcedure::s_szAccount = ""; // Â°Ã¨ÃÂ¤ Â¹Â®Ã€ÃšÂ¿Â­..
+std::string	CGameProcedure::s_szPassWord = ""; // Â°Ã¨ÃÂ¤ ÂºÃ±Â¹Ã¸..
+std::string	CGameProcedure::s_szServer = ""; // Â¼Â­Â¹Ã¶ Â¹Â®Ã€ÃšÂ¿Â­..
 bool CGameProcedure::m_bCursorLocked = false;
-SDL_Cursor*	CGameProcedure::m_hPrevGameCursor = NULL;
-HWND CGameProcedure::s_hWndSubSocket = NULL; // ¼­ºê ¼ÒÄÏ¿ë À©µµ¿ì ÇÚµé..
+HWND CGameProcedure::s_hWndSubSocket = NULL; // Â¼Â­ÂºÃª Â¼Ã’Ã„ÃÂ¿Ã« Ã€Â©ÂµÂµÂ¿Ã¬ Ã‡ÃšÂµÃ©..
 int	CGameProcedure::s_iChrSelectIndex = 0;
-bool CGameProcedure::s_bNeedReportConnectionClosed = false; // ¼­¹öÁ¢¼ÓÀÌ ²÷¾îÁø°É º¸°íÇØ¾ß ÇÏ´ÂÁö..
-bool CGameProcedure::s_bWindowed = false; // Ã¢¸ğµå ½ÇÇà??
-bool CGameProcedure::s_bKeyPress = false;	//Å°°¡ ´­·ÁÁ³À»¶§ ui¿¡¼­ ÇØ´çÇÏ´Â Á¶ÀÛµÈÀûÀÌ ÀÖ´Ù¸é
-bool CGameProcedure::s_bKeyPressed = false;	//Å°°¡ ¿Ã¶ó°¬À»¶§ ui¿¡¼­ ÇØ´çÇÏ´Â Á¶ÀÛµÈÀûÀÌ ÀÖ´Ù¸é
+bool CGameProcedure::s_bNeedReportConnectionClosed = false; // Â¼Â­Â¹Ã¶ÃÂ¢Â¼Ã“Ã€ÃŒ Â²Ã·Â¾Ã®ÃÃ¸Â°Ã‰ ÂºÂ¸Â°Ã­Ã‡Ã˜Â¾ÃŸ Ã‡ÃÂ´Ã‚ÃÃ¶..
+bool CGameProcedure::s_bWindowed = false; // ÃƒÂ¢Â¸Ã°ÂµÃ¥ Â½Ã‡Ã‡Ã ??
+bool CGameProcedure::s_bKeyPress = false;	//Ã…Â°Â°Â¡ Â´Â­Â·ÃÃÂ³Ã€Â»Â¶Â§ uiÂ¿Â¡Â¼Â­ Ã‡Ã˜Â´Ã§Ã‡ÃÂ´Ã‚ ÃÂ¶Ã€Ã›ÂµÃˆÃ€Ã»Ã€ÃŒ Ã€Ã–Â´Ã™Â¸Ã©
+bool CGameProcedure::s_bKeyPressed = false;	//Ã…Â°Â°Â¡ Â¿ÃƒÂ¶Ã³Â°Â¬Ã€Â»Â¶Â§ uiÂ¿Â¡Â¼Â­ Ã‡Ã˜Â´Ã§Ã‡ÃÂ´Ã‚ ÃÂ¶Ã€Ã›ÂµÃˆÃ€Ã»Ã€ÃŒ Ã€Ã–Â´Ã™Â¸Ã©
 
 // NOTE: adding boolean to check if window has focus or not
 bool CGameProcedure::s_bIsWindowInFocus = true;
@@ -126,38 +126,19 @@ void CGameProcedure::Init()
 	s_pUIMgr->SetFocusedUI(NULL);
 }
 
-void CGameProcedure::StaticMemberInit(SDL_Window* pWindow)
+void CGameProcedure::StaticMemberInit(HINSTANCE hInstance, HWND hWndMain, HWND hWndSub)
 {
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// °ÔÀÓ ±âº» 3D ¿£Áø ¸¸µé±â..
 #if _DEBUG 
 	s_bWindowed = true;
-#endif // #if _DEBUG 
+#endif 
 
-/*
-#ifndef _DEBUG
-	// ´ë¸¸ ¹öÀüÀÏ °æ¿ì IME ¹®Á¦·Î ÀÎÇØ °¡Â¥ Ç®¸ğµå¸¦ ¾´´Ù..
-	int iLangID = ::GetUserDefaultLangID();
-	if(0x0404 == iLangID) 
-	{
-		s_bWindowed = true;
-		
-		DEVMODE dm;
-		dm.dmSize = sizeof(DEVMODE);
-		dm.dmPelsWidth = CN3Base::s_Options.iViewWidth;
-		dm.dmPelsHeight = CN3Base::s_Options.iViewHeight;
-		dm.dmBitsPerPel = CN3Base::s_Options.iViewColorDepth;
-		dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-		::ChangeDisplaySettings(&dm, CDS_FULLSCREEN);
-	}
-#endif // #ifndef _DEBUG
-*/
-
+	s_hWndBase = hWndMain;
+	s_hWndSubSocket = hWndSub; // Â¼Â­ÂºÃª Â¼Ã’Ã„ÃÂ¿Ã« Ã€Â©ÂµÂµÂ¿Ã¬ Ã‡ÃšÂµÃ©..
 
 	s_pEng = new CGameEng();
-	if(false == s_pEng->Init(s_bWindowed, pWindow, CN3Base::s_Options.iViewWidth, CN3Base::s_Options.iViewHeight, CN3Base::s_Options.iViewColorDepth, TRUE)) exit(-1);
-	// °ÔÀÓ ±âº» 3D ¿£Áø ¸¸µé±â..
-	
+	if(false == s_pEng->Init(s_bWindowed, s_hWndBase, CN3Base::s_Options.iViewWidth, CN3Base::s_Options.iViewHeight, CN3Base::s_Options.iViewColorDepth, TRUE)) exit(-1);
+	// Â°Ã”Ã€Ã“ Â±Ã¢ÂºÂ» 3D Â¿Â£ÃÃ¸ Â¸Â¸ÂµÃ©Â±Ã¢..
+
 	
 	RECT rc;
 	::GetClientRect(s_hWndBase, &rc);
@@ -165,67 +146,36 @@ void CGameProcedure::StaticMemberInit(SDL_Window* pWindow)
 	CN3UIEdit::CreateEditWindow(s_hWndBase, rcTmp);
 	//////////////////////////////////////////////////////////////////////////////////////////
 
-	//s_hWndSubSocket = hWndSub; // ¼­ºê ¼ÒÄÏ¿ë À©µµ¿ì ÇÚµé..
 
-	CGameBase::StaticMemberInit(); // Table ¹× ÁöÇü, ¿ÀºêÁ§Æ®, Ä³¸¯ÅÍ ÃÊ±âÈ­...
+	CGameBase::StaticMemberInit(); // Table Â¹Ã— ÃÃ¶Ã‡Ã¼, Â¿Ã€ÂºÃªÃÂ§Ã†Â®, Ã„Â³Â¸Â¯Ã…Ã ÃƒÃŠÂ±Ã¢ÃˆÂ­...
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	// Game Procedure ¼ÒÄÏ°ú ·ÎÄÃ ÀÎÇ², 3D¿£Áø, Resource Table ·Îµù ¹× ÃÊ±âÈ­...
+	// Game Procedure Â¼Ã’Ã„ÃÂ°Ãº Â·ÃÃ„Ãƒ Ã€ÃÃ‡Â², 3DÂ¿Â£ÃÃ¸, Resource Table Â·ÃÂµÃ¹ Â¹Ã— ÃƒÃŠÂ±Ã¢ÃˆÂ­...
 	s_pSocket = new CAPISocket();
 	s_pSocketSub = new CAPISocket();
 
 
-	SDL_Surface* pSurf0 = IMG_Load("cursor_normal.cur");
-	SDL_Surface* pSurf1 = IMG_Load("cursor_normal1.cur");
-	SDL_Surface* pSurf2 = IMG_Load("cursor_click.cur");
-	SDL_Surface* pSurf3 = IMG_Load("cursor_click1.cur");
-	SDL_Surface* pSurf4 = IMG_Load("cursor_attack.cur");
-	SDL_Surface* pSurf5 = IMG_Load("repair0.cur");
-	SDL_Surface* pSurf6 = IMG_Load("repair1.cur");
-	SDL_Surface* pSurf7 = IMG_Load("WarFare.ico");
+	s_hCursorNormal = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR_NORMAL));
+	s_hCursorNormal1 = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR_NORMAL1));
+	s_hCursorClick = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR_CLICK));
+	s_hCursorClick1 = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR_CLICK1));
+	s_hCursorAttack = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR_ATTACK));
+	s_hCursorPreRepair = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR_PRE_REPAIR));
+	s_hCursorNowRepair = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR_NOW_REPAIR));
 
-	if(pSurf0==NULL||pSurf1==NULL||pSurf2==NULL||pSurf3==NULL||pSurf4==NULL||pSurf5==NULL||pSurf6==NULL||pSurf7==NULL) {
-		printf("ERROR: Unable to load image. %s\n", IMG_GetError());
-		system("pause");
-		//Sleep(1000 * 5);
-		exit(-1);
-	}
-
-	s_hCursorNormal    = SDL_CreateColorCursor(pSurf0, 0, 0);
-	s_hCursorNormal1   = SDL_CreateColorCursor(pSurf1, 0, 0);
-	s_hCursorClick     = SDL_CreateColorCursor(pSurf2, 0, 0);
-	s_hCursorClick1    = SDL_CreateColorCursor(pSurf3, 0, 0);
-	s_hCursorAttack    = SDL_CreateColorCursor(pSurf4, 0, 0);
-	s_hCursorPreRepair = SDL_CreateColorCursor(pSurf5, 0, 0);
-	s_hCursorNowRepair = SDL_CreateColorCursor(pSurf6, 0, 0);
-
-	SDL_SetCursor(s_hCursorNormal);
-	SDL_SetWindowIcon(pWindow, pSurf7);
-
-	SDL_FreeSurface(pSurf0);
-	SDL_FreeSurface(pSurf1);
-	SDL_FreeSurface(pSurf2);
-	SDL_FreeSurface(pSurf3);
-	SDL_FreeSurface(pSurf4);
-	SDL_FreeSurface(pSurf5);
-	SDL_FreeSurface(pSurf6);
-	SDL_FreeSurface(pSurf7);
-
-
-	/*
-	if(!CN3Base::s_Options.bWindowCursor)
+	if (!CN3Base::s_Options.bWindowCursor)
 	{
 		s_pGameCursor = new CGameCursor();
 		s_pGameCursor->LoadFromFile("ui\\cursor.uif");
 	}
 	SetGameCursor(s_hCursorNormal);
-	*/
+
 
 	s_pLocalInput = new CLocalInput();
-	s_pLocalInput->Init(pWindow, FALSE); // Input ¸¸ ÃÊ±âÈ­.
+	s_pLocalInput->Init(hInstance, s_hWndBase, FALSE);
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	// Sound ÃÊ±âÈ­..
+	// Sound ÃƒÃŠÂ±Ã¢ÃˆÂ­..
 	if(CN3Base::s_Options.bSndEnable)
 	{
 		CN3Base::s_SndMgr.Init(s_hWndBase);//pWindow);
@@ -235,41 +185,39 @@ void CGameProcedure::StaticMemberInit(SDL_Window* pWindow)
 
 	s_pFX = new CN3FXMgr();
 
-	__TABLE_UI_RESRC* pTblUI = s_pTbl_UI.Find(NATION_ELMORAD); // ±âº»Àº ¿¤¸ğ¶óµå UI ·Î ÇÑ´Ù..
+	__TABLE_UI_RESRC* pTblUI = s_pTbl_UI.Find(NATION_ELMORAD); // Â±Ã¢ÂºÂ»Ã€Âº Â¿Â¤Â¸Ã°Â¶Ã³ÂµÃ¥ UI Â·Ã Ã‡Ã‘Â´Ã™..
 	if(pTblUI == NULL) {
 		printf("ERROR: UI table is NULL.\n");
 		system("pause");
-		//Sleep(1000 * 5);
 		exit(-1);
 	}
 
-	s_pUIMgr = new CUIManager(); // ±âº» UIManager
-	s_pMsgBoxMgr = new CUIMessageBoxManager(); //MessageBox Manager
+	s_pUIMgr = new CUIManager(); 
+	s_pMsgBoxMgr = new CUIMessageBoxManager();
 
-	// ÅøÆÁ..
 	CN3UIBase::EnableTooltip(pTblUI->szToolTip);
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	// °¢ ÇÁ·Î½ÃÀúµé »ı¼º
-	s_pProcLogIn			= new CGameProcLogIn();				// ·Î±×ÀÎ ÇÁ·Î½ÃÁ®
-	s_pProcNationSelect		= new CGameProcNationSelect();		// ³ª¶ó ¼±ÅÃ
-	s_pProcCharacterSelect	= new CGameProcCharacterSelect();	// Ä³¸¯ÅÍ ¼±ÅÃ
-	s_pProcCharacterCreate	= new CGameProcCharacterCreate();	// Ä³¸¯ÅÍ ¸¸µé±â
-	s_pProcMain				= new CGameProcMain();				// ¸ŞÀÎ °ÔÀÓ ÇÁ·Î½ÃÁ®
-	s_pProcOption			= new CGameProcOption();			// °ÔÀÓ ¿É¼Ç ÇÁ·Î½ÃÁ®
+	// Â°Â¢ Ã‡ÃÂ·ÃÂ½ÃƒÃ€ÃºÂµÃ© Â»Ã½Â¼Âº
+	s_pProcLogIn			= new CGameProcLogIn();				// Â·ÃÂ±Ã—Ã€Ã Ã‡ÃÂ·ÃÂ½ÃƒÃÂ®
+	s_pProcNationSelect		= new CGameProcNationSelect();		// Â³ÂªÂ¶Ã³ Â¼Â±Ã…Ãƒ
+	s_pProcCharacterSelect	= new CGameProcCharacterSelect();	// Ã„Â³Â¸Â¯Ã…Ã Â¼Â±Ã…Ãƒ
+	s_pProcCharacterCreate	= new CGameProcCharacterCreate();	// Ã„Â³Â¸Â¯Ã…Ã Â¸Â¸ÂµÃ©Â±Ã¢
+	s_pProcMain				= new CGameProcMain();				// Â¸ÃÃ€Ã Â°Ã”Ã€Ã“ Ã‡ÃÂ·ÃÂ½ÃƒÃÂ®
+	s_pProcOption			= new CGameProcOption();			// Â°Ã”Ã€Ã“ Â¿Ã‰Â¼Ã‡ Ã‡ÃÂ·ÃÂ½ÃƒÃÂ®
 }
 
 void CGameProcedure::StaticMemberRelease()
 {
 #ifndef _DEBUG
-	// ´ë¸¸ ¹öÀüÀÏ °æ¿ì IME ¹®Á¦·Î ÀÎÇØ °¡Â¥ Ç®¸ğµå¸¦ ¾´´Ù..
+	// Â´Ã«Â¸Â¸ Â¹Ã¶Ã€Ã¼Ã€Ã Â°Ã¦Â¿Ã¬ IME Â¹Â®ÃÂ¦Â·Ã Ã€ÃÃ‡Ã˜ Â°Â¡Ã‚Â¥ Ã‡Â®Â¸Ã°ÂµÃ¥Â¸Â¦ Â¾Â´Â´Ã™..
 	int iLangID = ::GetUserDefaultLangID();
 	if(0x0404 == iLangID) 
 	{
 		DEVMODE dm;
 		::EnumDisplaySettings(NULL, ENUM_REGISTRY_SETTINGS, &dm);
 
-		// ·¹Áö½ºÆ®¸®ÀÇ µğ½ºÇÃ·¹ÀÌ ¸ğµå¿Í ÇöÀç °ÔÀÓÀÇ µğ½ºÇÃ·¹ÀÌ ¸ğµå°¡ ´Ù¸£¸é º¹±¸ ½ÃÄÑÁØ´Ù.
+		// Â·Â¹ÃÃ¶Â½ÂºÃ†Â®Â¸Â®Ã€Ã‡ ÂµÃ°Â½ÂºÃ‡ÃƒÂ·Â¹Ã€ÃŒ Â¸Ã°ÂµÃ¥Â¿Ã Ã‡Ã¶Ã€Ã§ Â°Ã”Ã€Ã“Ã€Ã‡ ÂµÃ°Â½ÂºÃ‡ÃƒÂ·Â¹Ã€ÃŒ Â¸Ã°ÂµÃ¥Â°Â¡ Â´Ã™Â¸Â£Â¸Ã© ÂºÂ¹Â±Â¸ Â½ÃƒÃ„Ã‘ÃÃ˜Â´Ã™.
 		if(	dm.dmPelsWidth != CN3Base::s_Options.iViewWidth || 
 			dm.dmPelsHeight != CN3Base::s_Options.iViewHeight || 
 			dm.dmBitsPerPel != CN3Base::s_Options.iViewColorDepth)
@@ -282,46 +230,46 @@ void CGameProcedure::StaticMemberRelease()
 #endif // #ifndef _DEBUG
 
 
-	delete s_pSocket; s_pSocket = NULL; // Åë½Å ²÷±â..
-	delete s_pSocketSub; s_pSocketSub = NULL; // ¼­ºê ¼ÒÄÏ ¾ø¾Ö±â..
+	delete s_pSocket; s_pSocket = NULL; // Ã…Ã«Â½Ã… Â²Ã·Â±Ã¢..
+	delete s_pSocketSub; s_pSocketSub = NULL; // Â¼Â­ÂºÃª Â¼Ã’Ã„Ã Â¾Ã¸Â¾Ã–Â±Ã¢..
 	delete s_pFX; s_pFX = NULL;
 
 	////////////////////////////////////////////////////////////
-	// ±âº»°ª ¾²±â..
+	// Â±Ã¢ÂºÂ»Â°Âª Â¾Â²Â±Ã¢..
 	if(s_pPlayer)
 	{
-		int iRun = s_pPlayer->IsRunning(); // ÀÌµ¿ ¸ğµå°¡ ¶Ù´Â »óÅÂ¿´À¸¸é 
-		CGameProcedure::RegPutSetting("UserRun", &iRun, 4); // °È±â, ¶Ù±â »óÅÂ ±â·Ï..
+		int iRun = s_pPlayer->IsRunning(); // Ã€ÃŒÂµÂ¿ Â¸Ã°ÂµÃ¥Â°Â¡ Â¶Ã™Â´Ã‚ Â»Ã³Ã…Ã‚Â¿Â´Ã€Â¸Â¸Ã© 
+		CGameProcedure::RegPutSetting("UserRun", &iRun, 4); // Â°ÃˆÂ±Ã¢, Â¶Ã™Â±Ã¢ Â»Ã³Ã…Ã‚ Â±Ã¢Â·Ã..
 	}
 	
 	if(s_pEng)
 	{
 		e_ViewPoint eVP = s_pEng->ViewPoint();
-		CGameProcedure::RegPutSetting("CameraMode", &eVP, 4); // Ä«¸Ş¶ó »óÅÂ ±â·Ï
+		CGameProcedure::RegPutSetting("CameraMode", &eVP, 4); // Ã„Â«Â¸ÃÂ¶Ã³ Â»Ã³Ã…Ã‚ Â±Ã¢Â·Ã
 	}
-	// ±âº»°ª ¾²±â..
+	// Â±Ã¢ÂºÂ»Â°Âª Â¾Â²Â±Ã¢..
 	////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////////////////////////////
-	// ¿£µùÈ­¸é º¸ÀÌ±â..
+	// Â¿Â£ÂµÃ¹ÃˆÂ­Â¸Ã© ÂºÂ¸Ã€ÃŒÂ±Ã¢..
 	if(s_pPlayer)
 	{
 		e_Nation eNation = s_pPlayer->m_InfoBase.eNation;
 		__TABLE_UI_RESRC* pTbl = s_pTbl_UI.Find(eNation);
 		if(pTbl)
 		{
-			CUIEndingDisplay Credit; // ¿£µù Ç¥½ÃÇÏ±â..
+			CUIEndingDisplay Credit; // Â¿Â£ÂµÃ¹ Ã‡Â¥Â½ÃƒÃ‡ÃÂ±Ã¢..
 			Credit.LoadFromFile(pTbl->szEndingDisplay);
 			Credit.Render();
 		}
 	}
-	// ¿£µùÈ­¸é º¸ÀÌ±â..
+	// Â¿Â£ÂµÃ¹ÃˆÂ­Â¸Ã© ÂºÂ¸Ã€ÃŒÂ±Ã¢..
 	////////////////////////////////////////////////////////////////////////
 
 //	if ( (s_pProcMain) && (s_pProcMain->m_pUIHotKeyDlg) )
 //			s_pProcMain->m_pUIHotKeyDlg->CloseIconRegistry();
 
-	// UI À§Ä¡¹× º¸ÀÌ±â µîÀÇ Á¤º¸ ÀúÀå..
+	// UI Ã€Â§Ã„Â¡Â¹Ã— ÂºÂ¸Ã€ÃŒÂ±Ã¢ ÂµÃ®Ã€Ã‡ ÃÂ¤ÂºÂ¸ Ã€ÃºÃ€Ã¥..
 	if(s_pProcMain)
 	{
 		UIPostData_Write(UI_POST_WND_CHAT, s_pProcMain->m_pUIChatDlg);
@@ -331,22 +279,22 @@ void CGameProcedure::StaticMemberRelease()
 		UIPostData_Write(UI_POST_WND_INFO, s_pProcMain->m_pUIMsgDlg);
 	}
 
-	// °¢ ÇÁ·Î½ÃÀúµé
-	delete s_pProcLogIn; s_pProcLogIn = NULL; 						// ·Î±×ÀÎ ÇÁ·Î½ÃÁ®
-	delete s_pProcNationSelect; s_pProcNationSelect = NULL; 		// ³ª¶ó ¼±ÅÃ
-	delete s_pProcCharacterSelect; s_pProcCharacterSelect = NULL; 	// Ä³¸¯ÅÍ ¼±ÅÃ
-	delete s_pProcCharacterCreate; s_pProcCharacterCreate = NULL; 	// Ä³¸¯ÅÍ ¸¸µé±â
-	delete s_pProcMain; s_pProcMain = NULL; 						// ¸ŞÀÎ °ÔÀÓ ÇÁ·Î½ÃÁ®
-	delete s_pProcOption; s_pProcOption = NULL; 					// °ÔÀÓ ¿É¼Ç ÇÁ·Î½ÃÁ®
+	// Â°Â¢ Ã‡ÃÂ·ÃÂ½ÃƒÃ€ÃºÂµÃ©
+	delete s_pProcLogIn; s_pProcLogIn = NULL; 						// Â·ÃÂ±Ã—Ã€Ã Ã‡ÃÂ·ÃÂ½ÃƒÃÂ®
+	delete s_pProcNationSelect; s_pProcNationSelect = NULL; 		// Â³ÂªÂ¶Ã³ Â¼Â±Ã…Ãƒ
+	delete s_pProcCharacterSelect; s_pProcCharacterSelect = NULL; 	// Ã„Â³Â¸Â¯Ã…Ã Â¼Â±Ã…Ãƒ
+	delete s_pProcCharacterCreate; s_pProcCharacterCreate = NULL; 	// Ã„Â³Â¸Â¯Ã…Ã Â¸Â¸ÂµÃ©Â±Ã¢
+	delete s_pProcMain; s_pProcMain = NULL; 						// Â¸ÃÃ€Ã Â°Ã”Ã€Ã“ Ã‡ÃÂ·ÃÂ½ÃƒÃÂ®
+	delete s_pProcOption; s_pProcOption = NULL; 					// Â°Ã”Ã€Ã“ Â¿Ã‰Â¼Ã‡ Ã‡ÃÂ·ÃÂ½ÃƒÃÂ®
 
-	// UI µé ³¯¸®±â..
+	// UI ÂµÃ© Â³Â¯Â¸Â®Â±Ã¢..
 	if(s_pUILoading) delete s_pUILoading; s_pUILoading = NULL;		// Loading Bar
 	delete s_pMsgBoxMgr;
 	delete s_pUIMgr; s_pUIMgr = NULL;				// UI Manager
 
 //	delete s_pIME; s_pIME = NULL;
 	delete s_pLocalInput; s_pLocalInput = NULL;
-	delete s_pEng; s_pEng = NULL; // Á© ¸¶Áö¸·¿¡ ¿£Áø ³¯¸®±â.!!!!!
+	delete s_pEng; s_pEng = NULL; // ÃÂ© Â¸Â¶ÃÃ¶Â¸Â·Â¿Â¡ Â¿Â£ÃÃ¸ Â³Â¯Â¸Â®Â±Ã¢.!!!!!
 
 	if(s_pGameCursor) delete s_pGameCursor; s_pGameCursor = NULL;
 
@@ -355,7 +303,7 @@ void CGameProcedure::StaticMemberRelease()
 
 void CGameProcedure::Tick()
 {
-	s_pLocalInput->Tick(); // Å°º¸µå¿Í ¸¶¿ì½º·ÎºÎÅÍ ÀÔ·ÂÀ» ¹Ş´Â´Ù.
+	s_pLocalInput->Tick(); // Ã…Â°ÂºÂ¸ÂµÃ¥Â¿Ã Â¸Â¶Â¿Ã¬Â½ÂºÂ·ÃÂºÃÃ…Ã Ã€Ã”Â·Ã‚Ã€Â» Â¹ÃÂ´Ã‚Â´Ã™.
 	if(s_pGameCursor) s_pGameCursor->Tick();
 
 	ProcessUIKeyInput();
@@ -365,14 +313,14 @@ void CGameProcedure::Tick()
 	POINT ptCur = s_pLocalInput->MouseGetPos();
 
 	e_Nation eNation = s_pPlayer->m_InfoBase.eNation;
-	if(dwMouseFlags & MOUSE_LBCLICK) SDL_SetCursor(((NATION_ELMORAD == eNation) ? s_hCursorClick1 : s_hCursorClick));
-	else if(dwMouseFlags & MOUSE_LBCLICKED) SDL_SetCursor(((NATION_ELMORAD == eNation) ? s_hCursorNormal1 : s_hCursorNormal));
+	if(dwMouseFlags & MOUSE_LBCLICK) SetGameCursor(((NATION_ELMORAD == eNation) ? s_hCursorClick1 : s_hCursorClick));
+	else if(dwMouseFlags & MOUSE_LBCLICKED) SetGameCursor(((NATION_ELMORAD == eNation) ? s_hCursorNormal1 : s_hCursorNormal));
 	if(dwMouseFlags & MOUSE_RBCLICKED)
 	{
-		if(s_pPlayer->m_bAttackContinous && s_pProcActive == s_pProcMain) // ¸ŞÀÎ ÇÁ·Î½ÃÁ® ÀÌ¸é..
-			SDL_SetCursor(s_hCursorAttack);
+		if(s_pPlayer->m_bAttackContinous && s_pProcActive == s_pProcMain) // Â¸ÃÃ€Ã Ã‡ÃÂ·ÃÂ½ÃƒÃÂ® Ã€ÃŒÂ¸Ã©..
+			SetGameCursor(s_hCursorAttack);
 		else
-			SDL_SetCursor(((NATION_ELMORAD == eNation) ? s_hCursorNormal1 : s_hCursorNormal));
+			SetGameCursor(((NATION_ELMORAD == eNation) ? s_hCursorNormal1 : s_hCursorNormal));
 	}
 
 	uint32_t dwRet = 0;
@@ -384,17 +332,17 @@ void CGameProcedure::Tick()
 		s_pUIMgr->Tick();
 	}
 
-	// ¸ó°¡ ÇÏ¸é... 
+	// Â¸Ã³Â°Â¡ Ã‡ÃÂ¸Ã©... 
 //	if((dwRet & UI_MOUSEPROC_CHILDDONESOMETHING) || (dwRet & UI_MOUSEPROC_DONESOMETHING))
 //		s_pLocalInput->MouseRemoveFlag(0xffMOUSE_LBCLICK | MOUSE_LBCLICKED | MOUSE_LBDBLCLK);
-	s_pUIMgr->m_bDoneSomething = false;		// UI ¿¡¼­ Á¶ÀÛÀ» Çß´Ù...
+	s_pUIMgr->m_bDoneSomething = false;		// UI Â¿Â¡Â¼Â­ ÃÂ¶Ã€Ã›Ã€Â» Ã‡ÃŸÂ´Ã™...
 	if(dwRet != UI_MOUSEPROC_NONE)
-		s_pUIMgr->m_bDoneSomething = true;		// UI ¿¡¼­ Á¶ÀÛÀ» Çß´Ù...
+		s_pUIMgr->m_bDoneSomething = true;		// UI Â¿Â¡Â¼Â­ ÃÂ¶Ã€Ã›Ã€Â» Ã‡ÃŸÂ´Ã™...
 
 	CN3Base::s_SndMgr.Tick(); // Sound Engine...
 
-	// ½ºÅ©¸° Ä¸ÃÄ Å°..
-	if(s_pLocalInput->IsKeyPress(SDL_SCANCODE_KP_MINUS)) // Å°ÆĞµåÀÇ ¸¶ÀÌ³Ê½º Å°¸¦ ´©¸£¸é..
+	// Â½ÂºÃ…Â©Â¸Â° Ã„Â¸ÃƒÃ„ Ã…Â°..
+	if(s_pLocalInput->IsKeyPress(DIK_NUMPADMINUS)) // Ã…Â°Ã†ÃÂµÃ¥Ã€Ã‡ Â¸Â¶Ã€ÃŒÂ³ÃŠÂ½Âº Ã…Â°Â¸Â¦ Â´Â©Â¸Â£Â¸Ã©..
 	{
 		SYSTEMTIME st;
 		::GetLocalTime(&st);
@@ -405,7 +353,7 @@ void CGameProcedure::Tick()
 	}
 
 	//////////////////////////////////
-	// Network Msg Ã³¸®ÇÏ±â
+	// Network Msg ÃƒÂ³Â¸Â®Ã‡ÃÂ±Ã¢
 	while (!s_pSocket->m_qRecvPkt.empty())
 	{
 		auto pkt = s_pSocket->m_qRecvPkt.front();
@@ -425,13 +373,13 @@ void CGameProcedure::Tick()
 		delete pkt;
 		s_pSocketSub->m_qRecvPkt.pop();
 	}
-	// Network Msg Ã³¸®ÇÏ±â
+	// Network Msg ÃƒÂ³Â¸Â®Ã‡ÃÂ±Ã¢
 	//////////////////////////////////
 }
 
 void CGameProcedure::Render()
 {
-	if(s_pUIMgr) s_pUIMgr->Render(); // UI µé ·»´õ¸µ..
+	if(s_pUIMgr) s_pUIMgr->Render(); // UI ÂµÃ© Â·Â»Â´ÃµÂ¸Âµ..
 
 	s_pMsgBoxMgr->Render();
 	if(s_pGameCursor) s_pGameCursor->Render();
@@ -439,7 +387,7 @@ void CGameProcedure::Render()
 
 void CGameProcedure::TickActive()
 {
-	if(s_pProcActive != s_pProcPrev) // ÇÁ·Î½ÃÀú°¡ ¹Ù²î¸é..
+	if(s_pProcActive != s_pProcPrev) // Ã‡ÃÂ·ÃÂ½ÃƒÃ€ÃºÂ°Â¡ Â¹Ã™Â²Ã®Â¸Ã©..
 	{
 		if(s_pProcPrev) s_pProcPrev->Release();
 		if(s_pProcActive) s_pProcActive->Init();
@@ -447,12 +395,12 @@ void CGameProcedure::TickActive()
 		s_pProcPrev = s_pProcActive;
 	}
 
-	if(s_pProcActive)	s_pProcActive->Tick();		// ÇöÀç ÇÁ·Î½ÃÀú Tick ................................
+	if(s_pProcActive)	s_pProcActive->Tick();		// Ã‡Ã¶Ã€Ã§ Ã‡ÃÂ·ÃÂ½ÃƒÃ€Ãº Tick ................................
 }
 
 void CGameProcedure::RenderActive()
 {
-//	if(s_pProcActive != s_pProcPrev) // ÇÁ·Î½ÃÀú°¡ ¹Ù²î¸é..
+//	if(s_pProcActive != s_pProcPrev) // Ã‡ÃÂ·ÃÂ½ÃƒÃ€ÃºÂ°Â¡ Â¹Ã™Â²Ã®Â¸Ã©..
 //	{
 //		if(s_pProcPrev) s_pProcPrev->Release();
 //		if(s_pProcActive) s_pProcActive->Init();
@@ -480,7 +428,7 @@ bool CGameProcedure::CaptureScreenAndSaveToFile(const std::string& szFN)
 		int nQuality = 90;
 		char szBuf[256] = "";
 
-		//¿î¿µÀÚ´Â ¾çÁúÀÇ ½ºÅ©¸° Ä¸ÃÄ¸¦ ÇÒ¼ö ÀÖ°Ô...
+		//Â¿Ã®Â¿ÂµÃ€ÃšÂ´Ã‚ Â¾Ã§ÃÃºÃ€Ã‡ Â½ÂºÃ…Â©Â¸Â° Ã„Â¸ÃƒÃ„Â¸Â¦ Ã‡Ã’Â¼Ã¶ Ã€Ã–Â°Ã”...
 		if(s_pPlayer->m_InfoBase.iAuthority == AUTHORITY_MANAGER)
 			nQuality = 100;
 
@@ -557,18 +505,18 @@ void CGameProcedure::ProcActiveSet(CGameProcedure *pProc)
 {
 	if(NULL == pProc || s_pProcActive == pProc) return;
 
-	if(s_pUIMgr) s_pUIMgr->EnableOperationSet(true); // UI¸¦ Á¶ÀÛÇÒ¼ö ÀÖ°Ô ÇÑ´Ù..
-	CGameProcedure::MessageBoxClose(-1); // MessageBox °¡ ¶° ÀÖÀ¸¸é °¨Ãá´Ù.
+	if(s_pUIMgr) s_pUIMgr->EnableOperationSet(true); // UIÂ¸Â¦ ÃÂ¶Ã€Ã›Ã‡Ã’Â¼Ã¶ Ã€Ã–Â°Ã” Ã‡Ã‘Â´Ã™..
+	CGameProcedure::MessageBoxClose(-1); // MessageBox Â°Â¡ Â¶Â° Ã€Ã–Ã€Â¸Â¸Ã© Â°Â¨ÃƒÃ¡Â´Ã™.
 
-	s_pProcPrev = s_pProcActive; // ÀüÀÇ °Í Æ÷ÀÎÅÍ ±â¾ï..
+	s_pProcPrev = s_pProcActive; // Ã€Ã¼Ã€Ã‡ Â°Ã Ã†Ã·Ã€ÃÃ…Ã Â±Ã¢Â¾Ã¯..
 	s_pProcActive = pProc;
 }
 
 void CGameProcedure::ReConnect()
 {
-	s_bNeedReportConnectionClosed = false; // ¼­¹öÁ¢¼ÓÀÌ ²÷¾îÁø°É º¸°íÇØ¾ß ÇÏ´ÂÁö..
+	s_bNeedReportConnectionClosed = false; // Â¼Â­Â¹Ã¶ÃÂ¢Â¼Ã“Ã€ÃŒ Â²Ã·Â¾Ã®ÃÃ¸Â°Ã‰ ÂºÂ¸Â°Ã­Ã‡Ã˜Â¾ÃŸ Ã‡ÃÂ´Ã‚ÃÃ¶..
 	CGameProcedure::s_pSocket->ReConnect();
-	s_bNeedReportConnectionClosed = true; // ¼­¹öÁ¢¼ÓÀÌ ²÷¾îÁø°É º¸°íÇØ¾ß ÇÏ´ÂÁö..
+	s_bNeedReportConnectionClosed = true; // Â¼Â­Â¹Ã¶ÃÂ¢Â¼Ã“Ã€ÃŒ Â²Ã·Â¾Ã®ÃÃ¸Â°Ã‰ ÂºÂ¸Â°Ã­Ã‡Ã˜Â¾ÃŸ Ã‡ÃÂ´Ã‚ÃÃ¶..
 }
 
 std::string CGameProcedure::MessageBoxPost(const std::string& szMsg, const std::string& szTitle, int iStyle, e_Behavior eBehavior)
@@ -670,14 +618,14 @@ void CGameProcedure::UIPostData_Read(const std::string& szKey, CN3UIBase* pUI, i
 {
 	if(szKey.empty() || NULL == pUI) return;
 
-	// 1. µğÆúÆ® µ¥ÀÌÅÍ¸¦ ¸¸µç´Ù..
-	// 2. µ¥ÀÌÅÍ¸¦ ÀĞ¾î¿Â´Ù..
-	// 3. ¿µ¿ªÀÌ À¯È¿ÇÑÁö¸¦ ÆÇ´ÜÇÑ´Ù..
+	// 1. ÂµÃ°Ã†ÃºÃ†Â® ÂµÂ¥Ã€ÃŒÃ…ÃÂ¸Â¦ Â¸Â¸ÂµÃ§Â´Ã™..
+	// 2. ÂµÂ¥Ã€ÃŒÃ…ÃÂ¸Â¦ Ã€ÃÂ¾Ã®Â¿Ã‚Â´Ã™..
+	// 3. Â¿ÂµÂ¿ÂªÃ€ÃŒ Ã€Â¯ÃˆÂ¿Ã‡Ã‘ÃÃ¶Â¸Â¦ Ã†Ã‡Â´ÃœÃ‡Ã‘Â´Ã™..
 
 	__WndInfo WI;
 	WI.ptPosition.x = iDefaultX;
 	WI.ptPosition.y = iDefaultY;
-	if(false == RegGetSetting(szKey.c_str(), &WI, sizeof(__WndInfo))) WI.bVisible = true; // ±âº» µ¥ÀÌÅÍ°¡ ¾øÀ¸¸é ¹«Á¶°Ç º¸ÀÌ°Ô ÇÑ´Ù..
+	if(false == RegGetSetting(szKey.c_str(), &WI, sizeof(__WndInfo))) WI.bVisible = true; // Â±Ã¢ÂºÂ» ÂµÂ¥Ã€ÃŒÃ…ÃÂ°Â¡ Â¾Ã¸Ã€Â¸Â¸Ã© Â¹Â«ÃÂ¶Â°Ã‡ ÂºÂ¸Ã€ÃŒÂ°Ã” Ã‡Ã‘Â´Ã™..
 
 	RECT rc = pUI->GetRegion();
 
@@ -694,7 +642,7 @@ void CGameProcedure::UIPostData_Read(const std::string& szKey, CN3UIBase* pUI, i
 	else pUI->SetPos(WI.ptPosition.x, WI.ptPosition.y);
 }
 
-void CGameProcedure::SetGameCursor(SDL_Cursor* hCursor, bool bLocked)
+void CGameProcedure::SetGameCursor(HCURSOR hCursor, bool bLocked)
 {
 	if(s_pGameCursor)
 	{
@@ -730,14 +678,14 @@ void CGameProcedure::SetGameCursor(SDL_Cursor* hCursor, bool bLocked)
 		if ((m_bCursorLocked) && (!bLocked) ) return;
 		else if ( ((m_bCursorLocked) && bLocked) || ((!m_bCursorLocked) && !bLocked) )
 		{
-			SDL_SetCursor(hCursor);
+			::SetCursor(hCursor);
 			return;
 		}
 		else if ((!m_bCursorLocked) && bLocked)
 		{
-			m_hPrevGameCursor = SDL_GetCursor();
+			m_hPrevGameCursor = ::GetCursor();
 			m_bCursorLocked = true;
-			SDL_SetCursor(hCursor);
+			::SetCursor(hCursor);
 		}
 	}
 }
@@ -762,7 +710,7 @@ void CGameProcedure::RestoreGameCursor()
 		if (m_bCursorLocked) 
 			m_bCursorLocked = false;
 
-		SDL_SetCursor(m_hPrevGameCursor);	
+		SetGameCursor(m_hPrevGameCursor);	
 	}
 }
 
@@ -775,14 +723,14 @@ std::string CGameProcedure::GetStrRegKeySetting()
 
 bool CGameProcedure::ProcessPacket(Packet& pkt)
 {
-	int iCmd = pkt.read<uint8_t>();	// Ä¿¸àµå ÆÄ½Ì..
-	switch ( iCmd )										// Ä¿¸àµå¿¡ ´Ù¶ó¼­ ºĞ±â..
+	int iCmd = pkt.read<uint8_t>();	// Ã„Â¿Â¸Ã ÂµÃ¥ Ã†Ã„Â½ÃŒ..
+	switch ( iCmd )										// Ã„Â¿Â¸Ã ÂµÃ¥Â¿Â¡ Â´Ã™Â¶Ã³Â¼Â­ ÂºÃÂ±Ã¢..
 	{
 		case WIZ_COMPRESS_PACKET:
 			this->MsgRecv_CompressedPacket(pkt);
 			return true;
 
-		case WIZ_VERSION_CHECK: // ¾ÏÈ£È­µµ °°ÀÌ ¹Ş´Â´Ù..
+		case WIZ_VERSION_CHECK: // Â¾ÃÃˆÂ£ÃˆÂ­ÂµÂµ Â°Â°Ã€ÃŒ Â¹ÃÂ´Ã‚Â´Ã™..
 			this->MsgRecv_VersionCheck(pkt); // virtual
 			return true;
 
@@ -790,14 +738,14 @@ bool CGameProcedure::ProcessPacket(Packet& pkt)
 			this->MsgRecv_GameServerLogIn(pkt);
 			return true;
 
-		case WIZ_SERVER_CHANGE:				// ¼­¹ö ¹Ù²Ù±â ¸Ş½ÃÁö..
+		case WIZ_SERVER_CHANGE:				// Â¼Â­Â¹Ã¶ Â¹Ã™Â²Ã™Â±Ã¢ Â¸ÃÂ½ÃƒÃÃ¶..
 		{
-			// ´Ù¸¥ Á¸ ¼­¹ö·Î ´Ù½Ã Á¢¼ÓÇÑ´Ù.
+			// Â´Ã™Â¸Â¥ ÃÂ¸ Â¼Â­Â¹Ã¶Â·Ã Â´Ã™Â½Ãƒ ÃÂ¢Â¼Ã“Ã‡Ã‘Â´Ã™.
 			int iLen = 0;
 			std::string szName, szIP;
-//			iLen = pkt.read<int16_t>(); // ¼­¹ö ÀÌ¸§
+//			iLen = pkt.read<int16_t>(); // Â¼Â­Â¹Ã¶ Ã€ÃŒÂ¸Â§
 //			pkt.readString(szName, iLen);
-			iLen = pkt.read<int16_t>(); // ¼­¹ö IP
+			iLen = pkt.read<int16_t>(); // Â¼Â­Â¹Ã¶ IP
 			pkt.readString(szIP, iLen);
 			uint32_t dwPort = pkt.read<int16_t>();
 			s_pPlayer->m_InfoExt.iZoneInit = pkt.read<uint8_t>();
@@ -805,17 +753,17 @@ bool CGameProcedure::ProcessPacket(Packet& pkt)
 			int iVictoryNation = pkt.read<uint8_t>();
 			CGameProcedure::LoadingUIChange(iVictoryNation);
 
-			s_bNeedReportConnectionClosed = false; // ¼­¹öÁ¢¼ÓÀÌ ²÷¾îÁø°É º¸°íÇØ¾ß ÇÏ´ÂÁö..
-			s_pSocket->Disconnect(); // ²÷°í...
-			Sleep(2000); // 2ÃÊ µô·¹ÀÌ.. ¼­¹ö°¡ Ã³¸®ÇÒ ½Ã°£À» ÁØ´Ù.
+			s_bNeedReportConnectionClosed = false; // Â¼Â­Â¹Ã¶ÃÂ¢Â¼Ã“Ã€ÃŒ Â²Ã·Â¾Ã®ÃÃ¸Â°Ã‰ ÂºÂ¸Â°Ã­Ã‡Ã˜Â¾ÃŸ Ã‡ÃÂ´Ã‚ÃÃ¶..
+			s_pSocket->Disconnect(); // Â²Ã·Â°Ã­...
+			Sleep(2000); // 2ÃƒÃŠ ÂµÃ´Â·Â¹Ã€ÃŒ.. Â¼Â­Â¹Ã¶Â°Â¡ ÃƒÂ³Â¸Â®Ã‡Ã’ Â½ÃƒÂ°Â£Ã€Â» ÃÃ˜Â´Ã™.
 			int iErr = s_pSocket->Connect(s_hWndBase, szIP.c_str(), dwPort);
-			s_bNeedReportConnectionClosed = true; // ¼­¹öÁ¢¼ÓÀÌ ²÷¾îÁø°É º¸°íÇØ¾ß ÇÏ´ÂÁö..
+			s_bNeedReportConnectionClosed = true; // Â¼Â­Â¹Ã¶ÃÂ¢Â¼Ã“Ã€ÃŒ Â²Ã·Â¾Ã®ÃÃ¸Â°Ã‰ ÂºÂ¸Â°Ã­Ã‡Ã˜Â¾ÃŸ Ã‡ÃÂ´Ã‚ÃÃ¶..
 
-			if(iErr) this->ReportServerConnectionFailed("Current Zone", iErr, true); // ¼­¹ö Á¢¼Ó ¿À·ù.. Exit.
+			if(iErr) this->ReportServerConnectionFailed("Current Zone", iErr, true); // Â¼Â­Â¹Ã¶ ÃÂ¢Â¼Ã“ Â¿Ã€Â·Ã¹.. Exit.
 			else
 			{
-				// ¹öÀüÃ¼Å©¸¦ º¸³»¸é.. ÀÀ´äÀ¸·Î ¹öÀü°ú ¾ÏÈ£È­ Å°°¡ ¿Â´Ù.
-				// ¸ŞÀÎ ÇÁ·Î½ÃÀúÀÇ °æ¿ì Character_Select ¸¦ º¸³»°í ·Î±×ÀÎÀÏ°æ¿ì GameServer_LogIn À» º¸³½´Ù.
+				// Â¹Ã¶Ã€Ã¼ÃƒÂ¼Ã…Â©Â¸Â¦ ÂºÂ¸Â³Â»Â¸Ã©.. Ã€Ã€Â´Ã¤Ã€Â¸Â·Ã Â¹Ã¶Ã€Ã¼Â°Ãº Â¾ÃÃˆÂ£ÃˆÂ­ Ã…Â°Â°Â¡ Â¿Ã‚Â´Ã™.
+				// Â¸ÃÃ€Ã Ã‡ÃÂ·ÃÂ½ÃƒÃ€ÃºÃ€Ã‡ Â°Ã¦Â¿Ã¬ Character_Select Â¸Â¦ ÂºÂ¸Â³Â»Â°Ã­ Â·ÃÂ±Ã—Ã€ÃÃ€ÃÂ°Ã¦Â¿Ã¬ GameServer_LogIn Ã€Â» ÂºÂ¸Â³Â½Â´Ã™.
 				this->MsgSend_VersionCheck(); 
 			}
 		}
@@ -875,28 +823,28 @@ void CGameProcedure::ReportDebugStringAndSendToServer(const std::string& szDebug
 	if(s_pSocket && s_pSocket->IsConnected())
 	{
 		int iLen = szDebug.size();
-		std::vector<uint8_t> buffer;	// ¹öÆÛ.. 
+		std::vector<uint8_t> buffer;	// Â¹Ã¶Ã†Ã›.. 
 		buffer.assign(iLen + 4, 0x00);
-		int iOffset=0;												// ¿É¼Â..
+		int iOffset=0;												// Â¿Ã‰Â¼Ã‚..
 		s_pSocket->MP_AddByte(&(buffer[0]), iOffset, WIZ_DEBUG_STRING_PACKET);
 		s_pSocket->MP_AddShort(&(buffer[0]), iOffset, iLen);
 		s_pSocket->MP_AddString(&(buffer[0]), iOffset, szDebug);
-		s_pSocket->Send(&(buffer[0]), iOffset);				// º¸³¿..
+		s_pSocket->Send(&(buffer[0]), iOffset);				// ÂºÂ¸Â³Â¿..
 	}
 }
 
 void CGameProcedure::MsgSend_GameServerLogIn()
 {
-	uint8_t byBuff[128];										// ÆĞÅ¶ ¹öÆÛ..
-	int iOffset = 0;										// ¹öÆÛÀÇ ¿ÀÇÁ¼Â..
+	uint8_t byBuff[128];										// Ã†ÃÃ…Â¶ Â¹Ã¶Ã†Ã›..
+	int iOffset = 0;										// Â¹Ã¶Ã†Ã›Ã€Ã‡ Â¿Ã€Ã‡ÃÂ¼Ã‚..
 
-	CAPISocket::MP_AddByte(byBuff, iOffset, WIZ_LOGIN);	// Ä¿¸àµå.
-	CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)s_szAccount.size());	// ¾ÆÀÌµğ ±æÀÌ..
-	CAPISocket::MP_AddString(byBuff, iOffset, s_szAccount);			// ½ÇÁ¦ ¾ÆÀÌµğ..
-	CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)s_szPassWord.size());	// ÆĞ½º¿öµå ±æÀÌ
-	CAPISocket::MP_AddString(byBuff, iOffset, s_szPassWord);		// ½ÇÁ¦ ÆĞ½º¿öµå
+	CAPISocket::MP_AddByte(byBuff, iOffset, WIZ_LOGIN);	// Ã„Â¿Â¸Ã ÂµÃ¥.
+	CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)s_szAccount.size());	// Â¾Ã†Ã€ÃŒÂµÃ° Â±Ã¦Ã€ÃŒ..
+	CAPISocket::MP_AddString(byBuff, iOffset, s_szAccount);			// Â½Ã‡ÃÂ¦ Â¾Ã†Ã€ÃŒÂµÃ°..
+	CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)s_szPassWord.size());	// Ã†ÃÂ½ÂºÂ¿Ã¶ÂµÃ¥ Â±Ã¦Ã€ÃŒ
+	CAPISocket::MP_AddString(byBuff, iOffset, s_szPassWord);		// Â½Ã‡ÃÂ¦ Ã†ÃÂ½ÂºÂ¿Ã¶ÂµÃ¥
 		
-	s_pSocket->Send(byBuff, iOffset);								// º¸³½´Ù
+	s_pSocket->Send(byBuff, iOffset);								// ÂºÂ¸Â³Â½Â´Ã™
 }
 
 void CGameProcedure::MsgSend_VersionCheck() // virtual
@@ -904,11 +852,11 @@ void CGameProcedure::MsgSend_VersionCheck() // virtual
 	// Version Check
 	int iOffset = 0;
 	uint8_t byBuffs[4];
-	CAPISocket::MP_AddByte(byBuffs, iOffset, WIZ_VERSION_CHECK);				// Ä¿¸àµå.
-	s_pSocket->Send(byBuffs, iOffset);	// º¸³½´Ù
+	CAPISocket::MP_AddByte(byBuffs, iOffset, WIZ_VERSION_CHECK);				// Ã„Â¿Â¸Ã ÂµÃ¥.
+	s_pSocket->Send(byBuffs, iOffset);	// ÂºÂ¸Â³Â½Â´Ã™
 
 #ifdef _CRYPTION
-	s_pSocket->m_bEnableSend = FALSE; // º¸³»±â °¡´É..?
+	s_pSocket->m_bEnableSend = FALSE; // ÂºÂ¸Â³Â»Â±Ã¢ Â°Â¡Â´Ã‰..?
 #endif // #ifdef _CRYPTION
 }
 
@@ -916,20 +864,20 @@ void CGameProcedure::MsgSend_CharacterSelect() // virtual
 {
 	uint8_t byBuff[64];
 	int iOffset = 0;
-	CAPISocket::MP_AddByte(byBuff, iOffset, WIZ_SEL_CHAR);				// Ä¿¸àµå.
-	CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)s_szAccount.size());				// °èÁ¤ ±æÀÌ..
-	CAPISocket::MP_AddString(byBuff, iOffset, s_szAccount);						// °èÁ¤ ¹®ÀÚ¿­..
-	CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)s_pPlayer->IDString().size());		// Ä³¸¯ ¾ÆÀÌµğ ±æÀÌ..
-	CAPISocket::MP_AddString(byBuff, iOffset, s_pPlayer->IDString());			// Ä³¸¯ ¾ÆÀÌµğ ¹®ÀÚ¿­..
-	CAPISocket::MP_AddByte(byBuff, iOffset, s_pPlayer->m_InfoExt.iZoneInit);	// Ã³À½ Á¢¼ÓÀÎÁö ¾Æ´ÑÁö 0x01:Ã³À½ Á¢¼Ó
-	CAPISocket::MP_AddByte(byBuff, iOffset, s_pPlayer->m_InfoExt.iZoneCur);		// Ä³¸¯ÅÍ ¼±ÅÃÃ¢¿¡¼­ÀÇ Ä³¸¯ÅÍ Á¸ ¹øÈ£
-	s_pSocket->Send(byBuff, iOffset);	// º¸³½´Ù
+	CAPISocket::MP_AddByte(byBuff, iOffset, WIZ_SEL_CHAR);				// Ã„Â¿Â¸Ã ÂµÃ¥.
+	CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)s_szAccount.size());				// Â°Ã¨ÃÂ¤ Â±Ã¦Ã€ÃŒ..
+	CAPISocket::MP_AddString(byBuff, iOffset, s_szAccount);						// Â°Ã¨ÃÂ¤ Â¹Â®Ã€ÃšÂ¿Â­..
+	CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)s_pPlayer->IDString().size());		// Ã„Â³Â¸Â¯ Â¾Ã†Ã€ÃŒÂµÃ° Â±Ã¦Ã€ÃŒ..
+	CAPISocket::MP_AddString(byBuff, iOffset, s_pPlayer->IDString());			// Ã„Â³Â¸Â¯ Â¾Ã†Ã€ÃŒÂµÃ° Â¹Â®Ã€ÃšÂ¿Â­..
+	CAPISocket::MP_AddByte(byBuff, iOffset, s_pPlayer->m_InfoExt.iZoneInit);	// ÃƒÂ³Ã€Â½ ÃÂ¢Â¼Ã“Ã€ÃÃÃ¶ Â¾Ã†Â´Ã‘ÃÃ¶ 0x01:ÃƒÂ³Ã€Â½ ÃÂ¢Â¼Ã“
+	CAPISocket::MP_AddByte(byBuff, iOffset, s_pPlayer->m_InfoExt.iZoneCur);		// Ã„Â³Â¸Â¯Ã…Ã Â¼Â±Ã…ÃƒÃƒÂ¢Â¿Â¡Â¼Â­Ã€Ã‡ Ã„Â³Â¸Â¯Ã…Ã ÃÂ¸ Â¹Ã¸ÃˆÂ£
+	s_pSocket->Send(byBuff, iOffset);	// ÂºÂ¸Â³Â½Â´Ã™
 
 	CLogWriter::Write("MsgSend_CharacterSelect - name(%s) zone(%d)",
-		s_pPlayer->IDString().c_str(), s_pPlayer->m_InfoExt.iZoneCur); // µğ¹ö±ë ·Î±×..
+		s_pPlayer->IDString().c_str(), s_pPlayer->m_InfoExt.iZoneCur); // ÂµÃ°Â¹Ã¶Â±Ã« Â·ÃÂ±Ã—..
 }
 
-void CGameProcedure::MsgRecv_CompressedPacket(Packet& pkt) // ¾ĞÃàµÈ µ¥ÀÌÅÍ ÀÌ´Ù... ÇÑ¹ø ´õ ÆÄ½ÌÇØ¾ß ÇÑ´Ù!!!
+void CGameProcedure::MsgRecv_CompressedPacket(Packet& pkt) // Â¾ÃÃƒÃ ÂµÃˆ ÂµÂ¥Ã€ÃŒÃ…Ã Ã€ÃŒÂ´Ã™... Ã‡Ã‘Â¹Ã¸ Â´Ãµ Ã†Ã„Â½ÃŒÃ‡Ã˜Â¾ÃŸ Ã‡Ã‘Â´Ã™!!!
 {
 	uint16_t compressedLength = pkt.read<uint16_t>();
 	uint16_t originalLength = pkt.read<uint16_t>();
@@ -948,11 +896,11 @@ void CGameProcedure::MsgRecv_CompressedPacket(Packet& pkt) // ¾ĞÃàµÈ µ¥ÀÌÅÍ ÀÌ´Ù
 
 int CGameProcedure::MsgRecv_VersionCheck(Packet& pkt) // virtual
 {
-	int iVersion = pkt.read<int16_t>();	// ¹öÀü
+	int iVersion = pkt.read<int16_t>();	// Â¹Ã¶Ã€Ã¼
 #ifdef _CRYPTION
-	uint64_t iPublicKey = pkt.read<uint64_t>(); // ¾ÏÈ£È­ °ø°³Å°
+	uint64_t iPublicKey = pkt.read<uint64_t>(); // Â¾ÃÃˆÂ£ÃˆÂ­ Â°Ã¸Â°Â³Ã…Â°
 	CAPISocket::InitCrypt(iPublicKey);
-	s_pSocket->m_bEnableSend = TRUE; // º¸³»±â °¡´É..?
+	s_pSocket->m_bEnableSend = TRUE; // ÂºÂ¸Â³Â»Â±Ã¢ Â°Â¡Â´Ã‰..?
 #endif // #ifdef _CRYPTION
 
 	if(iVersion != CURRENT_VERSION)
@@ -981,14 +929,14 @@ int CGameProcedure::MsgRecv_VersionCheck(Packet& pkt) // virtual
 
 int CGameProcedure::MsgRecv_GameServerLogIn(Packet& pkt) // virtual
 {
-	int iNation = pkt.read<uint8_t>(); // ±¹°¡ - 0 ¾øÀ½ 0xff - ½ÇÆĞ..
+	int iNation = pkt.read<uint8_t>(); // Â±Â¹Â°Â¡ - 0 Â¾Ã¸Ã€Â½ 0xff - Â½Ã‡Ã†Ã..
 	return iNation;
 }
 
 bool CGameProcedure::MsgRecv_CharacterSelect(Packet& pkt) // virtual
 {
-	int iResult = pkt.read<uint8_t>(); // 0x00 ½ÇÆĞ
-	if(1 == iResult) // ¼º°ø..
+	int iResult = pkt.read<uint8_t>(); // 0x00 Â½Ã‡Ã†Ã
+	if(1 == iResult) // Â¼ÂºÂ°Ã¸..
 	{
 		int iZoneCur = pkt.read<uint8_t>();
 		float fX = (pkt.read<uint16_t>())/10.0f;
@@ -1009,7 +957,7 @@ bool CGameProcedure::MsgRecv_CharacterSelect(Packet& pkt) // virtual
 		CLogWriter::Write("MsgRecv_CharacterSelect - name(%s) zone(%d -> %d)", s_pPlayer->m_InfoBase.szID.c_str(), iZonePrev, iZoneCur);
 		return true;
 	}
-	else // ½ÇÆĞ
+	else // Â½Ã‡Ã†Ã
 	{
 		CLogWriter::Write("MsgRecv_CharacterSelect - failed(%d)", iResult);
 		return false;
@@ -1021,7 +969,7 @@ bool CGameProcedure::MsgRecv_CharacterSelect(Packet& pkt) // virtual
 
 void CGameProcedure::ProcessUIKeyInput(bool bEnable)
 {
-	s_bKeyPressed	= false;	//Å°°¡ ¿Ã¶ó°¬À»¶§ ui¿¡¼­ ÇØ´çÇÏ´Â Á¶ÀÛµÈÀûÀÌ ÀÖ´Ù¸é
+	s_bKeyPressed	= false;	//Ã…Â°Â°Â¡ Â¿ÃƒÂ¶Ã³Â°Â¬Ã€Â»Â¶Â§ uiÂ¿Â¡Â¼Â­ Ã‡Ã˜Â´Ã§Ã‡ÃÂ´Ã‚ ÃÂ¶Ã€Ã›ÂµÃˆÃ€Ã»Ã€ÃŒ Ã€Ã–Â´Ã™Â¸Ã©
 
 	if(!bEnable)
 	{
@@ -1053,7 +1001,7 @@ void CGameProcedure::ProcessUIKeyInput(bool bEnable)
 				s_bKeyPressed |= pMsgBox->OnKeyPressed(i);
 		}
 	}
-	else if(pUIFocus && pUIFocus->IsVisible()) // Æ÷Ä¿½Ì µÈ UI °¡ ÀÖÀ¸¸é...
+	else if(pUIFocus && pUIFocus->IsVisible()) // Ã†Ã·Ã„Â¿Â½ÃŒ ÂµÃˆ UI Â°Â¡ Ã€Ã–Ã€Â¸Â¸Ã©...
 	{
 		for(int i = 0; i < NUMDIKEYS; i++)
 		{
@@ -1106,11 +1054,11 @@ void CGameProcedure::LoadingUIChange(int iVictoryNation)
 	if(s_pUILoading) delete s_pUILoading; s_pUILoading = NULL;		// Loading Bar
 
 	s_pUILoading = new CUILoading();
-	__ASSERT(s_pUILoading, "·ÎµùÈ­¸é »ı¼º ½ÇÆĞ");
+	__ASSERT(s_pUILoading, "Â·ÃÂµÃ¹ÃˆÂ­Â¸Ã© Â»Ã½Â¼Âº Â½Ã‡Ã†Ã");
 	if(s_pUILoading == NULL) return;
 
-	__TABLE_UI_RESRC* pTblUI = s_pTbl_UI.Find(NATION_ELMORAD); // ±âº»Àº ¿¤¸ğ¶óµå UI ·Î ÇÑ´Ù..
-	__ASSERT(pTblUI, "±âº» UI °¡ ¾ø½À´Ï´Ù.");
+	__TABLE_UI_RESRC* pTblUI = s_pTbl_UI.Find(NATION_ELMORAD); // Â±Ã¢ÂºÂ»Ã€Âº Â¿Â¤Â¸Ã°Â¶Ã³ÂµÃ¥ UI Â·Ã Ã‡Ã‘Â´Ã™..
+	__ASSERT(pTblUI, "Â±Ã¢ÂºÂ» UI Â°Â¡ Â¾Ã¸Â½Ã€Â´ÃÂ´Ã™.");
 	if(pTblUI == NULL) return;
 
 	switch(iVictoryNation)
@@ -1130,5 +1078,5 @@ void CGameProcedure::LoadingUIChange(int iVictoryNation)
 	}
 
 	//TRACE("Loading UIF : %s\n", szLoading.c_str());
-	s_pUILoading->LoadFromFile(szLoading); // ±âº»ÀûÀÎ ·Îµù ¹Ù ¸¸µé±â..
+	s_pUILoading->LoadFromFile(szLoading); // Â±Ã¢ÂºÂ»Ã€Ã»Ã€Ã Â·ÃÂµÃ¹ Â¹Ã™ Â¸Â¸ÂµÃ©Â±Ã¢..
 }

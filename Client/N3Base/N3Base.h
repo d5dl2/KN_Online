@@ -24,6 +24,12 @@
 #include "N3SndMgr.h"
 #endif
 
+typedef unsigned char Uint8;
+typedef unsigned short Uint16;
+typedef unsigned int Uint32;
+typedef unsigned long Uint64;
+
+
 const uint32_t TEX_CAPS_DXT1 =			0x00000001;
 const uint32_t TEX_CAPS_DXT2 =			0x00000002;
 const uint32_t TEX_CAPS_DXT3 =			0x00000004;
@@ -166,7 +172,6 @@ public:
 	static D3DPRESENT_PARAMETERS	s_DevParam; // Device 생성 Present Parameter
 	static D3DCAPS9					s_DevCaps; // Device 호환성...
 	static uint32_t					s_dwTextureCaps; // Texture 지원.. DXT1 ~ DXT5, Square Only
-	static struct SDL_Window *		s_pWindow;
 	static HWND						s_hWndBase; // Init 할때 쓴 Window Handle
 	static HWND						s_hWndPresent; // 최근에 Present 한 Window Handle
 

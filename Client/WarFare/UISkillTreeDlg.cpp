@@ -457,7 +457,7 @@ void CUISkillTreeDlg::PageLeft()
 
 void CUISkillTreeDlg::PageRight()
 {
-	if ( m_iCurSkillPage == 2 )
+	if ( m_iCurSkillPage == MAX_SKILL_PAGE_NUM )
 		return;
 
 	SetPageInIconRegion(m_iCurKindOf, m_iCurSkillPage+1);
@@ -1753,13 +1753,13 @@ bool CUISkillTreeDlg::OnKeyPress(int iKey)
 {
 	switch(iKey)
 	{
-	case SDL_SCANCODE_PAGEUP://DIK_PRIOR:
+	case DIK_PRIOR:
 		PageLeft();
 		return true;
-	case SDL_SCANCODE_PAGEDOWN://DIK_NEXT:
+	case DIK_NEXT:
 		PageRight();
 		return true;
-	case SDL_SCANCODE_ESCAPE://DIK_ESCAPE:
+	case DIK_ESCAPE:
 		if(!m_bClosingNow) this->Close();
 		return true;
 	}

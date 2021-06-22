@@ -222,7 +222,7 @@ bool CUIWhisperOpenDlg::OnKeyPress(int iKey)
 {
 	switch (iKey)
 	{
-		case SDL_SCANCODE_RETURN:
+		case DIK_RETURN:
 		{	
 			if (m_pEditChat)
 			{
