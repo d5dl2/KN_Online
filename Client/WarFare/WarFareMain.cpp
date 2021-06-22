@@ -151,7 +151,7 @@ LRESULT CALLBACK WndProcMain(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 	} break;
 	}
 
-	return 0;
+	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 //-----------------------------------------------------------------------------
@@ -176,7 +176,7 @@ LRESULT CALLBACK WndProcSub(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		}
 	}
 
-	return 0;
+	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 
