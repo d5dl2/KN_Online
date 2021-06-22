@@ -435,6 +435,9 @@ bool CN3FXPartParticles::Load(HANDLE hFile)
 		ReadFile(hFile, &m_fTexRotateVelocity, sizeof(float), &dwRWC, NULL);
 		ReadFile(hFile, &m_fScaleVelX, sizeof(float), &dwRWC, NULL);
 		ReadFile(hFile, &m_fScaleVelY, sizeof(float), &dwRWC, NULL);
+		byte a;
+		ReadFile(hFile, &a, sizeof(byte), &dwRWC, NULL);
+		ReadFile(hFile, &a, sizeof(byte), &dwRWC, NULL);
 	}
 
 	if (m_iFileFormatVersion == N3FORMAT_VER_2062) {
