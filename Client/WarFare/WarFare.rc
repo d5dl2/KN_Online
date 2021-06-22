@@ -55,8 +55,8 @@ END
 3 CURSOR "cursor_click1.cur"
 4 CURSOR "cursor_normal.cur"
 5 CURSOR "cursor_normal1.cur"
-6 CURSOR "repair0.cur"
-7 CURSOR "repair1.cur"
+6 CURSOR "repair1.cur"
+7 CURSOR "repair0.cur"
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////

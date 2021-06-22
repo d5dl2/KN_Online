@@ -1,4 +1,4 @@
-/*
+﻿/*
 */
 
 //#include "StdAfx.h"
@@ -30,6 +30,11 @@ LRESULT CALLBACK WndProcMain(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 {
 	switch (message)
 	{
+	case WM_SETCURSOR:
+	{
+		if (GetDlgItem(hWnd, 4000) == nullptr)
+			return true;
+	}
 	case WM_COMMAND: {
 		uint16_t wNotifyCode = HIWORD(wParam); // notification code
 		CN3UIEdit* pEdit = CN3UIEdit::GetFocusedEdit();
@@ -51,26 +56,27 @@ LRESULT CALLBACK WndProcMain(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 		NMHDR* pnmh = (NMHDR*)lParam;
 	} break;
 
-	case WM_KEYDOWN: {
-		int iLangID = ::GetUserDefaultLangID();
-		if (iLangID == 0x0404) { // Taiwan Language
-			CUIChat* pUIChat = CGameProcedure::s_pProcMain->m_pUIChatDlg;
-			int iVK = (int)wParam;
+	// Taiwan dili için input girişi
+	//case WM_KEYDOWN: {
+	//	int iLangID = ::GetUserDefaultLangID();
+	//	if (iLangID == 0x0404) { // Taiwan Language
+	//		CUIChat* pUIChat = CGameProcedure::s_pProcMain->m_pUIChatDlg;
+	//		int iVK = (int)wParam;
 
-			if (
-				pUIChat && iVK != VK_ESCAPE && iVK != VK_RETURN &&
-				CGameProcedure::s_pProcMain &&
-				CGameProcedure::s_pProcActive == CGameProcedure::s_pProcMain &&
-				!pUIChat->IsChatMode()
-				) {
-				if (!(GetKeyState(VK_CONTROL) & 0x8000)) {
-					pUIChat->SetFocus();
-					PostMessage(CN3UIEdit::s_hWndEdit, WM_KEYDOWN, wParam, lParam);
-					return 0;
-				}
-			}
-		}
-	} break;
+	//		if (
+	//			pUIChat && iVK != VK_ESCAPE && iVK != VK_RETURN &&
+	//			CGameProcedure::s_pProcMain &&
+	//			CGameProcedure::s_pProcActive == CGameProcedure::s_pProcMain &&
+	//			!pUIChat->IsChatMode()
+	//			) {
+	//			if (!(GetKeyState(VK_CONTROL) & 0x8000)) {
+	//				pUIChat->SetFocus();
+	//				PostMessage(CN3UIEdit::s_hWndEdit, WM_KEYDOWN, wParam, lParam);
+	//				return 0;
+	//			}
+	//		}
+	//	}
+	//} break;
 
 	case WM_SOCKETMSG: {
 		switch (WSAGETSELECTEVENT(lParam))
@@ -210,7 +216,9 @@ HWND CreateMainWindow(HINSTANCE hInstance)
 	return ::CreateWindow(
 		"Knight OnLine Client",
 		"Knight OnLine Client",
-		style, rect.left / 2, rect.top / 2, //0, 0,
+		style,
+		rect.left,
+		rect.top, //0, 0,
 		CN3Base::s_Options.iViewWidth,
 		CN3Base::s_Options.iViewHeight,
 		NULL, NULL, hInstance, NULL
@@ -251,12 +259,7 @@ HWND CreateSubWindow(HINSTANCE hInstance)
 /*
 - NOTE: this is the main intry point for the knight online program
 */
-int APIENTRY wWinMain(
-	_In_ HINSTANCE hInstance,
-	_In_opt_ HINSTANCE hPrevInstance,
-	_In_ LPWSTR lpCmdLine,
-	_In_ int nShowCmd
-)
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
 {
 	// NOTE: get the current directory and make it known to CN3Base
 	char szPath[_MAX_PATH] = "";
@@ -399,12 +402,12 @@ int APIENTRY wWinMain(
 			if (TranslateAccelerator(hWndMain, hAccel, &msg) == 0) {
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
-			}
+		}
 #else
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 #endif
-		}
+	}
 		else {
 			// NOTE: render a frame during idle time (no messages are waiting)
 			if (g_bActive) {
@@ -453,7 +456,7 @@ int APIENTRY wWinMain(
 #endif
 			}
 		}
-	}
+}
 
 #if _DEBUG
 	ReleaseDC(hWndMain, hDC);

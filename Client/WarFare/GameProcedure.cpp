@@ -155,7 +155,7 @@ void CGameProcedure::StaticMemberInit(HINSTANCE hInstance, HWND hWndMain, HWND h
 	s_pSocketSub = new CAPISocket();
 
 
-	s_hCursorNormal = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR_NORMAL));
+	s_hCursorNormal = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR_NORMAL));	
 	s_hCursorNormal1 = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR_NORMAL1));
 	s_hCursorClick = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR_CLICK));
 	s_hCursorClick1 = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR_CLICK1));
@@ -710,7 +710,7 @@ void CGameProcedure::RestoreGameCursor()
 		if (m_bCursorLocked) 
 			m_bCursorLocked = false;
 
-		SetGameCursor(m_hPrevGameCursor);	
+		::SetCursor(m_hPrevGameCursor);
 	}
 }
 
