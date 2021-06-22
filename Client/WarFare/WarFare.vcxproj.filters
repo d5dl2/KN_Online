@@ -611,5 +611,36 @@
     <ClInclude Include="WhisperManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="WarFare.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cursor_attack.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="cursor_click.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="cursor_click1.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="cursor_normal.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="cursor_normal1.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="repair0.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="repair1.cur">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

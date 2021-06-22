@@ -16,7 +16,8 @@ static char THIS_FILE[]=__FILE__;
 #endif
 
 const float LIGHTNING_DURATION = 2.0f;
-
+const float CAMERA_TURNAROUND_DURATION = 0.5f; // secs
+const float CAMERA_TURNAROUND_YAW = __PI; // 180*
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -86,6 +87,7 @@ CGameEng::CGameEng()
 
 	m_fFPDeltaCur = 1.0f; // 현재 
 	m_fFPDeltaToReach = 1.0f; // 이값을 목표로 해서 변한다.
+	m_bTurnArroundActivated = false;
 
 //	m_fLightDeltaCur = 1.0f;
 //	m_fLightDeltaToReach = 1.0f; // 이값을 목표로 해서 변한다.
@@ -176,7 +178,7 @@ void CGameEng::Tick(const D3DCOLOR* crDiffuses,			// Diffuse 라이트 색깔.. 3 개 
 	{
 		vAxis.y *= -1.0f;
 		fYaw *= -1.0f;
-	}
+	}	
 
 	switch(m_eViewPoint)
 	{
@@ -218,6 +220,18 @@ void CGameEng::Tick(const D3DCOLOR* crDiffuses,			// Diffuse 라이트 색깔.. 3 개 
 			m_vAtToReach = vPosPlayer; m_vAtToReach.y += fHeightPlayer * 0.8f;
 			m_vEyeToReach.Set(0,0,-m_fOffsetVPGod);
 			m_vEyeToReach = m_vAtToReach + (m_vEyeToReach * mtxRot);
+
+			if (m_bTurnArroundActivated)
+			{
+				if (m_fTargetRotYawVPGod > m_fRotYawVPGod)
+				{
+					float maxRaw = m_fTargetRotYawVPGod - m_fRotYawVPGod;
+					m_fRotYawVPGod += min(CAMERA_TURNAROUND_YAW / (CAMERA_TURNAROUND_DURATION / CN3Base::s_fSecPerFrm), maxRaw);
+				}
+				else
+					m_bTurnArroundActivated = false;
+
+			}
 		}
 		break;
 	}
@@ -494,6 +508,12 @@ void CGameEng::CameraYawAdd(float fRotYPerSec)
 		m_fRotYawVPGod += fRotYPerSec * s_fSecPerFrm; // 위에서 바라본 시점일 경우에 카메라 회전각도..
 		return; // 돌아간다!
 	}
+}
+
+void CGameEng::ActivateCameraTurnArround()
+{
+	m_bTurnArroundActivated = true;
+	m_fTargetRotYawVPGod = m_fRotYawVPGod + CAMERA_TURNAROUND_YAW;
 }
 
 void CGameEng::CameraZoom(float fDelta)

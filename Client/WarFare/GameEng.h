@@ -48,6 +48,8 @@ protected:
 	
 	float			m_fOffsetVPGod; // 위에서 바라본 시점일 경우에 거리..
 	float			m_fRotYawVPGod; // 위에서 바라본 시점일 경우에 카메라 회전각도..
+	float			m_fTargetRotYawVPGod;
+	bool			m_bTurnArroundActivated;
 
 	float			m_fZoomBackwardOrFoward; // 1.5인칭, 앞에서 본 시점일때 카메라 Zoom 1.0f 가 기준이다.
 	float			m_fLightningTimeRemain; // 번개 칠때 타이머..
@@ -80,6 +82,7 @@ public:
 	e_ViewPoint		ViewPoint() { return m_eViewPoint; } // 시점..
 	void			CameraPitchAdd(float fRotXPerSec);
 	void			CameraYawAdd(float fRotYPerSec);
+	void			ActivateCameraTurnArround();
 	void			CameraZoom(float fDelta);
 	float			CameraYaw() { return m_fRotYawVPGod; } // 위에서 바라본 시점일 경우에 카메라 회전각도..
 	void			SetActiveCamera(CN3Camera* pCamera) { m_pActiveCam = pCamera; }

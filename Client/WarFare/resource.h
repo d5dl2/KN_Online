@@ -1,5 +1,14 @@
 #pragma once
 
+#define IDC_CURSOR_ATTACK               1
+#define IDC_CURSOR_CLICK                2
+#define IDC_CURSOR_CLICK1               3
+#define IDC_CURSOR_NORMAL               4
+#define IDC_CURSOR_NORMAL1              5
+#define IDC_CURSOR_NOW_REPAIR           6
+#define IDC_CURSOR_PRE_REPAIR           7
+#define IDI_MAIN                        101
+#define IDR_MAIN_ACCELATOR              201
 #define IDS_BIND_POINT_FAILED           1001
 #define IDS_BIND_POINT_REQUEST_FAIL     1002
 #define IDS_BIND_POINT_SUCCESS          1003
