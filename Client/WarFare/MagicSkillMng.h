@@ -16,6 +16,8 @@
 typedef std::map<int, uint32_t>::value_type stlmapVAL_INT_DWORD;
 typedef std::multimap<int, uint32_t>::value_type stlmultimapVAL_INT_DWORD;
 
+#define PLAYER_SKILL_REQUEST_INTERVAL	0.7f
+
 
 class CMagicSkillMng : public CGameBase
 {

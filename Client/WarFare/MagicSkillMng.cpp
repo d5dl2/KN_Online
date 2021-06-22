@@ -1762,7 +1762,7 @@ void CMagicSkillMng::SuccessCast(__TABLE_UPC_SKILL* pSkill, CPlayerBase* pTarget
 		::_LoadStringFromResource(IDS_SKILL_USE, szFmt);
 		sprintf(szBuff, szFmt.c_str(), pSkill->szName.c_str());
 		m_pGameProcMain->MsgOutput(szBuff, 0xffffff00);
-		m_fRecastTime = (float)pSkill->iReCastTime / 10.0f;
+		m_fRecastTime = PLAYER_SKILL_REQUEST_INTERVAL;//(float)pSkill->iReCastTime / 10.0f;
 		m_fDelay = 0.3f;
 		s_pPlayer->m_iSkillStep = 0;
 
@@ -1910,7 +1910,7 @@ void CMagicSkillMng::ProcessCombo()
 		if(m_iCurrStep==m_iNumStep)//ÄÞº¸°ø°Ý ³¡³µ´Ù..
 		{
 			__TABLE_UPC_SKILL* pSkill = s_pTbl_Skill.Find(m_iComboSkillID);
-			if(pSkill) m_fRecastTime = (float)pSkill->iReCastTime / 10.0f;
+			if (pSkill) m_fRecastTime = PLAYER_SKILL_REQUEST_INTERVAL;// (float)pSkill->iReCastTime / 10.0f;
 			m_iCurrStep = -1;
 			s_pPlayer->m_iSkillStep = -1;
 			m_iNumStep = 0;			
