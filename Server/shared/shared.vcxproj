@@ -143,6 +143,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="APISocket.cpp" />
     <ClCompile Include="CircularBuffer.cpp" />
     <ClCompile Include="Compression.cpp" />
     <ClCompile Include="Compression_LZF.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="tstring.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="APISocket.h" />
     <ClInclude Include="Atomic.h" />
     <ClInclude Include="ByteBuffer.h" />
     <ClInclude Include="CircularBuffer.h" />

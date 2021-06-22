@@ -282,9 +282,6 @@
     <ClCompile Include="WhisperManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="APISocket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameProcedure.h">
@@ -609,9 +606,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="APISocket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

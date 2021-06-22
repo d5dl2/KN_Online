@@ -168,7 +168,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="APISocket.cpp" />
     <ClCompile Include="Bird.cpp" />
     <ClCompile Include="BirdMng.cpp" />
     <ClCompile Include="Catapult.cpp" />
@@ -260,7 +259,6 @@
     <ClCompile Include="WhisperManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="APISocket.h" />
     <ClInclude Include="Bird.h" />
     <ClInclude Include="BirdMng.h" />
     <ClInclude Include="Bitset.h" />

@@ -9,11 +9,11 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "shared/DebugUtils.h"
+#include "DebugUtils.h"
 #include "DInput.h"
 #include <string>
-#include "shared/types.h"
-#include "shared/Packet.h"
+#include "types.h"
+#include "Packet.h"
 
 typedef unsigned char Uint8;
 typedef unsigned short Uint16;
@@ -29,7 +29,7 @@ typedef unsigned long Uint64;
 
 #define _CRYPTION		// 암호화 사용
 #ifdef _CRYPTION
-#include "shared/JvCryption.h"
+#include "JvCryption.h"
 #endif
 
 #ifdef _DEBUG

@@ -123,6 +123,9 @@
     <ClCompile Include="pkware\pklib.c">
       <Filter>Compression\PKWARE</Filter>
     </ClCompile>
+    <ClCompile Include="APISocket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Atomic.h">
@@ -424,6 +427,9 @@
     </ClInclude>
     <ClInclude Include="Compression_LZF.h">
       <Filter>Compression\LZF</Filter>
+    </ClInclude>
+    <ClInclude Include="APISocket.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
