@@ -6,6 +6,7 @@
 
 #include "shared/types.h"
 #include "shared/version.h"
+#include "N3Base.h"
 
 // TODO: Shift this logic into a separate header and generally clean this shared logic up
 #ifndef ASSERT
@@ -404,8 +405,8 @@ struct __InfoPlayerMySelf : public __InfoPlayerOther
 			
 	int					iTargetHPPercent;
 	int					iGold;
-	Uint64					iExpNext;
-	Uint64					iExp;
+	Uint64				iExpNext;
+	Uint64				iExp;
 	int					iRealmPoint;		// 국가 기여도
 	int					iRealmPointMonthly;		// @Demircivi.
 	e_KnightsDuty		eKnightsDuty;		// 기사단 권한
