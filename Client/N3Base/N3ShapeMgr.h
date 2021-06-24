@@ -39,7 +39,7 @@ public:
 	{
 		int 	nCCPolyCount; // Collision Check Polygon Count
 		uint32_t m_iFileFormatVersion;
-		uint32_t*	pdwCCVertIndices; // Collision Check Polygon Vertex Indices - wCCPolyCount * 3 父怒 积己等促.
+		uint32_t*	pdwCCVertIndices = NULL; // Collision Check Polygon Vertex Indices - wCCPolyCount * 3 父怒 积己等促.
 
 		void Load(HANDLE hFile)
 		{
@@ -159,8 +159,8 @@ public:
 		if(x < 0 || x >= MAX_CELL_MAIN || z < 0 || z >= MAX_CELL_MAIN) return NULL;
 		if(NULL == m_pCells[x][z]) return NULL;
 
-		int xx = (((int)fX)%CELL_MAIN_SIZE)/CELL_SUB_SIZE;
-		int zz = (((int)fZ)%CELL_MAIN_SIZE)/CELL_SUB_SIZE;
+		int xx = (((int)max(fX, 0))%CELL_MAIN_SIZE)/CELL_SUB_SIZE;
+		int zz = (((int)max(fZ, 0))%CELL_MAIN_SIZE)/CELL_SUB_SIZE;
 		
 		return &(m_pCells[x][z]->SubCells[xx][zz]);
 	}
