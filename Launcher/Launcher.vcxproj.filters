@@ -30,12 +30,18 @@
     <ClInclude Include="LauncherCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="unzip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Launcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LauncherCore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="unzip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -24,11 +24,3 @@
 #define _APS_NEXT_SYMED_VALUE		110
 #endif
 #endif
-
-static COLORREF OK = RGB(255, 255, 255);
-static COLORREF ERR = RGB(255, 0, 0);
-
-static HBRUSH hBrushOK = CreateSolidBrush(OK);
-static HBRUSH hBrushERR = CreateSolidBrush(ERR);
-
-static HBRUSH hBrushConnectionLabel = hBrushERR;

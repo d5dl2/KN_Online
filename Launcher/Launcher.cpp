@@ -1,15 +1,16 @@
-// Launcher.cpp : Defines the entry point for the application.
+﻿// Launcher.cpp : Defines the entry point for the application.
 //
 
 #include "framework.h"
 #include "Launcher.h"
 #include <CommCtrl.h>
 #include "LauncherCore.h"
+#include <WinSock2.h>
 
 #define MAX_LOADSTRING 100
 
-#define WIDTH 300
-#define HEIGHT 300
+#define WIDTH 400
+#define HEIGHT 70
 const int ScreenX = (GetSystemMetrics(SM_CXSCREEN) - WIDTH) / 2;
 const int ScreenY = (GetSystemMetrics(SM_CYSCREEN) - HEIGHT) / 2;
 
@@ -27,8 +28,11 @@ INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 BOOL InitControls(HWND hwndParent);
 
 HWND hWnd;
-HWND hwndPROGRESSBAR;
 HWND hwndCONNECTIONLABEL;
+HWND hwndCLOSE;
+HWND hwndSARTGAME;
+
+LauncherCore eng;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -50,10 +54,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	{
 		return FALSE;
 	}
-
-	LauncherCore eng;
-	eng.Init(hWnd);
+	eng.Init(hWnd, hwndCONNECTIONLABEL);
 	
+
 	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_LAUNCHER));
 
 	MSG msg;
@@ -65,6 +68,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+			eng.Tick();
 		}
 	}
 
@@ -137,13 +141,39 @@ BOOL InitControls(HWND hwndParent)
 	hwndCONNECTIONLABEL = CreateWindowEx(0,
 		WC_STATIC,
 		(LPTSTR)NULL,
-		WS_CHILD | WS_VISIBLE,
+		WS_CHILD | WS_VISIBLE | SS_CENTER,
 		rcClient.left + 10,
 		rcClient.top + 10,
 		rcClient.right / 10 * 8,
-		rcClient.bottom / 10 * 8,
+		rcClient.bottom - 20,
 		hwndParent,
 		(HMENU)0,
+		hInst,
+		NULL);
+
+	hwndCLOSE = CreateWindowEx(0,
+		WC_BUTTON,
+		"X",
+		WS_CHILD | WS_VISIBLE,
+		rcClient.right - 20,
+		rcClient.top + 5,
+		15,
+		15,
+		hwndParent,
+		NULL,
+		hInst,
+		NULL);
+
+	hwndSARTGAME = CreateWindowEx(0,
+		WC_BUTTON,
+		"START",
+		WS_CHILD | WS_VISIBLE,
+		rcClient.right - 70,
+		rcClient.top + 25,
+		65,
+		35,
+		hwndParent,
+		NULL,
 		hInst,
 		NULL);
 
@@ -189,18 +219,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_COMMAND:
 	{
-		int wmId = LOWORD(wParam);
-		// Parse the menu selections:
-		switch (wmId)
+		if ((HWND)lParam == hwndCLOSE)
 		{
-			/*case IDM_ABOUT:
-				DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-				break;
-			case IDM_EXIT:
-				DestroyWindow(hWnd);
-				break;*/
-		default:
-			return DefWindowProc(hWnd, message, wParam, lParam);
+			eng.s_pSocket->Disconnect();
+			PostQuitMessage(0);
+			break;
+		}
+		if ((HWND)lParam == hwndSARTGAME)
+		{
+			STARTUPINFO info = { sizeof(info) };
+			PROCESS_INFORMATION processInfo;
+			if (CreateProcess("WarFare.exe", NULL, NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
+			{
+				WaitForSingleObject(processInfo.hProcess, INFINITE);
+				CloseHandle(processInfo.hProcess);
+				CloseHandle(processInfo.hThread);
+				PostQuitMessage(0);
+				return true;
+			}
+			else
+			{
+				SetWindowTextA(hwndCONNECTIONLABEL, "Can not start exe file: WarFare.exe ");
+				return true;
+			}
 		}
 	}
 	break;
@@ -212,18 +253,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		EndPaint(hWnd, &ps);
 	}
 	break;
-	case WM_CTLCOLORSTATIC:
-	{
-		if ((HWND)lParam == hwndCONNECTIONLABEL)
-		{
-			HDC hdcStatic = (HDC)wParam;
-			SetBkColor(hdcStatic, OK);
-			return DefWindowProc(hWnd, message, wParam, lParam);
-		}
-	}
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
+	case WM_SOCKETMSG: {
+		switch (WSAGETSELECTEVENT(lParam))
+		{
+		case FD_CONNECT: {
+			//TRACE("Socket connected..\n");
+		} break;
+		case FD_CLOSE: {
+			SetWindowTextA(hwndCONNECTIONLABEL, "CONNECTION LOST!");
+			//TRACE("Socket closed..\n");
+		}  break;
+		case FD_READ: {
+			eng.s_pSocket->Receive();
+		} break;
+		default: {
+			__ASSERT(0, "WM_SOCKETMSG: unknown socket flag.");
+		} break;
+		}
+	} break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
