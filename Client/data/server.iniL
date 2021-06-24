@@ -1,0 +1,10 @@
+[Join]
+Registration site=Hazırlanacak
+
+[Server]
+Count=1
+IP0=127.0.0.1
+PLOGIN=15100
+
+[Version]
+Files=1098
