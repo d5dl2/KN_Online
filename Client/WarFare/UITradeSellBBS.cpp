@@ -15,7 +15,7 @@
 #include "PlayerMySelf.h"
 #include "UIManager.h"
 #include "LocalInput.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

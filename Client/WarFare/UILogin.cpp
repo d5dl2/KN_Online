@@ -167,8 +167,8 @@ bool CUILogIn::Load(HANDLE hFile)
 		m_pGroup_ServerList->SetVisible(false);
 	}
 #if _DEBUG
-	m_pEdit_id->SetString("twostars");
-	m_pEdit_pw->SetString("test");
+	m_pEdit_id->SetString("testing");
+	m_pEdit_pw->SetString("testing");
 #endif
 	return true;
 }

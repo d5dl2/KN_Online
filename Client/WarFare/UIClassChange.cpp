@@ -14,7 +14,7 @@
 #include "GameProcMain.h"
 #include "UISkillTreeDlg.h"
 
-#include "APISocket.h"
+#include "shared\APISocket.h"
 #include "UIVarious.h"
 
 #include "UIHotkeyDlg.h"

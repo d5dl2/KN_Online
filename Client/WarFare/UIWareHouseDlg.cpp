@@ -8,7 +8,7 @@
 
 #include "PacketDef.h"
 #include "LocalInput.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 #include "GameProcMain.h"
 #include "PlayerMySelf.h"
 #include "GameBase.h"

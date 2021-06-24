@@ -13,7 +13,7 @@
 #include "..\WarFare\N3FXBundleGame.h"
 #include "..\WarFare\N3WorldManager.h"
 #include "..\WarFare\MagicSkillMng.h"
-#include "..\WarFare\APISocket.h"
+#include "..\Server\shared\APISocket.h"
 #include "..\WarFare\PacketDef.h"
 
 #include "N3ShapeExtra.h"

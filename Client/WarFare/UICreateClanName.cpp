@@ -9,7 +9,7 @@
 #include "GameProcMain.h"
 #include "GameProcedure.h"
 #include "PacketDef.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 
 //#include "StdAfxBase.h"
 

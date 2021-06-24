@@ -12,7 +12,7 @@
 #include "UIQuestMenu.h"
 #include "UIManager.h"
 #include "PlayerOtherMgr.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 
 //-----------------------------------------------------------------------------
 CUIQuestMenu::CUIQuestMenu(void) {

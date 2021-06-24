@@ -13,7 +13,7 @@
 #include "N3UIString.h"
 #include "N3UIImage.h"
 #include "GameProcMain.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 #include "PacketDef.h"
 #include "PlayerMySelf.h"
 #include "UIManager.h"

@@ -6,7 +6,7 @@
 #include "resource.h"
 
 #include "GameProcMain.h"
-#include "APISocket.h"
+#include "shared/APISocket.h"
 #include "PacketDef.h"
 #include "PlayerMySelf.h"
 #include "PlayerOtherMgr.h"

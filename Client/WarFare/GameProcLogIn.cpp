@@ -10,7 +10,7 @@
 #include "PlayerMySelf.h"
 #include "UIManager.h"
 #include "LocalInput.h"
-#include "APISocket.h"
+#include "shared/APISocket.h"
 #include "PacketDef.h"
 
 #include "N3Camera.h"

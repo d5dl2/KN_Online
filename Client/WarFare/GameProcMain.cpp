@@ -10,7 +10,7 @@
 #include "GameProcMain.h"
 #include "LocalInput.h"
 
-#include "APISocket.h"
+#include "shared\APISocket.h"
 #include "PacketDef.h"
 
 #include "PlayerMySelf.h"

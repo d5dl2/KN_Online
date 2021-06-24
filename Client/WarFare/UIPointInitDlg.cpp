@@ -12,7 +12,7 @@
 #include "PlayerMySelf.h"
 
 #include "GameProcedure.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 
 #include "N3UIWndBase.h"
 #include "UIManager.h"

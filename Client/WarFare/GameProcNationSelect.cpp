@@ -6,7 +6,7 @@
 
 #include "PacketDef.h"
 #include "GameEng.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 
 #include "GameProcNationSelect.h"
 #include "PlayerMySelf.h"

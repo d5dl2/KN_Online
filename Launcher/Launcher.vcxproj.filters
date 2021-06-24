@@ -27,9 +27,15 @@
     <ClInclude Include="Launcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LauncherCore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Launcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LauncherCore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -6,7 +6,7 @@
 #include "resource.h"
 #include "GameProcMain.h"
 #include "PacketDef.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 #include "UIKnightsOperation.h"
 
 #include "N3UIButton.h"

@@ -5,7 +5,7 @@
 //#include "stdafx.h"
 #include "UITradeBBSSelector.h"
 #include "PacketDef.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 #include "GameProcedure.h"
 
 #include "GameProcMain.h"

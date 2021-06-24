@@ -6,7 +6,7 @@
 
 #include "PacketDef.h"
 #include "LocalInput.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 #include "GameProcMain.h"
 #include "PlayerMyself.h"
 #include "N3UIWndBase.h"

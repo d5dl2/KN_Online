@@ -18,7 +18,7 @@
 #include "UIDroppedItemDlg.h"
 
 #include "PacketDef.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 
 #include "UIPerTradeDlg.h"
 #include "UITradeEditDlg.h"

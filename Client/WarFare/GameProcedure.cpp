@@ -9,7 +9,7 @@
 #include "GameEng.h"
 #include "packetdef.h"
 #include "LocalInput.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 #include "UIMessageBox.h"
 #include "UIMessageBoxManager.h"
 #include "UIManager.h"

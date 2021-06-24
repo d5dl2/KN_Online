@@ -12,7 +12,7 @@
 #include "N3UIEdit.h"
 #include "UIChat.h"
 #include "GameProcMain.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 #include "GameEng.h"
 
 #include "UIManager.h"

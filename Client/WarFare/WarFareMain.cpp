@@ -8,7 +8,7 @@
 #include "N3SndMgr.h"
 #include "N3UIEdit.h"
 #include "PacketDef.h"
-#include "APISocket.h"
+#include "shared/APISocket.h"
 #include "PlayerMySelf.h"
 #include "GameProcMain.h"
 #include "N3WorldManager.h"

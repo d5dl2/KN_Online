@@ -9,7 +9,7 @@
 #include "PlayerMySelf.h"
 #include "PacketDef.h"
 #include "LocalInput.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 #include "GameProcMain.h"
 
 #include "UIInventory.h"

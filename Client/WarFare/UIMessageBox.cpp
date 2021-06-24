@@ -17,7 +17,7 @@
 #include "UIMessageBoxManager.h"
 #include "SubProcPerTrade.h"
 #include <shellapi.h>
-#include "APISocket.h"
+#include "shared\APISocket.h"
 
 #include "N3UIButton.h"
 #include "N3UIString.h"

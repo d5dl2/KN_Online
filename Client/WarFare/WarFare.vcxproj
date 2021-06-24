@@ -100,7 +100,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\lib\;..\N3Base\$(Configuration)\;$(DXSDK_DIR)lib\x86\;..\..\Server\shared\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>;..\N3Base\$(Configuration)\;$(DXSDK_DIR)lib\x86\;..\..\Server\shared\$(Configuration)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>shared.lib;ws2_32.lib;winmm.lib;imm32.lib;d3d9.lib;d3dx9.lib;dsound.lib;dxguid.lib;wsock32.lib;DInput8.lib;N3Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>

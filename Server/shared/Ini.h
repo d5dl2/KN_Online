@@ -1,5 +1,8 @@
 #pragma once
 
+#include <vector>
+#include <map>
+
 #define	INI_SECTION_START	'['
 #define	INI_SECTION_END		']'
 #define	INI_KEY_SEPARATOR	'='

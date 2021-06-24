@@ -9,7 +9,7 @@
 #include "PlayerMySelf.h"
 #include "PlayerOtherMgr.h"
 #include "PacketDef.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 
 #include "N3UIString.h"
 #include "N3UIImage.h"

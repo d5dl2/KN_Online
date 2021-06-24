@@ -10,7 +10,7 @@
 #include "..\WarFare\N3TerrainManager.h"
 #include "..\WarFare\DungeonManager.h"
 
-#include "..\WarFare\APISocket.h"
+#include "..\Server\shared\APISocket.h"
 #include "..\WarFare\PacketDef.h"
 
 #include "..\WarFare\GameProcedure.h"

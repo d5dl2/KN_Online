@@ -6,7 +6,7 @@
 
 #include "PacketDef.h"
 #include "LocalInput.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 #include "resource.h"
 #include "UISkillTreeDlg.h"
 

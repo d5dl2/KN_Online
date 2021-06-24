@@ -10,7 +10,7 @@
 #include "GameProcMain.h"
 #include "GameProcedure.h"
 #include "PacketDef.h"
-#include "APISocket.h"
+#include "shared\APISocket.h"
 #include "PlayerMySelf.h"
 #include "UITradeBBSSelector.h"
 #include "UIManager.h"
