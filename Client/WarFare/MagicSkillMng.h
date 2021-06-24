@@ -12,11 +12,13 @@
 #include "GameDef.h"
 #include "GameBase.h"
 #include <map>
+#include "time.h"
 
 typedef std::map<int, uint32_t>::value_type stlmapVAL_INT_DWORD;
 typedef std::multimap<int, uint32_t>::value_type stlmultimapVAL_INT_DWORD;
+typedef	std::map<uint32_t, unsigned long> UISkillCooldownList;
 
-#define PLAYER_SKILL_REQUEST_INTERVAL	0.7f
+#define PLAYER_SKILL_REQUEST_INTERVAL	0.1f
 
 
 class CMagicSkillMng : public CGameBase
@@ -91,6 +93,7 @@ public:
 	//지역마법..
 	int						m_iMyRegionTargetFXID;
 
+	UISkillCooldownList		m_UISkillCooldownList;
 
 
 protected:

@@ -698,25 +698,40 @@ void CUIHotKeyDlg::EffectTriggerByHotKey(int iIndex)
 {
 	if(iIndex < 0 || iIndex >= 8) return;
 
-	if ( m_pMyHotkey[m_iCurPage][iIndex] && m_pMyHotkey[m_iCurPage][iIndex]->pUIIcon->IsVisible() )
+	__IconItemSkill* pUISkill = m_pMyHotkey[m_iCurPage][iIndex];
+
+	if (pUISkill && pUISkill->pUIIcon->IsVisible())
 	{
-		DoOperate(m_pMyHotkey[m_iCurPage][iIndex]);
+		DoOperate(pUISkill);
 	}
 }
 
-void CUIHotKeyDlg::DoOperate(__IconItemSkill*	pSkill)
+void CUIHotKeyDlg::DoOperate(__IconItemSkill*	pUISkill)
 {
-	if(!pSkill) return;
+	if(!pUISkill) return;
 
 	//char szBuf[512];
 	// 메시지 박스 출력..	
 	//wsprintf(szBuf, "%s 스킬이 사용되었습니다.", pSkill->pSkill->szName.c_str() );
 	//CGameProcedure::s_pProcMain->MsgOutput(szBuf, 0xffffff00);
 
-	PlayRepairSound();					
+	UISkillCooldownList::iterator itr;
+	unsigned long diff = ULONG_MAX;
+	itr = CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.find(pUISkill->pSkill->dwID);
+	if (itr != CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.end()) {
+		diff = timeGetTime() - itr->second;
+	}
+	if (diff > (pUISkill->pSkill->iReCastTime * 100)) {
+		if (pUISkill->pSkill->iReCastTime != 0) {
+			CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.erase(pUISkill->pSkill->dwID);
+			CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pUISkill->pSkill->dwID, timeGetTime()));
+		}
+		PlayRepairSound();
+
+		int iIDTarget = CGameBase::s_pPlayer->m_iIDTarget;
+		CGameProcedure::s_pProcMain->m_pMagicSkillMng->MsgSend_MagicProcess(iIDTarget, pUISkill->pSkill);
+	}
 	
-	int iIDTarget = CGameBase::s_pPlayer->m_iIDTarget;
-	CGameProcedure::s_pProcMain->m_pMagicSkillMng->MsgSend_MagicProcess(iIDTarget, pSkill->pSkill);
 }
 
 void CUIHotKeyDlg::ClassChangeHotkeyFlush()

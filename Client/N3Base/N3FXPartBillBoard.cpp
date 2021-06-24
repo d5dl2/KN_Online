@@ -208,7 +208,14 @@ bool CN3FXPartBillBoard::Load(HANDLE hFile)
 	}
 
 	if(m_iVersion>=5) ReadFile(hFile, &m_mtxRot, sizeof(m_mtxRot), &dwRWC, NULL);
-
+	if (m_iVersion >= 6) {
+		byte a;
+		ReadFile(hFile, &a, sizeof(byte), &dwRWC, NULL);
+	}
+	if (m_iVersion >= 7) {
+		byte a;
+		ReadFile(hFile, &a, sizeof(byte), &dwRWC, NULL);
+	}
 	CreateVB();
 	Init();
 
