@@ -44,3 +44,5 @@ Debug/
 Release/
 /N3Base/lib
 bin/
+Client/data/Log.txt
+Client/data/*.exe
