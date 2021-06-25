@@ -78,7 +78,7 @@ void CN3UIImage::initCoordinateArray() {
 	float cx, cy;
 
 
-	D3DVERTEX2 d_index0 = { 0.5, -0.5 };
+	D3DVERTEX2 d_index0 = { 0.5, 0.5 };
 	v_coordinates[0] = d_index0;
 
 	for (int i = 1; i < 1000; i++) {
@@ -87,29 +87,34 @@ void CN3UIImage::initCoordinateArray() {
 
 		if (percent <= 87.5 && percent > 62.5) {
 			cx = 1;
-			cy = 0 - (float)((25 - (percent - 62.5)) / 25);
+			cy = 1 - (float)((25 - (percent - 62.5)) / 25);
 		}
 		if (percent <= 62.5 && percent > 37.5) {
 			cx = 1 - (float)((25 - (percent - 37.5)) / 25);
-			cy = -1;
+			cy = 0;
 		}
 		if (percent <= 37.5 && percent > 12.5) {
 			cx = 0;
-			cy = -1 + (float)((25 - (percent - 12.5)) / 25);
+			cy = 0 + (float)((25 - (percent - 12.5)) / 25);
 		}
 		if (percent <= 12.5) {
 			cx = 0 + (float)((12.5 - percent) / 25);
-			cy = 0;
+			cy = 1;
 		}
 		if (percent > 87.5) {
 			cx = 0.5 + (float)((12.5 - (percent - 87.5)) / 25);
-			cy = 0;
+			cy = 1;
 		}
 
 
 		D3DVERTEX2 d_nextIndex2 = { cx, cy };
 		v_coordinates[i] = d_nextIndex2;
 
+	}
+	for (int i = 0; i < 1000; i++)
+	{
+		v_coordinates[i].fX *= 500;
+		v_coordinates[i].fY *= 500;
 	}
 
 }
@@ -231,22 +236,24 @@ void CN3UIImage::RenderIconWrapperWithCd(float cd)
 
 	if (m_pVB)
 	{
-		int cd10 = cd * 10;
-		if (cd10 > 998) cd10 = 998;
-
+		int cd10 = min(cd * 10, 998);
 		s_lpD3DDev->SetStreamSource(0, m_pVB, 0, sizeof(__VertexTransformed));
-		s_lpD3DDev->SetTextureStageState(1, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-		s_lpD3DDev->SetTextureStageState(1, D3DTSS_ALPHAARG1, D3DTA_CURRENT);
-		s_lpD3DDev->SetTextureStageState(1, D3DTSS_ALPHAARG2, D3DTA_TEXTURE);
-		s_lpD3DDev->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
-		s_lpD3DDev->SetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-		s_lpD3DDev->SetFVF(FVF_XYZT1);
-		s_lpD3DDev->SetTexture(1, pTexCooldown);
-		s_lpD3DDev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, cd10, v_coordinates, sizeof(D3DVERTEX2));
+		s_lpD3DDev->SetFVF(FVF_TRANSFORMED);
+		s_lpD3DDev->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, cd10, v_coordinates, sizeof(D3DVERTEX2));
+		
+		/*
+		
+					s_lpD3DDev->SetStreamSource( 0, m_pVB, 0, sizeof(__VertexTransformed) );
+						s_lpD3DDev->SetFVF(FVF_TRANSFORMED);
 
-		s_lpD3DDev->SetTexture(1, NULL);
-		s_lpD3DDev->SetTexture(0, NULL);
-		//s_lpD3DDev->DrawPrimitive(D3DPT_TRIANGLEFAN, 0, 2);
+						s_lpD3DDev->SetTexture( 0, m_pTexRef->Get());
+						s_lpD3DDev->SetTextureStageState( 0, D3DTSS_COLOROP,    D3DTOP_MODULATE );
+						s_lpD3DDev->SetTextureStageState( 0, D3DTSS_COLORARG1,  D3DTA_TEXTURE );
+						s_lpD3DDev->SetTextureStageState( 0, D3DTSS_COLORARG2,  D3DTA_DIFFUSE );
+
+						s_lpD3DDev->DrawPrimitive( D3DPT_TRIANGLEFAN, 0, 2);
+		*/
+
 	}
 
 	CN3UIBase::Render();
