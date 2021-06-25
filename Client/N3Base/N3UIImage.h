@@ -11,6 +11,11 @@
 
 #include "N3UIBase.h"
 
+struct D3DVERTEX2
+{
+	float fX, fY;
+};
+
 class N3Texture;
 class CN3UIImage : public CN3UIBase  
 {
@@ -52,11 +57,15 @@ public:
 	virtual void	Tick();									// Tick
 	virtual void	Render();								// 그리기
 	virtual void	RenderIconWrapper();
+	virtual void	RenderIconWrapperWithCd(float cd);
 	virtual void	Init(CN3UIBase* pParent);				// 초기화
 	virtual bool	Load(HANDLE hFile);
 
 	virtual void	operator = (const CN3UIImage& other);
 
+	static D3DVERTEX2 v_coordinates[1000];
+
+	static void initCoordinateArray(); 
 protected:
 	bool			CreateVB();								// 4개의 vertex를 가진 vertex buffer 생성
 	virtual void	SetVB();								// vertex buffer 다시 세팅

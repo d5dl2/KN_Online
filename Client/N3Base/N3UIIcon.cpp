@@ -124,6 +124,18 @@ uint32_t CN3UIIcon::MouseProc(uint32_t dwFlags, const POINT& ptCur, const POINT&
 	return dwRet;
 }
 
+void CN3UIIcon::SetStyleAsCooldown(float cd_in) {
+
+	cd = cd_in;
+
+	if (cd > 0) {
+		CN3UIBase::SetStyle(UISTYLE_ICON_ON_COOLDOWN | CN3UIBase::GetStyle());
+	}/*
+	else {
+		CN3UIBase::SetStyle(UISTYLE_ICON_ON_COOLDOWN);
+	}*/
+}
+
 void CN3UIIcon::Render()
 {
 	if (!IsVisible()) return;
@@ -159,6 +171,14 @@ void CN3UIIcon::Render()
 		CN3UIWndBase::m_pSelectionImage->SetColor(D3DCOLOR_RGBA(200, 20, 20, 100));
 		CN3UIWndBase::m_pSelectionImage->RenderIconWrapper();
 		CN3UIWndBase::m_pSelectionImage->SetColor(m_dc);
+		CN3UIWndBase::m_pSelectionImage->SetVisible(false);
+	}
+
+	if (m_dwStyle & UISTYLE_ICON_ON_COOLDOWN)
+	{
+		CN3UIWndBase::m_pSelectionImage->SetVisible(true);
+		CN3UIWndBase::m_pSelectionImage->SetRegion(GetRegion());
+		CN3UIWndBase::m_pSelectionImage->RenderIconWrapperWithCd(cd);
 		CN3UIWndBase::m_pSelectionImage->SetVisible(false);
 	}
 }
