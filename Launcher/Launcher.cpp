@@ -229,9 +229,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			STARTUPINFO info = { sizeof(info) };
 			PROCESS_INFORMATION processInfo;
-			if (CreateProcess("WarFare.exe", NULL, NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
+			if (CreateProcess("KnightOnline.exe", NULL, NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
 			{
-				WaitForSingleObject(processInfo.hProcess, INFINITE);
 				CloseHandle(processInfo.hProcess);
 				CloseHandle(processInfo.hThread);
 				PostQuitMessage(0);
@@ -239,7 +238,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			else
 			{
-				SetWindowTextA(hwndCONNECTIONLABEL, "Can not start exe file: WarFare.exe ");
+				SetWindowTextA(hwndCONNECTIONLABEL, "Can not start exe file: KnightOnline.exe ");
 				return true;
 			}
 		}

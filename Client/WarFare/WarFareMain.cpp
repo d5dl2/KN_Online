@@ -16,7 +16,7 @@
 #include "UIManager.h"
 #include "IMouseWheelInputDlg.h"
 #include "time.h"
-
+#include "LauncherReplacer.h"
 #include "DFont.h"
 #include <WinSock2.h>
 //-----------------------------------------------------------------------------
@@ -261,6 +261,7 @@ HWND CreateSubWindow(HINSTANCE hInstance)
 */
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
 {
+	ReplaceLauncherIfUpdated();
 	// NOTE: get the current directory and make it known to CN3Base
 	char szPath[_MAX_PATH] = "";
 	GetCurrentDirectory(_MAX_PATH, szPath);

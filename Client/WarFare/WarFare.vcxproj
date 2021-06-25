@@ -187,6 +187,7 @@
     <ClCompile Include="GrassBoard.cpp" />
     <ClCompile Include="GrassMng.cpp" />
     <ClCompile Include="ItemRepairMgr.cpp" />
+    <ClCompile Include="LauncherReplacer.cpp" />
     <ClCompile Include="LightMgr.cpp" />
     <ClCompile Include="LocalInput.cpp" />
     <ClCompile Include="MachineBase.cpp" />
@@ -280,6 +281,7 @@
     <ClInclude Include="GrassBoard.h" />
     <ClInclude Include="GrassMng.h" />
     <ClInclude Include="IMouseWheelInputDlg.h" />
+    <ClInclude Include="LauncherReplacer.h" />
     <ClInclude Include="resource1.h" />
     <ClInclude Include="UICmdEdit.h" />
     <ClInclude Include="UICmdList.h" />
