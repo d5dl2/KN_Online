@@ -1685,6 +1685,10 @@ void CMagicSkillMng::Tick()
 
 void CMagicSkillMng::SuccessCast(__TABLE_UPC_SKILL* pSkill, CPlayerBase* pTarget)
 {
+
+	if (pSkill->iReCastTime != 0) {
+		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
+	}
 	s_pPlayer->m_dwMagicID = 0xffffffff;
 	s_pPlayer->m_fCastingTime = 0.0f;
 

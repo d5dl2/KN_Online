@@ -749,7 +749,6 @@ void CUIHotKeyDlg::DoOperate(__IconItemSkill*	pUISkill)
 	if (diff > (pUISkill->pSkill->iReCastTime * 100)) {
 		if (pUISkill->pSkill->iReCastTime != 0) {
 			CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.erase(pUISkill->pSkill->dwID);
-			CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pUISkill->pSkill->dwID, timeGetTime()));
 		}
 
 		int iIDTarget = CGameBase::s_pPlayer->m_iIDTarget;
