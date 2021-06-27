@@ -301,13 +301,39 @@ void CUIHotKeyDlg::Render()
 	for(UIListReverseItor itor = m_Children.rbegin(); m_Children.rend() != itor; ++itor)
 	{
 		CN3UIBase* pChild = (*itor);
-		if ( (GetState() == UI_STATE_ICON_MOVING) && (pChild->UIType() == UI_TYPE_ICON) && (CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo) &&
-			((CN3UIIcon *)pChild == CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo->pUIIcon) )	continue;
+		if ( pChild->UIType() == UI_TYPE_ICON)	continue;
+			
 			pChild->Render();
 	}
 
 	if ( (GetState() == UI_STATE_ICON_MOVING) && (CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo) )
 		CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo->pUIIcon->Render();		
+
+	int k;
+	for (k = 0; k < MAX_SKILL_IN_HOTKEY; k++)
+	{
+		if (m_pMyHotkey[m_iCurPage][k] != NULL) {
+
+			
+			float cd = 0;
+			UISkillCooldownList::iterator itr;
+			itr = CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.find(m_pMyHotkey[m_iCurPage][k]->pSkill->dwID);
+			if (itr != CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.end()) {
+				int recasttime = m_pMyHotkey[m_iCurPage][k]->pSkill->iReCastTime * 100;
+				DWORD t = timeGetTime();
+				DWORD diff = t - itr->second;
+				if (diff > recasttime) diff = recasttime;
+				cd = (((recasttime - diff) / (float)recasttime) * 100);
+				DWORD a = timeGetTime();
+			}
+			m_pMyHotkey[m_iCurPage][k]->pUIIcon->SetStyleAsCooldown(cd);
+
+			m_pMyHotkey[m_iCurPage][k]->pUIIcon->Render();
+
+		}
+		
+
+	}
 
 	if(m_iCurPage == m_iSelectPage && m_pMyHotkey[m_iSelectPage][m_iSelectIndex])
 	{
@@ -320,7 +346,6 @@ void CUIHotKeyDlg::Render()
 	CN3UIArea* pArea;
 	POINT ptCur = CGameProcedure::s_pLocalInput->MouseGetPos();
 
-	int k;
 	for(k = 0; k < MAX_SKILL_IN_HOTKEY; k++ )
 	{
 		if (m_pMyHotkey[m_iCurPage][k] != NULL) 
@@ -724,9 +749,7 @@ void CUIHotKeyDlg::DoOperate(__IconItemSkill*	pUISkill)
 	if (diff > (pUISkill->pSkill->iReCastTime * 100)) {
 		if (pUISkill->pSkill->iReCastTime != 0) {
 			CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.erase(pUISkill->pSkill->dwID);
-			CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pUISkill->pSkill->dwID, timeGetTime()));
 		}
-		PlayRepairSound();
 
 		int iIDTarget = CGameBase::s_pPlayer->m_iIDTarget;
 		CGameProcedure::s_pProcMain->m_pMagicSkillMng->MsgSend_MagicProcess(iIDTarget, pUISkill->pSkill);

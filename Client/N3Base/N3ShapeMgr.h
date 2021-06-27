@@ -57,7 +57,6 @@ public:
 
 #if _DEBUG				
 				static char szTrace[256];
-				sprintf(szTrace, "CollisionCheckPolygon : %d\n", nCCPolyCount);
 				OutputDebugString(szTrace);
 #endif
 			}
