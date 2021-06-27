@@ -36,6 +36,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shared", "Server\shared\sha
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Launcher", "Launcher\Launcher.vcxproj", "{DA7B669B-50B8-4371-9112-DE7CF9A1BC94}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CoolDownTest", "CoolDownTest\CoolDownTest.vcxproj", "{9F927A17-8732-4631-B9A6-6A78860E2FAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -136,6 +138,16 @@ Global
 		{DA7B669B-50B8-4371-9112-DE7CF9A1BC94}.Release|Win32.Build.0 = Release|Win32
 		{DA7B669B-50B8-4371-9112-DE7CF9A1BC94}.Release|x64.ActiveCfg = Release|x64
 		{DA7B669B-50B8-4371-9112-DE7CF9A1BC94}.Release|x64.Build.0 = Release|x64
+		{9F927A17-8732-4631-B9A6-6A78860E2FAF}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{9F927A17-8732-4631-B9A6-6A78860E2FAF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9F927A17-8732-4631-B9A6-6A78860E2FAF}.Debug|Win32.Build.0 = Debug|Win32
+		{9F927A17-8732-4631-B9A6-6A78860E2FAF}.Debug|x64.ActiveCfg = Debug|x64
+		{9F927A17-8732-4631-B9A6-6A78860E2FAF}.Debug|x64.Build.0 = Debug|x64
+		{9F927A17-8732-4631-B9A6-6A78860E2FAF}.Release|Any CPU.ActiveCfg = Release|Win32
+		{9F927A17-8732-4631-B9A6-6A78860E2FAF}.Release|Win32.ActiveCfg = Release|Win32
+		{9F927A17-8732-4631-B9A6-6A78860E2FAF}.Release|Win32.Build.0 = Release|Win32
+		{9F927A17-8732-4631-B9A6-6A78860E2FAF}.Release|x64.ActiveCfg = Release|x64
+		{9F927A17-8732-4631-B9A6-6A78860E2FAF}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

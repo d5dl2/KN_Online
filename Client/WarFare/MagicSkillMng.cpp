@@ -1685,6 +1685,10 @@ void CMagicSkillMng::Tick()
 
 void CMagicSkillMng::SuccessCast(__TABLE_UPC_SKILL* pSkill, CPlayerBase* pTarget)
 {
+
+	if (pSkill->iReCastTime != 0) {
+		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
+	}
 	s_pPlayer->m_dwMagicID = 0xffffffff;
 	s_pPlayer->m_fCastingTime = 0.0f;
 
@@ -1762,7 +1766,7 @@ void CMagicSkillMng::SuccessCast(__TABLE_UPC_SKILL* pSkill, CPlayerBase* pTarget
 		::_LoadStringFromResource(IDS_SKILL_USE, szFmt);
 		sprintf(szBuff, szFmt.c_str(), pSkill->szName.c_str());
 		m_pGameProcMain->MsgOutput(szBuff, 0xffffff00);
-		m_fRecastTime = PLAYER_SKILL_REQUEST_INTERVAL;//(float)pSkill->iReCastTime / 10.0f;
+		m_fRecastTime = PLAYER_SKILL_REQUEST_INTERVAL_UI;//(float)pSkill->iReCastTime / 10.0f;
 		m_fDelay = 0.3f;
 		s_pPlayer->m_iSkillStep = 0;
 
@@ -1910,7 +1914,7 @@ void CMagicSkillMng::ProcessCombo()
 		if(m_iCurrStep==m_iNumStep)//ÄÞº¸°ø°Ý ³¡³µ´Ù..
 		{
 			__TABLE_UPC_SKILL* pSkill = s_pTbl_Skill.Find(m_iComboSkillID);
-			if (pSkill) m_fRecastTime = PLAYER_SKILL_REQUEST_INTERVAL;// (float)pSkill->iReCastTime / 10.0f;
+			if (pSkill) m_fRecastTime = PLAYER_SKILL_REQUEST_INTERVAL_UI;// (float)pSkill->iReCastTime / 10.0f;
 			m_iCurrStep = -1;
 			s_pPlayer->m_iSkillStep = -1;
 			m_iNumStep = 0;			
@@ -2072,6 +2076,9 @@ void CMagicSkillMng::MsgRecv_Flying(Packet& pkt)
 	//
 	////common.....//////////////////////////////////////////////////////////////
 
+	if (pSkill->iReCastTime != 0) {
+		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
+	}
 	//TRACE("recv flying : %.4f\n", CN3Base::TimeGet());
 
 	if(pPlayer && pPlayer->State()==PSA_SPELLMAGIC)
@@ -2141,6 +2148,10 @@ void CMagicSkillMng::MsgRecv_Effecting(Packet& pkt)
 	if(!pSkill) return;
 	//
 	////common.....//////////////////////////////////////////////////////////////
+
+	if (pSkill->iReCastTime != 0) {
+		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
+	}
 		
 	if(pPlayer && iSourceID!=s_pPlayer->IDNumber() && pPlayer->State()==PSA_SPELLMAGIC)
 	{
@@ -2346,6 +2357,9 @@ void CMagicSkillMng::MsgRecv_BuffType(Packet& pkt)
 	if(it!= m_ListBuffTypeID.end())
 	{
 		__TABLE_UPC_SKILL* pSkill = s_pTbl_Skill.Find(it->second);
+		if (pSkill->iReCastTime != 0) {
+			CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
+		}
 		m_pGameProcMain->m_pUIStateBarAndMiniMap->DelMagic(pSkill);
 		m_ListBuffTypeID.erase(it);
 	}
