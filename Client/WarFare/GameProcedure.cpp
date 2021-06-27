@@ -357,21 +357,22 @@ void CGameProcedure::Tick()
 	while (!s_pSocket->m_qRecvPkt.empty())
 	{
 		auto pkt = s_pSocket->m_qRecvPkt.front();
+		s_pSocket->m_qRecvPkt.pop();
+
 		if (!ProcessPacket(*pkt))
 			CLogWriter::Write("Invalid Packet... (%d)", pkt->GetOpcode());
 
 		delete pkt;
-		s_pSocket->m_qRecvPkt.pop();
 	}
 
 	while (!s_pSocketSub->m_qRecvPkt.empty())
 	{
 		auto pkt = s_pSocketSub->m_qRecvPkt.front();
+		s_pSocketSub->m_qRecvPkt.pop();
 		if (!ProcessPacket(*pkt))
 			break;
 
 		delete pkt;
-		s_pSocketSub->m_qRecvPkt.pop();
 	}
 	// Network Msg Ã³¸®ÇÏ±â
 	//////////////////////////////////

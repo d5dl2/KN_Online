@@ -11,15 +11,6 @@
 #include "PacketDef.h"
 #include "shared\APISocket.h"
 
-//#include "StdAfxBase.h"
-
-
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -49,18 +40,21 @@ bool CUICmdEdit::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 	{
 		if (pSender->m_szID == "btn_ok")
 		{
-			m_szArg1 = m_pEdit_Box->GetString();
-			std::string tempCmdStr = "/" + m_pText_Title->GetString() + " " + m_szArg1;
-			CGameProcedure::s_pProcMain->ParseChattingCommand(tempCmdStr);
-			SetVisible(false);
+			ExecutePM();
 			return true;
 		}
 
 		if (pSender->m_szID == "btn_cancel")
 		{
 			SetVisible(false);
+			m_pEdit_Box->SetString("");
 			return true;
 		}
+	}
+	if (dwMsg == UIMSG_EDIT_RETURN)
+	{
+		ExecutePM();
+		return true;
 	}
 	return true;
 }
@@ -86,4 +80,24 @@ void CUICmdEdit::SetVisible(bool bVisible)
 	}
 
 	CN3UIBase::SetVisible(bVisible);
+}
+
+bool CUICmdEdit::OnKeyPress(int iKey)
+{
+	switch (iKey)
+	{
+	case DIK_ESCAPE:
+		SetVisible(false);
+		m_pEdit_Box->SetString("");
+		return true;
+	}
+
+	return CN3UIBase::OnKeyPress(iKey);
+}
+
+void CUICmdEdit::ExecutePM()
+{
+	std::string tempCmdStr = "/PM " + m_pEdit_Box->GetString();
+	CGameProcedure::s_pProcMain->ParseChattingCommand(tempCmdStr);	
+	m_pEdit_Box->SetString("");
 }

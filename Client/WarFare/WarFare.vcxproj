@@ -92,7 +92,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>DIRECTINPUT_VERSION=0x0800;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;_WINSOCK_DEPRECATED_NO_WARNINGS;_N3GAME;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DIRECTINPUT_VERSION=0x0800;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;_N3GAME;WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\N3Base\;..\..\Server\;$(DXSDK_DIR)include\</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <ShowIncludes>false</ShowIncludes>

@@ -81,7 +81,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;WIN32;_DEBUG;_ITERATOR_DEBUG_LEVEL=0;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsCpp</CompileAs>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>

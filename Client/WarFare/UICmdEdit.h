@@ -24,7 +24,6 @@ public:
 	CN3UIButton*	m_pBtn_Ok;
 	CN3UIButton*	m_pBtn_Cancel;
 	CN3UIEdit*		m_pEdit_Box;
-	std::string		m_szArg1;
 
 public:
 	void SetVisible(bool bVisible);
@@ -32,7 +31,8 @@ public:
 
 	bool Load(HANDLE hFile);
 	bool ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg);
-
+	bool OnKeyPress(int iKey);
+	void ExecutePM();
 	CUICmdEdit();
 	virtual ~CUICmdEdit();
 };

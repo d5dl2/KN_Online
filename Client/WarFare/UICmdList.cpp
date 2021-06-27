@@ -204,6 +204,11 @@ bool CUICmdList::OnKeyPress(int iKey)
 		case DIK_ESCAPE:
 			if (!m_bClosingNow) this->Close();
 			return true;
+		case DIK_RETURN:
+		case DIK_NUMPADENTER:
+			uint8_t iSel = m_pList_Cmds->GetCurSel();
+			ExecuteCommand(iSel);
+			return true;
 	}
 
 	return CN3UIBase::OnKeyPress(iKey);

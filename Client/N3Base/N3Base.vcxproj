@@ -302,7 +302,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>DIRECTINPUT_VERSION=0x0800;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;_N3GAME;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DIRECTINPUT_VERSION=0x0800;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;_N3GAME;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_ITERATOR_DEBUG_LEVEL=0;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\Server\;$(DXSDK_DIR)include\</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>

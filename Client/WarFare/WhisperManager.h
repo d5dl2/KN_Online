@@ -9,13 +9,14 @@
 class CWhisperManager
 {
 private:
-	typedef std::map<std::string, CUIWhisperOpenDlg*>	WhisperMap;
+	typedef std::vector<std::pair<std::string, CUIWhisperOpenDlg*>>	WhisperVec;
 	POINT												GetPosForNewDlg();
 	POINT												m_DefaultPos;
+	WhisperVec::iterator FindDlg(std::string ssenderId);
 protected:
-	WhisperMap	m_Whispers;
+	WhisperVec	m_Whispers;
 
-	void CreateNewDlg(std::string targetId);
+	void CreateNewDlg(std::string targetId, std::string msg);
 	
 	std::string szOpenChat;
 	std::string szCloseChat;
@@ -26,7 +27,7 @@ public:
 	void NewConnection(std::string targetId);
 	void SetFileNames(std::string openChat, std::string closeChat);
 	void SetDefaultPos(int x, int y) { m_DefaultPos.x = x; m_DefaultPos.y = y; };
-
+	void RePosAll();
 	CWhisperManager();
 	~CWhisperManager();
 };
