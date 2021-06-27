@@ -11,9 +11,23 @@
 
 #include "N3UIBase.h"
 
-struct D3DVERTEX2
+
+struct D3DVERTEX2 : public __Vector3
 {
-	float fX, fY;
+public:
+	float rhw;
+	D3DCOLOR color; 
+public:
+	void Set(float sx, float sy, float sz, float srhw, D3DCOLOR sColor)
+	{
+		x = sx; y = sy; z = sz; rhw = srhw; color = sColor;
+	}
+
+	D3DVERTEX2() {}
+	D3DVERTEX2(float sx, float sy, float sz, float srhw, D3DCOLOR sColor)
+	{
+		this->Set(sx, sy, sz, srhw, sColor);
+	}
 };
 
 class N3Texture;
@@ -36,7 +50,7 @@ protected:
 	std::string				m_szTexFN;		// 텍스처 이름.. 따로 갖고 있는 이유는 툴에서 텍스처 부르기가 실패할 경우를 대비해서이다.
 	__FLOAT_RECT			m_frcUVRect;	// uv 좌표를 저장
 	D3DCOLOR				m_Color;		// 칼라(배경 이미지가 없을경우 사용된다.)
-
+	static D3DVERTEX2*		v_coordinates;
 	float					m_fAnimFrame;	// 1초당 그려지는 이미지의 수
 	int						m_iAnimCount;	// Animate되는 이미지 수(Load할 때 child의 숫자로 파악)
 	float					m_fCurAnimFrame;	// 현재 그려질 animate frame index (소수는 버리고 사용하자)
@@ -63,7 +77,7 @@ public:
 
 	virtual void	operator = (const CN3UIImage& other);
 
-	static D3DVERTEX2 v_coordinates[1000];
+	//static D3DVERTEX2 v_coordinates[15];
 
 	static void initCoordinateArray(); 
 protected:

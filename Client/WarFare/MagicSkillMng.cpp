@@ -2076,6 +2076,9 @@ void CMagicSkillMng::MsgRecv_Flying(Packet& pkt)
 	//
 	////common.....//////////////////////////////////////////////////////////////
 
+	if (pSkill->iReCastTime != 0) {
+		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
+	}
 	//TRACE("recv flying : %.4f\n", CN3Base::TimeGet());
 
 	if(pPlayer && pPlayer->State()==PSA_SPELLMAGIC)
@@ -2145,6 +2148,10 @@ void CMagicSkillMng::MsgRecv_Effecting(Packet& pkt)
 	if(!pSkill) return;
 	//
 	////common.....//////////////////////////////////////////////////////////////
+
+	if (pSkill->iReCastTime != 0) {
+		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
+	}
 		
 	if(pPlayer && iSourceID!=s_pPlayer->IDNumber() && pPlayer->State()==PSA_SPELLMAGIC)
 	{
@@ -2350,6 +2357,9 @@ void CMagicSkillMng::MsgRecv_BuffType(Packet& pkt)
 	if(it!= m_ListBuffTypeID.end())
 	{
 		__TABLE_UPC_SKILL* pSkill = s_pTbl_Skill.Find(it->second);
+		if (pSkill->iReCastTime != 0) {
+			CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
+		}
 		m_pGameProcMain->m_pUIStateBarAndMiniMap->DelMagic(pSkill);
 		m_ListBuffTypeID.erase(it);
 	}
