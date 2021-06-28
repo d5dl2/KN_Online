@@ -167,7 +167,7 @@ void CCountableItemEditDlg::Open(e_UIWND eUW, e_UIWND_DISTRICT eUD, bool bCountG
 	int iCX, iCY;
 
 	m_bLocked = true;
-	if (bCountGold || bWareGold) {
+	if (bCountGold || bWareGold || eUW == UIWND_TRANSACTION) {
 		this->SetQuantity(-1);
 	}
 	else {
@@ -204,7 +204,7 @@ void CCountableItemEditDlg::Open(e_UIWND eUW, e_UIWND_DISTRICT eUD, bool bCountG
 		rcThis = GetRegion();
 		SetPos(iCX-(rcThis.right-rcThis.left)/2, iCY-(rcThis.bottom-rcThis.top)/2);
 	}
-	if (!bCountGold && !bWareGold && CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->iCount == 1) {
+	if (eUW != UIWND_TRANSACTION && !bCountGold && !bWareGold && CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->iCount == 1) {
 		ReceiveMessage(m_pBtnOk, UIMSG_BUTTON_CLICK);
 		CCountableItemEditDlg::Close();
 	}

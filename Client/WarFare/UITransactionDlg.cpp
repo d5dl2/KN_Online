@@ -1358,6 +1358,16 @@ RECT CUITransactionDlg::GetSampleRect()
 	return rect;
 }
 
+RECT CUITransactionDlg::GetFirstRect(e_UIWND_DISTRICT eUIWnd)
+{
+	if (eUIWnd == UIWND_DISTRICT_TRADE_MY) {
+		return CN3UIWndBase::GetChildAreaByiOrder(UI_AREA_TYPE_TRADE_NPC, 0)->GetRegion();
+	}
+	if (eUIWnd == UIWND_DISTRICT_TRADE_NPC)
+		return CN3UIWndBase::GetChildAreaByiOrder(UI_AREA_TYPE_TRADE_MY, 0)->GetRegion();
+}
+
+
 e_UIWND_DISTRICT CUITransactionDlg::GetWndDistrict(__IconItemSkill* spItem)
 {
 	for( int i = 0; i < MAX_ITEM_TRADE; i++ )
@@ -1467,7 +1477,7 @@ bool CUITransactionDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 	e_UIWND_DISTRICT eUIWnd;
 	int iOrder;
 
-	uint32_t dwBitMask = 0x000f0000;
+	uint32_t dwBitMask = 0x0f0f0000;
 
 	switch (dwMsg & dwBitMask)
 	{
@@ -1508,6 +1518,34 @@ bool CUITransactionDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 				CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->pUIIcon->SetRegion(GetSampleRect());
 				CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->pUIIcon->SetMoveRect(GetSampleRect());
 			}
+			break;
+		case UIMSG_ICON_RDOWN_FIRST:
+			CN3UIWndBase::AllHighLightIconFree();
+
+			// Get Item..
+			spItem = GetHighlightIconItem((CN3UIIcon*)pSender);
+			CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.UIWnd = UIWND_TRANSACTION;
+			eUIWnd = GetWndDistrict(spItem);
+			if (eUIWnd == UIWND_DISTRICT_UNKNOWN)	FAIL_CODE
+			CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.UIWndDistrict = eUIWnd;
+			iOrder = GetItemiOrder(spItem, eUIWnd);
+			if (iOrder == -1)	FAIL_CODE
+			CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.iOrder = iOrder;
+			CN3UIWndBase::m_sSelectedIconInfo.pItemSelect = spItem;
+			// Do Ops..
+			((CN3UIIcon*)pSender)->SetRegion(GetSampleRect());
+			RECT destRect = GetFirstRect(eUIWnd);
+			((CN3UIIcon*)pSender)->SetMoveRect(destRect);
+			// Sound..
+			if (spItem) PlayItemSound(spItem->pItemBasic);
+			long x = destRect.left + ((destRect.right - destRect.left) / 2);
+			long y = destRect.top + ((destRect.bottom - destRect.top) / 2);
+
+			if (!CGameProcedure::s_pUIMgr->BroadcastIconDropWithRBMsg(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect, x, y))
+				// 아이콘 위치 원래대로..
+				IconRestore();
+			// Sound..
+			if (CN3UIWndBase::m_sSelectedIconInfo.pItemSelect) PlayItemSound(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->pItemBasic);
 			break;
 	}
 

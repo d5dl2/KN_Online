@@ -781,6 +781,22 @@ RECT CUIPerTradeDlg::GetSampleRect()
 	return rect;
 }
 
+RECT CUIPerTradeDlg::GetFirstEmptyRect()
+{
+	
+		int i = 0;
+		for (; i < MAX_ITEM_PER_TRADE; i++)
+		{
+			if (m_pPerTradeMy[i] == NULL)
+				break;
+		}
+
+		return CN3UIWndBase::GetChildAreaByiOrder(UI_AREA_TYPE_TRADE_NPC, i)->GetRegion();
+
+
+}
+
+
 bool CUIPerTradeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 {
 // Temp Define
@@ -854,6 +870,33 @@ bool CUIPerTradeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 				IconRestore();
 			// Sound..
 			if (CN3UIWndBase::m_sSelectedIconInfo.pItemSelect) PlayItemSound(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->pItemBasic);			
+			break;
+		case UIMSG_ICON_RDOWN_FIRST:
+			CN3UIWndBase::AllHighLightIconFree();
+
+			// Get Item..
+			spItem = GetHighlightIconItem((CN3UIIcon*)pSender);
+			CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.UIWnd = UIWND_PER_TRADE;
+			CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.UIWndDistrict = UIWND_DISTRICT_PER_TRADE_INV;
+			iOrder = GetItemiOrder(spItem, UIWND_DISTRICT_PER_TRADE_INV);
+			if (iOrder == -1)	FAIL_CODE
+			CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.iOrder = iOrder;
+			CN3UIWndBase::m_sSelectedIconInfo.pItemSelect = spItem;
+
+			// Do Ops..
+			((CN3UIIcon*)pSender)->SetRegion(GetSampleRect());
+			RECT destRect = GetFirstEmptyRect();
+			((CN3UIIcon*)pSender)->SetMoveRect(destRect);
+			// Sound..
+			if (spItem) PlayItemSound(spItem->pItemBasic);
+			long x = destRect.left + ((destRect.right - destRect.left) / 2);
+			long y = destRect.top + ((destRect.bottom - destRect.top) / 2);
+
+			if (!CGameProcedure::s_pUIMgr->BroadcastIconDropWithRBMsg(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect, x, y))
+				// 아이콘 위치 원래대로..
+				IconRestore();
+			// Sound..
+			if (CN3UIWndBase::m_sSelectedIconInfo.pItemSelect) PlayItemSound(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->pItemBasic);
 			break;
 	}
 
