@@ -29,7 +29,7 @@ protected:
 
 	CN3SndObj*		m_pSnd_On;		// 버튼 위에 마우스가 올라가는 순간 내는 소리
 	CN3SndObj*		m_pSnd_Click;	// 버튼이 눌리는 순간 내는 소리
-
+	bool			isLastStateDown;
 // Operations
 public:
 	virtual bool	Load(HANDLE hFile);

@@ -395,18 +395,18 @@ void CUIWhisperOpenDlg::ToggleOpenClose(bool opened)
 {
 	SetVisible(opened);
 	m_pUIWhisperCloseDlg->SetVisible(!opened);
+	m_pUIWhisperCloseDlg->SetBarState(UI_STATE_BUTTON_NORMAL);
 	manager->RePosAll();
 	if (opened)
 	{
 		SetFocus();
-		m_pUIWhisperCloseDlg->SetBarState(UI_STATE_BUTTON_NORMAL);
 	}
 }
 void CUIWhisperOpenDlg::IncomingWhisper(std::string& szString)
 {
 	this->AddLineBuffer(szString, INCOMING_MSG_COLOR);
 	this->AdjustScroll();
-	m_pUIWhisperCloseDlg->SetBarState(UI_STATE_BUTTON_DOWN);
+	m_pUIWhisperCloseDlg->SetBarState(UI_STATE_BUTTON_DOWN_2CHECKDOWN);
 }
 void CUIWhisperOpenDlg::AddLineBuffer(const std::string& szString, D3DCOLOR color)
 {

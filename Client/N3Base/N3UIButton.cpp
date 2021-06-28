@@ -14,10 +14,6 @@
 #include "N3SndMgr.h"
 #include "N3SndObj.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#endif
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -28,10 +24,11 @@ CN3UIButton::CN3UIButton()
 
 	m_dwStyle = UISTYLE_BTN_NORMAL;
 	m_eState = UI_STATE_BUTTON_NORMAL;
-	ZeroMemory(m_ImageRef, sizeof(CN3UIImage*)*NUM_BTN_STATE);
+	ZeroMemory(m_ImageRef, sizeof(CN3UIImage*) * NUM_BTN_STATE);
 	ZeroMemory(&m_rcClick, sizeof(m_rcClick));
 	m_pSnd_On = NULL;
 	m_pSnd_Click = NULL;
+	isLastStateDown = false;
 }
 
 CN3UIButton::~CN3UIButton()
@@ -46,7 +43,7 @@ void CN3UIButton::Release()
 
 	m_dwStyle = UISTYLE_BTN_NORMAL;
 	m_eState = UI_STATE_BUTTON_NORMAL;
-	ZeroMemory(m_ImageRef, sizeof(CN3UIImage*)*NUM_BTN_STATE);
+	ZeroMemory(m_ImageRef, sizeof(CN3UIImage*) * NUM_BTN_STATE);
 	ZeroMemory(&m_rcClick, sizeof(m_rcClick));
 
 	CN3Base::s_SndMgr.ReleaseObj(&m_pSnd_On);
@@ -57,7 +54,7 @@ void CN3UIButton::SetRegion(const RECT& Rect)
 {
 	CN3UIBase::SetRegion(Rect);
 	SetClickRect(Rect);
-	for(UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
+	for (UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
 	{
 		(*itor)->SetRegion(Rect);
 	}
@@ -68,46 +65,68 @@ BOOL CN3UIButton::MoveOffset(int iOffsetX, int iOffsetY)
 	if (FALSE == CN3UIBase::MoveOffset(iOffsetX, iOffsetY)) return FALSE;
 	// click 영역
 	m_rcClick.left += iOffsetX;		m_rcClick.top += iOffsetY;
-	m_rcClick.right += iOffsetX;	m_rcClick.bottom += iOffsetY;	
+	m_rcClick.right += iOffsetX;	m_rcClick.bottom += iOffsetY;
 	return TRUE;
 }
 
 void CN3UIButton::Render()
 {
- 	if(!m_bVisible) return;
+	if (!m_bVisible) return;
 
-	switch(m_eState)
+	switch (m_eState)
 	{
 	case UI_STATE_BUTTON_NORMAL:
-		{
-			if (m_ImageRef[BS_NORMAL]) m_ImageRef[BS_NORMAL]->Render();
-		}
-		break;
-	case UI_STATE_BUTTON_DOWN:
-	case UI_STATE_BUTTON_DOWN_2CHECKDOWN:
+	{
+		if (m_ImageRef[BS_NORMAL]) m_ImageRef[BS_NORMAL]->Render();
+	}
+	break;
+	case UI_STATE_BUTTON_DOWN:	
+	{
+		if (m_ImageRef[BS_DOWN]) m_ImageRef[BS_DOWN]->Render();
+	}
+	break;
 	case UI_STATE_BUTTON_DOWN_2CHECKUP:
+	case UI_STATE_BUTTON_DOWN_2CHECKDOWN:
+		if (m_ImageRef[BS_NORMAL] && m_ImageRef[BS_DOWN])
 		{
-			if (m_ImageRef[BS_DOWN]) m_ImageRef[BS_DOWN]->Render();
-		}
+			float time = TimeGet();
+
+			if (isLastStateDown)
+			{
+				m_ImageRef[BS_NORMAL]->Render();
+				if ((int)time % 2 == 0)
+				{
+					isLastStateDown = false;
+				}
+			}
+			else
+			{
+				m_ImageRef[BS_DOWN]->Render();
+				if ((int)time % 2 == 1)
+				{
+					isLastStateDown = true;
+				}
+			}
+		}		
 		break;
 	case UI_STATE_BUTTON_ON:
-		{
-			if (m_ImageRef[BS_ON]) m_ImageRef[BS_ON]->Render();
-		}
-		break;
+	{
+		if (m_ImageRef[BS_ON]) m_ImageRef[BS_ON]->Render();
+	}
+	break;
 	case UI_STATE_BUTTON_DISABLE:
-		{
-			if (m_ImageRef[BS_DISABLE]) m_ImageRef[BS_DISABLE]->Render();
-		}
+	{
+		if (m_ImageRef[BS_DISABLE]) m_ImageRef[BS_DISABLE]->Render();
+	}
 	}
 
 	int i = 0;
-	for(UIListReverseItor itor = m_Children.rbegin(); m_Children.rend() != itor; ++itor)
+	for (UIListReverseItor itor = m_Children.rbegin(); m_Children.rend() != itor; ++itor)
 	{
 		CN3UIBase* pChild = (*itor);
-		for(i = 0; i < NUM_BTN_STATE; i++) // 버튼의 구성 요소가 아닌지 보고..
-			if(pChild == m_ImageRef[i]) break;
-		if(i >= NUM_BTN_STATE) pChild->Render(); // 버튼 차일드가 아니면 렌더링..
+		for (i = 0; i < NUM_BTN_STATE; i++) // 버튼의 구성 요소가 아닌지 보고..
+			if (pChild == m_ImageRef[i]) break;
+		if (i >= NUM_BTN_STATE) pChild->Render(); // 버튼 차일드가 아니면 렌더링..
 	}
 }
 
@@ -118,18 +137,18 @@ uint32_t CN3UIButton::MouseProc(uint32_t dwFlags, const POINT& ptCur, const POIN
 
 #ifndef _REPENT
 #ifdef _N3GAME
-	if ( CN3UIWndBase::m_sRecoveryJobInfo.m_bWaitFromServer ) return dwRet;
+	if (CN3UIWndBase::m_sRecoveryJobInfo.m_bWaitFromServer) return dwRet;
 #endif
 #endif
 
-	if(false == IsIn(ptCur.x, ptCur.y))	// 영역 밖이면
+	if (false == IsIn(ptCur.x, ptCur.y))	// 영역 밖이면
 	{
 		if (false == IsIn(ptOld.x, ptOld.y))	return dwRet; // 이전 pointer도 영역 밖이었으면 그냥 리턴
 		dwRet |= UI_MOUSEPROC_PREVINREGION;	// 이전 마우스 좌표는 영역 안이었다.
 
 		if (UI_STATE_BUTTON_DISABLE == m_eState) return dwRet;	// disable이면 그냥 리턴
 
-		if(UISTYLE_BTN_NORMAL & m_dwStyle) // normal 버튼 이면
+		if (UISTYLE_BTN_NORMAL & m_dwStyle) // normal 버튼 이면
 		{
 			SetState(UI_STATE_BUTTON_NORMAL);	// normal 상태로
 		}
@@ -150,7 +169,7 @@ uint32_t CN3UIButton::MouseProc(uint32_t dwFlags, const POINT& ptCur, const POIN
 	// 클릭 영역 밖이면
 	if (FALSE == PtInRect(&m_rcClick, ptCur))
 	{
-		if(UISTYLE_BTN_NORMAL & m_dwStyle) // normal 버튼 이면
+		if (UISTYLE_BTN_NORMAL & m_dwStyle) // normal 버튼 이면
 		{
 			SetState(UI_STATE_BUTTON_NORMAL);	// normal 상태로
 		}
@@ -167,18 +186,18 @@ uint32_t CN3UIButton::MouseProc(uint32_t dwFlags, const POINT& ptCur, const POIN
 
 	// 아래는 클릭 영역 안일때..
 	// normal 버튼 이면
-	if(UISTYLE_BTN_NORMAL & m_dwStyle)
+	if (UISTYLE_BTN_NORMAL & m_dwStyle)
 	{
-		if(dwFlags & UI_MOUSE_LBCLICK)  // 왼쪽버튼 눌르는 순간
+		if (dwFlags & UI_MOUSE_LBCLICK)  // 왼쪽버튼 눌르는 순간
 		{
 			SetState(UI_STATE_BUTTON_DOWN); // 누른 상태로 만들고..
 			if (m_pSnd_Click) m_pSnd_Click->Play();	// 사운드가 있으면 play 하기
 			dwRet |= UI_MOUSEPROC_DONESOMETHING;
 			return dwRet;
 		}
-		else if(dwFlags & UI_MOUSE_LBCLICKED) // 왼쪽버튼을 떼는 순간
+		else if (dwFlags & UI_MOUSE_LBCLICKED) // 왼쪽버튼을 떼는 순간
 		{
-			if(m_pParent && UI_STATE_BUTTON_DOWN == m_eState) // 이전 상태가 버튼을 Down 상태이면
+			if (m_pParent && UI_STATE_BUTTON_DOWN == m_eState) // 이전 상태가 버튼을 Down 상태이면
 			{
 				SetState(UI_STATE_BUTTON_ON); // 버튼을 On 상태로 만든다..
 				m_pParent->ReceiveMessage(this, UIMSG_BUTTON_CLICK); // 부모에게 버튼 클릭 통지..
@@ -198,9 +217,9 @@ uint32_t CN3UIButton::MouseProc(uint32_t dwFlags, const POINT& ptCur, const POIN
 	}
 
 	// 체크 버튼이면
-	else if(UISTYLE_BTN_CHECK & m_dwStyle) 
+	else if (UISTYLE_BTN_CHECK & m_dwStyle)
 	{
-		if(dwFlags & UI_MOUSE_LBCLICK)  // 왼쪽버튼 눌르는 순간
+		if (dwFlags & UI_MOUSE_LBCLICK)  // 왼쪽버튼 눌르는 순간
 		{
 			if (UI_STATE_BUTTON_NORMAL == m_eState || UI_STATE_BUTTON_ON == m_eState)
 			{
@@ -209,7 +228,7 @@ uint32_t CN3UIButton::MouseProc(uint32_t dwFlags, const POINT& ptCur, const POIN
 				dwRet |= UI_MOUSEPROC_DONESOMETHING;
 				return dwRet;
 			}
-			else if(UI_STATE_BUTTON_DOWN == m_eState)
+			else if (UI_STATE_BUTTON_DOWN == m_eState)
 			{
 				SetState(UI_STATE_BUTTON_DOWN_2CHECKUP); // 임시로 누른 상태(DOWN_2CHECKUP)로 만들고..
 				if (m_pSnd_Click) m_pSnd_Click->Play();	// 사운드가 있으면 play 하기
@@ -217,9 +236,9 @@ uint32_t CN3UIButton::MouseProc(uint32_t dwFlags, const POINT& ptCur, const POIN
 				return dwRet;
 			}
 		}
-		else if(dwFlags & UI_MOUSE_LBCLICKED)  // 왼쪽버튼 떼는 순간
+		else if (dwFlags & UI_MOUSE_LBCLICKED)  // 왼쪽버튼 떼는 순간
 		{
-			if(UI_STATE_BUTTON_DOWN_2CHECKDOWN == m_eState) // 이전 상태가 2CHECKDOWN 상태이면
+			if (UI_STATE_BUTTON_DOWN_2CHECKDOWN == m_eState) // 이전 상태가 2CHECKDOWN 상태이면
 			{
 				SetState(UI_STATE_BUTTON_DOWN); // down 상태로 만들기
 				if (m_pParent) m_pParent->ReceiveMessage(this, UIMSG_BUTTON_CLICK); // 부모에게 버튼 클릭 통지..
@@ -257,12 +276,12 @@ bool CN3UIButton::Load(HANDLE hFile)
 	ReadFile(hFile, &m_rcClick, sizeof(m_rcClick), &dwNum, NULL);	// click 영역
 
 	// m_ImageRef 설정하기
-	for(UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
+	for (UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
 	{
 		CN3UIBase* pChild = (*itor);
 		if (UI_TYPE_IMAGE != pChild->UIType()) continue;	// image만 골라내기
 		int iBtnState = (int)(pChild->GetReserved());
-		if (iBtnState<NUM_BTN_STATE)
+		if (iBtnState < NUM_BTN_STATE)
 		{
 			m_ImageRef[iBtnState] = (CN3UIImage*)pChild;
 		}
@@ -271,9 +290,9 @@ bool CN3UIButton::Load(HANDLE hFile)
 	// 이전 uif파일을 컨버팅 하려면 사운드 로드 하는 부분 막기
 	int iSndFNLen = 0;
 	ReadFile(hFile, &iSndFNLen, sizeof(iSndFNLen), &dwNum, NULL);		//	사운드 파일 문자열 길이
-	if (iSndFNLen>0)
+	if (iSndFNLen > 0)
 	{
-		std::vector<char> buffer(iSndFNLen+1, NULL);
+		std::vector<char> buffer(iSndFNLen + 1, NULL);
 		ReadFile(hFile, &buffer[0], iSndFNLen, &dwNum, NULL);
 
 		__ASSERT(NULL == m_pSnd_On, "memory leak");
@@ -281,9 +300,9 @@ bool CN3UIButton::Load(HANDLE hFile)
 	}
 
 	ReadFile(hFile, &iSndFNLen, sizeof(iSndFNLen), &dwNum, NULL);		//	사운드 파일 문자열 길이
-	if (iSndFNLen>0)
+	if (iSndFNLen > 0)
 	{
-		std::vector<char> buffer(iSndFNLen+1, NULL);
+		std::vector<char> buffer(iSndFNLen + 1, NULL);
 		ReadFile(hFile, &buffer[0], iSndFNLen, &dwNum, NULL);
 
 		__ASSERT(NULL == m_pSnd_Click, "memory leak");
@@ -302,12 +321,12 @@ void CN3UIButton::operator = (const CN3UIButton& other)
 	SetSndClick(other.GetSndFName_Click());	// 사운드
 
 	// m_ImageRef 설정하기
-	for(UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
+	for (UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
 	{
 		CN3UIBase* pChild = (*itor);
 		if (UI_TYPE_IMAGE != pChild->UIType()) continue;	// image만 골라내기
 		int iBtnState = (int)(pChild->GetReserved());
-		if (iBtnState<NUM_BTN_STATE)
+		if (iBtnState < NUM_BTN_STATE)
 		{
 			m_ImageRef[iBtnState] = (CN3UIImage*)pChild;
 		}
@@ -324,12 +343,12 @@ bool CN3UIButton::Save(HANDLE hFile)
 	int iSndFNLen = 0;
 	if (m_pSnd_On) iSndFNLen = m_pSnd_On->m_szFileName.size();
 	WriteFile(hFile, &iSndFNLen, sizeof(iSndFNLen), &dwNum, NULL);		//	사운드 파일 문자열 길이
-	if (iSndFNLen>0) WriteFile(hFile, m_pSnd_On->m_szFileName.c_str(), iSndFNLen, &dwNum, NULL);
+	if (iSndFNLen > 0) WriteFile(hFile, m_pSnd_On->m_szFileName.c_str(), iSndFNLen, &dwNum, NULL);
 
 	iSndFNLen = 0;
 	if (m_pSnd_Click) iSndFNLen = m_pSnd_Click->m_szFileName.size();
 	WriteFile(hFile, &iSndFNLen, sizeof(iSndFNLen), &dwNum, NULL);		//	사운드 파일 문자열 길이
-	if (iSndFNLen>0) WriteFile(hFile, m_pSnd_Click->m_szFileName.c_str(), iSndFNLen, &dwNum, NULL);
+	if (iSndFNLen > 0) WriteFile(hFile, m_pSnd_Click->m_szFileName.c_str(), iSndFNLen, &dwNum, NULL);
 
 	return true;
 }
@@ -338,9 +357,9 @@ bool CN3UIButton::Save(HANDLE hFile)
 void CN3UIButton::CreateImages()
 {
 	int i;
-	for (i=0; i<NUM_BTN_STATE; ++i)
+	for (i = 0; i < NUM_BTN_STATE; ++i)
 	{
-		__ASSERT(NULL == m_ImageRef[i],"이미지가 이미 할당되어 있어여");
+		__ASSERT(NULL == m_ImageRef[i], "이미지가 이미 할당되어 있어여");
 		m_ImageRef[i] = new CN3UIImage();
 		m_ImageRef[i]->Init(this);
 		m_ImageRef[i]->SetRegion(m_rcRegion);
