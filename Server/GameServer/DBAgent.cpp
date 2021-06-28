@@ -103,15 +103,6 @@ int8_t CDBAgent::AccountLogin(string & strAccountID, string & strPasswd)
 	if (!dbCommand->Execute(_T("{CALL ACCOUNT_LOGIN(?, ?, ?)}")))
 		ReportSQLError(m_GameDB->GetError());
 
-	/*
-	dbCommand->AddParameter(SQL_PARAM_OUTPUT, &bRet);
-	dbCommand->AddParameter(SQL_PARAM_INPUT, strAccountID.c_str(), strAccountID.length());
-	dbCommand->AddParameter(SQL_PARAM_INPUT, strPasswd.c_str(), strPasswd.length());
-
-	if (!dbCommand->Execute(_T("{? = CALL GAME_LOGIN(?, ?)}")))
-		ReportSQLError(m_GameDB->GetError());
-	*/
-
 	return bRet;
 }
 
