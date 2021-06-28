@@ -167,13 +167,16 @@ void CCountableItemEditDlg::Open(e_UIWND eUW, e_UIWND_DISTRICT eUD, bool bCountG
 	int iCX, iCY;
 
 	m_bLocked = true;
-	this->SetQuantity(-1);
-
+	if (bCountGold || bWareGold) {
+		this->SetQuantity(-1);
+	}
+	else {
+		this->SetQuantity(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->iCount);
+	}
 	SetVisible(true);
 	CN3UIEdit* pEdit = (CN3UIEdit*)this->GetChildByID("edit_trade");
 	__ASSERT(pEdit, "NULL UI Component!!");
 	if(pEdit) pEdit->SetFocus();
-
 
 	m_eCallerWnd = eUW;
 	m_eCallerWndDistrict = eUD;
@@ -200,6 +203,10 @@ void CCountableItemEditDlg::Open(e_UIWND eUW, e_UIWND_DISTRICT eUD, bool bCountG
 		iCY = (rc.bottom+rc.top)/2;
 		rcThis = GetRegion();
 		SetPos(iCX-(rcThis.right-rcThis.left)/2, iCY-(rcThis.bottom-rcThis.top)/2);
+	}
+	if (!bCountGold && !bWareGold && CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->iCount == 1) {
+		ReceiveMessage(m_pBtnOk, UIMSG_BUTTON_CLICK);
+		CCountableItemEditDlg::Close();
 	}
 }
 
@@ -229,7 +236,7 @@ void CCountableItemEditDlg::SetQuantity(int iQuantity) // "edit_trade" Edit Cont
 	char szBuff[64] = "";
 	if (iQuantity != -1)
 		sprintf(szBuff, "%d", iQuantity);
-
+	
 	pEdit->SetString(szBuff);
 }
 

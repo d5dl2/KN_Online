@@ -191,6 +191,7 @@ void CUIManager::Render()
 	*/
 	////////////////////////////////////////////////////////
 #ifdef _DEBUG
+#ifdef DEBUG_STATISTICS
 	CDFont* m_pDFont = new CDFont("굴림", 10);	// default 로 굴림 16으로 설정
 	m_pDFont->InitDeviceObjects(CN3Base::s_lpD3DDev);
 	m_pDFont->RestoreDeviceObjects();
@@ -232,6 +233,7 @@ void CUIManager::Render()
 	}
 
 	delete m_pDFont;
+#endif
 #endif
 	////////////////////////////////////////////////////////
 
@@ -337,6 +339,55 @@ bool CUIManager::BroadcastIconDropMsg(__IconItemSkill* spItem)
 	}
 	return false;
 }
+
+bool CUIManager::BroadcastIconDropWithRBMsg(__IconItemSkill* spItem, long x , long y)
+{
+	bool bFound = false;
+	POINT ptCur = CGameProcedure::s_pLocalInput->MouseGetPos();
+	ptCur.x = x;
+	ptCur.y = y;
+	// 윈도우들을 돌아 다니면서 검사..
+	for (UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
+	{
+		if (bFound) break;
+		CN3UIBase* pChild = (*itor);
+		if (pChild->UIType() == UI_TYPE_ICON_MANAGER)
+		{
+			// 해당 윈도우가 보이고(활성화 되어 있고), 그 윈도우 영역 안에 있으면..
+			if (((CN3UIWndBase*)pChild)->IsVisible() && ((CN3UIWndBase*)pChild)->IsIn(ptCur.x, ptCur.y))
+				// 해당 윈도우에 아이콘 드롭 메시지 함수를 호출..
+				if (((CN3UIWndBase*)pChild)->ReceiveIconDrop(spItem, ptCur))
+					return true;
+				else
+					bFound = true;
+		}
+	}
+
+	// 어느 누구의 영역에도 속하지 않으면.. 해당 아이콘을 가진 윈도우에게 Cancel 메시지를 날려 준다..
+	if (!bFound)
+	{
+		switch (CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.UIWnd)
+		{
+		case UIWND_INVENTORY:
+			CGameProcedure::s_pProcMain->m_pUIInventory->CancelIconDrop(spItem);
+			break;
+
+		case UIWND_TRANSACTION:
+			CGameProcedure::s_pProcMain->m_pUITransactionDlg->CancelIconDrop(spItem);
+			break;
+
+		case UIWND_WARE_HOUSE:
+			CGameProcedure::s_pProcMain->m_pUIWareHouseDlg->CancelIconDrop(spItem);
+			break;
+
+		case UIWND_EXCHANGE_REPAIR:
+			CGameProcedure::s_pProcMain->m_pUIItemREDlg->CancelIconDrop(spItem);
+			break;
+		}
+	}
+	return false;
+}
+
 
 CN3UIBase* CUIManager::GetTopUI(bool bVisible)
 {

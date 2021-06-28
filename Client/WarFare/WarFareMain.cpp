@@ -418,6 +418,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 				// NOTE: if we aredebugging then also draw helpful information
 #if _DEBUG
+#ifdef DEBUG_STATISTICS
 				static float fTimePrev = CN3Base::TimeGet();
 				static char szDebugs[4][256] = { "", "", "", "" };
 				float fTime = CN3Base::TimeGet();
@@ -454,6 +455,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 				for (int i = 0; i < 4; i++)
 					if (szDebugs[i]) TextOut(hDC, 0, i * 18, szDebugs[i], lstrlen(szDebugs[i]));
+#endif
 #endif
 			}
 		}

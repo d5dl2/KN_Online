@@ -55,6 +55,7 @@ public:
 	void		ReorderChildList();
 
 	bool		BroadcastIconDropMsg(__IconItemSkill* spItem);
+	bool		BroadcastIconDropWithRBMsg(__IconItemSkill* spItem, long x, long y);
 
 	CUIManager();
 	virtual ~CUIManager();
