@@ -52,7 +52,7 @@ public:
 protected:
 	int					GetItemiOrder(__IconItemSkill* spItem, e_UIWND_DISTRICT eWndDist);
 	RECT				GetSampleRect();
-
+	RECT				GetFirstRect(e_UIWND_DISTRICT eUIWnd);
 	e_UIWND_DISTRICT	GetWndDistrict(__IconItemSkill* spItem);
 
 public:

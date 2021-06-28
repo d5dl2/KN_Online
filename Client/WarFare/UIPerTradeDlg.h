@@ -43,7 +43,7 @@ public:
 protected:
 	int					GetItemiOrder(__IconItemSkill* spItem, e_UIWND_DISTRICT eWndDist);
 	RECT				GetSampleRect();
-
+	RECT				GetFirstEmptyRect();
 	void				ItemMoveFromInvToThis();
 	void				ItemMoveFromThisToInv();
 
