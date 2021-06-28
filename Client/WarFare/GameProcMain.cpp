@@ -7676,7 +7676,8 @@ void CGameProcMain::ProcessUIKeyInput(bool bEnable)
 		CGameProcedure::ProcessUIKeyInput();
 		if (s_pLocalInput->IsKeyPress(DIK_RETURN) && !s_bKeyPress)
 		{
-			m_pUIChatDlg->SetFocus();
+			if (!CGameProcedure::s_pUIMgr->GetFocusedEdit())
+				m_pUIChatDlg->SetFocus();
 		}
 	}
 	else if (m_pUIChatDlg && m_pUIChatDlg->IsChatMode())

@@ -48,6 +48,7 @@ bool CUICmdEdit::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 		{
 			SetVisible(false);
 			m_pEdit_Box->SetString("");
+			m_pEdit_Box->KillFocus();
 			return true;
 		}
 	}
@@ -89,6 +90,7 @@ bool CUICmdEdit::OnKeyPress(int iKey)
 	case DIK_ESCAPE:
 		SetVisible(false);
 		m_pEdit_Box->SetString("");
+		m_pEdit_Box->KillFocus();
 		return true;
 	}
 
@@ -100,4 +102,6 @@ void CUICmdEdit::ExecutePM()
 	std::string tempCmdStr = "/PM " + m_pEdit_Box->GetString();
 	CGameProcedure::s_pProcMain->ParseChattingCommand(tempCmdStr);	
 	m_pEdit_Box->SetString("");
+	m_pEdit_Box->KillFocus();
+	m_pEdit_Box->SetFocus();
 }
