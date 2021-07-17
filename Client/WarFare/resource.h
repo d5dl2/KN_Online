@@ -416,7 +416,6 @@
 #define IDS_SKILL_INFO_CLERIC1          6061
 #define IDS_SKILL_INFO_CLERIC2          6062
 #define IDS_SKILL_INFO_CLERIC3          6063
-#define IDS_SKILL_INFO_SHAMAN3          6064
 #define IDS_ERR_CHARACTER_SELECT        6066
 #define IDS_DROPPED_NOAH_GET            6067
 #define IDS_DURABILITY_EXOAST           6068

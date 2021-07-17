@@ -54,7 +54,7 @@ public:
 	int					m_iCurInPageOffset[MAX_SKILL_KIND_OF];										// 스킬당 현재 페이지 옵셋..
 
 protected:
-	void				AllClearImageByName(const std::string& szFN, bool bTrueOrNot);
+	void				AllClearImageByName(const std::string& szFN, bool isVisible, bool includeMainImg);
 	RECT				GetSampleRect();
 	void				PageButtonInitialize();
 	bool				CheckSkillCanBeUse(__TABLE_UPC_SKILL* pUSkill);
