@@ -38,7 +38,8 @@ bool CN3Skin::Load(HANDLE hFile)
 	DWORD dwRWC = 0;
 	for(int i = 0; i < m_nVC; i++)
 	{
-		ReadFile(hFile, &m_pSkinVertices[i], sizeof(__VertexSkinned), &dwRWC, NULL);
+		//bool t = ReadFile(hFile, &m_pSkinVertices[i], sizeof(__VertexSkinned), &dwRWC, NULL);
+		bool t = ReadFile(hFile, &m_pSkinVertices[i], 24, &dwRWC, NULL);
 		m_pSkinVertices[i].pnJoints = NULL;
 		m_pSkinVertices[i].pfWeights = NULL;
 		

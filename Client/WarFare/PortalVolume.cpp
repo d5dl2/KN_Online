@@ -710,7 +710,7 @@ CN3Shape* CPortalVolume::PickWithShape(int iXScreen, int iYScreen, bool bMustHav
 	}
 
 	int iSC = Shapes.size();
-	qsort(&(Shapes[0]), iSC, 4, CN3ShapeMgr::SortByCameraDistance);
+	qsort(&(Shapes[0]), iSC, sizeof(ShapeInfo*), CN3ShapeMgr::SortByCameraDistance);
 	for(int i = 0; i < iSC; i++)
 	{
 		ShapeInfo* pShr = Shapes[i];

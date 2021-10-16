@@ -466,11 +466,11 @@ void CUIStateBar::Tick()
 	static int iCount = 0;
 	static char strFPS[0x10] = "";
 
-	if (iCount++ == 60) {
-		iCount = 0;
+	/*if (iCount++ == 60) {
+		iCount = 0;*/
 		sprintf(strFPS, "%.1f", CN3Base::s_fFrmPerSec);
 		if(m_pText_FPS) m_pText_FPS->SetString(strFPS);
-	}
+	//}
 
 
 	TickMiniMap(); // ¸Ê ÀÌ¹ÌÁö...

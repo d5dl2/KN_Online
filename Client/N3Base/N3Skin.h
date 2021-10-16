@@ -10,7 +10,6 @@
 #endif // _MSC_VER > 1000
 
 #include "N3IMesh.h"
-
 struct __VertexSkinned
 {
 	__Vector3	vOrigin; // 원래 점 위치..

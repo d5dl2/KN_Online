@@ -782,7 +782,7 @@ bool CN3ShapeMgr::CheckCollision(const __Vector3& vPos,		// 충돌 위치
 			if (Shapes.empty()) return false;
 
 			iSC = Shapes.size();
-			if (iSC > 1) qsort(&(Shapes[0]), iSC, 4, SortByCameraDistance); // 카메라 거리에 따라 정렬하고..
+			if (iSC > 1) qsort(&(Shapes[0]), iSC, sizeof(CN3Shape*), SortByCameraDistance); // 카메라 거리에 따라 정렬하고..
 
 			CN3VMesh* pVMesh = NULL;
 			for (int i = 0; i < iSC; i++)
@@ -903,7 +903,7 @@ CN3Shape* CN3ShapeMgr::Pick(int iXScreen, int iYScreen, bool bMustHaveEvent, __V
 	// 거리순으로 정렬..
 	std::vector<CN3Shape*> Shapes(iSC, NULL);
 	for (int i = 0; it != itEnd; it++, i++) { Shapes[i] = *it; }
-	qsort(&(Shapes[0]), iSC, 4, SortByCameraDistance);
+	qsort(&(Shapes[0]), iSC, sizeof(CN3Shape*), SortByCameraDistance);
 
 	for (int i = 0; i < iSC; i++)
 	{
@@ -930,7 +930,7 @@ CN3Shape* CN3ShapeMgr::PickMovable(int iXScreen, int iYScreen, __Vector3* pvPick
 	// 거리순으로 정렬..
 	std::vector<CN3Shape*> Shapes(iSC, NULL);
 	for (int i = 0; it != itEnd; it++, i++) { Shapes[i] = *it; }
-	qsort(&(Shapes[0]), iSC, 4, SortByCameraDistance);
+	qsort(&(Shapes[0]), iSC, sizeof(CN3Shape*), SortByCameraDistance);
 
 	for (int i = 0; i < iSC; i++)
 	{

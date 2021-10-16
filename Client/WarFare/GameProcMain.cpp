@@ -324,7 +324,7 @@ void CGameProcMain::Init()
 	::GetCurrentDirectory(_MAX_PATH, szPathOld);
 
 	_finddata_t fi;
-	long hFind = -1;
+	uint64_t hFind = -1;
 
 	// 리소스 다 읽기..
 	// 에니메이션 다 읽기..
