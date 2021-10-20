@@ -442,6 +442,163 @@ bool CN3Eng::Init(BOOL bWindowed, SDL_Window* pWindow, uint32_t dwWidth, uint32_
 	return true;
 }
 
+//-----------------------------------------------------------------------------
+bool CN3Eng::Init(BOOL bWindowed, HWND hwnd, uint32_t dwWidth, uint32_t dwHeight, uint32_t dwBPP, BOOL bUseHW)
+{
+
+	memset(&s_ResrcInfo, 0, sizeof(__ResrcInfo)); // Rendering Information 초기화..
+
+
+	s_hWndBase = hwnd; // TODO: Remove this when we move away from DX
+
+	// FIX (srmeier): I really have no idea what the second arguement here should be
+	int nAMC = m_lpD3D->GetAdapterModeCount(0, D3DFMT_X8R8G8B8); // 디스플레이 모드 카운트
+	if (nAMC <= 0)
+	{
+		//MessageBox(hWnd, "Can't create D3D - Invalid display mode property.", "initialization", MB_OK);
+//		{ for(int iii = 0; iii < 2; iii++) Beep(2000, 200); Sleep(300); } // 여러번 삑~
+#ifdef _N3GAME
+		CLogWriter::Write("Can't create D3D - Invalid display mode property.");
+#endif
+		this->Release();
+		return false;
+	}
+
+	m_DeviceInfo.nAdapter = 0;
+	m_DeviceInfo.DevType = D3DDEVTYPE_HAL;
+	m_DeviceInfo.nDevice = 0;
+	m_DeviceInfo.nModeCount = nAMC;
+	delete[] m_DeviceInfo.pModes;
+	m_DeviceInfo.pModes = new D3DDISPLAYMODE[nAMC];
+	for (int i = 0; i < nAMC; i++)
+	{
+		// FIX (srmeier): I really have no idea what the second arguement here should be
+		m_lpD3D->EnumAdapterModes(0, D3DFMT_X8R8G8B8, i, &m_DeviceInfo.pModes[i]); // 디스플레이 모드 가져오기..
+	}
+
+	D3DDEVTYPE DevType = D3DDEVTYPE_REF;
+	if (TRUE == bUseHW) DevType = D3DDEVTYPE_HAL;
+
+	memset(&s_DevParam, 0, sizeof(s_DevParam));
+	s_DevParam.Windowed = bWindowed;
+	s_DevParam.EnableAutoDepthStencil = TRUE;
+	s_DevParam.SwapEffect = D3DSWAPEFFECT_DISCARD;
+	s_DevParam.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
+	s_DevParam.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
+
+	D3DFORMAT BBFormat = D3DFMT_UNKNOWN;
+	if (TRUE == bWindowed) // 윈도우 모드일 경우
+	{
+		D3DDISPLAYMODE dm;
+		m_lpD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &dm);
+		s_DevParam.BackBufferCount = 1;
+		if (dwWidth <= 0) dwWidth = dm.Width;
+		if (dwHeight <= 0) dwHeight = dm.Height;
+		BBFormat = dm.Format;
+		s_DevParam.hDeviceWindow = s_hWndBase;
+	}
+	else
+	{
+		s_DevParam.BackBufferCount = 1;
+		s_DevParam.AutoDepthStencilFormat = D3DFMT_D16; // 자동 생성이면 무시된다.
+		if (16 == dwBPP) BBFormat = D3DFMT_R5G6B5;
+		else if (24 == dwBPP) BBFormat = D3DFMT_R8G8B8;
+		else if (32 == dwBPP) BBFormat = D3DFMT_X8R8G8B8;
+		s_DevParam.hDeviceWindow = s_hWndBase;
+	}
+
+	s_DevParam.BackBufferWidth = dwWidth;
+	s_DevParam.BackBufferHeight = dwHeight;
+	s_DevParam.BackBufferFormat = BBFormat;
+	s_DevParam.MultiSampleType = D3DMULTISAMPLE_NONE; // Swap Effect 가 Discard 형태가 아니면 반드시 이런 식이어야 한다.
+	s_DevParam.Flags = 0;
+	//#ifdef _N3TOOL
+	s_DevParam.Flags = D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
+	//#endif // end of _N3TOOL
+
+	int nMC = m_DeviceInfo.nModeCount;
+	for (int i = 0; i < nMC; i++)
+	{
+		//		if(	m_DeviceInfo.pModes[i].Width == dwWidth && 
+		//			m_DeviceInfo.pModes[i].Height == dwHeight && 
+		if (m_DeviceInfo.pModes[i].Format == BBFormat) // 모드가 일치하면
+		{
+			this->FindDepthStencilFormat(0, m_DeviceInfo.DevType, m_DeviceInfo.pModes[i].Format, &s_DevParam.AutoDepthStencilFormat); // 깊이와 스텐실 버퍼를 찾는다.
+			m_nModeActive = i;
+			break;
+		}
+	}
+
+	HRESULT rval = m_lpD3D->CreateDevice(0, DevType, s_hWndBase, D3DCREATE_HARDWARE_VERTEXPROCESSING, &s_DevParam, &s_lpD3DDev);
+	if (rval != D3D_OK)
+	{
+		rval = m_lpD3D->CreateDevice(0, DevType, s_hWndBase, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &s_DevParam, &s_lpD3DDev);
+		if (rval != D3D_OK)
+		{
+			char szDebug[256];
+			//D3DXGetErrorString(rval, szDebug, 256);
+			MessageBox(s_hWndBase, "Can't create D3D Device - please, check DirectX or display card driver", "initialization", MB_OK);
+#ifdef _N3GAME
+			CLogWriter::Write("Can't create D3D Device - please, check DirectX or display card driver");
+			CLogWriter::Write(szDebug);
+#endif
+			//			{ for(int iii = 0; iii < 3; iii++) Beep(2000, 200); Sleep(300); } // 여러번 삑~
+
+			this->Release();
+			return false;
+		}
+#ifdef _N3GAME
+		CLogWriter::Write("CNEng::Init - Not supported HardWare TnL");
+#endif
+	}
+
+
+	// Device 지원 항목은??
+	// DXT 지원 여부..
+	s_dwTextureCaps = 0;
+	s_DevCaps.DeviceType = DevType;
+
+	s_lpD3DDev->GetDeviceCaps(&s_DevCaps);
+	if (s_DevCaps.MaxTextureWidth < 256 || s_DevCaps.MaxTextureHeight < 256) // 텍스처 지원 크기가 256 이하면.. 아예 포기..
+	{
+		MessageBox(s_hWndBase, "Can't support this graphic card : Texture size is too small", "Initialization error", MB_OK);
+#ifdef _N3GAME
+		CLogWriter::Write("Can't support this graphic card : Texture size is too small");
+#endif
+		//		{ for(int iii = 0; iii < 4; iii++) Beep(2000, 200); Sleep(300); } // 여러번 삑~
+
+		this->Release();
+		return false;
+	}
+
+	if (D3D_OK == m_lpD3D->CheckDeviceFormat(D3DADAPTER_DEFAULT, DevType, BBFormat, 0, D3DRTYPE_TEXTURE, D3DFMT_DXT1)) s_dwTextureCaps |= TEX_CAPS_DXT1;
+	if (D3D_OK == m_lpD3D->CheckDeviceFormat(D3DADAPTER_DEFAULT, DevType, BBFormat, 0, D3DRTYPE_TEXTURE, D3DFMT_DXT2)) s_dwTextureCaps |= TEX_CAPS_DXT2;
+	if (D3D_OK == m_lpD3D->CheckDeviceFormat(D3DADAPTER_DEFAULT, DevType, BBFormat, 0, D3DRTYPE_TEXTURE, D3DFMT_DXT3)) s_dwTextureCaps |= TEX_CAPS_DXT3;
+	if (D3D_OK == m_lpD3D->CheckDeviceFormat(D3DADAPTER_DEFAULT, DevType, BBFormat, 0, D3DRTYPE_TEXTURE, D3DFMT_DXT4)) s_dwTextureCaps |= TEX_CAPS_DXT4;
+	if (D3D_OK == m_lpD3D->CheckDeviceFormat(D3DADAPTER_DEFAULT, DevType, BBFormat, 0, D3DRTYPE_TEXTURE, D3DFMT_DXT5)) s_dwTextureCaps |= TEX_CAPS_DXT5;
+	if (s_DevCaps.TextureCaps & D3DPTEXTURECAPS_SQUAREONLY) s_dwTextureCaps |= TEX_CAPS_SQUAREONLY;
+	if (s_DevCaps.TextureCaps & D3DPTEXTURECAPS_MIPMAP) s_dwTextureCaps |= TEX_CAPS_MIPMAP;
+	if (s_DevCaps.TextureCaps & D3DPTEXTURECAPS_POW2) s_dwTextureCaps |= TEX_CAPS_POW2;
+
+	// 기본 라이트 정보 지정..
+	for (int i = 0; i < 8; i++)
+	{
+		CN3Light::__Light Lgt;
+		_D3DCOLORVALUE LgtColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+		Lgt.InitPoint(i, __Vector3(0, 0, 0), LgtColor);
+		s_lpD3DDev->SetLight(i, &Lgt);
+	}
+
+	// 기본 뷰와 프로젝션 설정.
+	this->LookAt(__Vector3(5, 5, -10), __Vector3(0, 0, 0), __Vector3(0, 1, 0));
+	this->SetProjection(0.1f, 256.0f, D3DXToRadian(45.0f), (float)dwHeight / dwWidth);
+
+	RECT rcView = { 0, 0, (int)dwWidth, (int)dwHeight };
+	this->SetViewPort(rcView);
+	this->SetDefaultEnvironment(); // 기본 상태로 설정..
+
+	return true;
+}
 
 /*
 LRESULT WINAPI CN3Eng::MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
@@ -486,90 +643,6 @@ BOOL CN3Eng::FindDepthStencilFormat(UINT iAdapter, D3DDEVTYPE DeviceType, D3DFOR
 }
 
 
-void CN3Eng::Present(HWND hWnd, RECT* pRC)
-{
-//	HRESULT rval = s_lpD3DDev->TestCooperativeLevel();
-//	if(D3D_OK != rval)
-//	{
-//#if _DEBUG
-//		char szDebug[256];
-//		D3DXGetErrorString(rval, szDebug, 256);
-//#endif
-//		return;
-//	}
-
-	/*
-	RECT rc;
-	if(s_DevParam.Windowed) // 윈도우 모드면...
-	{
-		GetClientRect(s_hWndBase, &rc);
-		pRC = &rc;
-	}
-	*/
-
-
-
-
-	//SDL_Renderer* s_pRenderer = SDL_GetRenderer(pWindow);
-	//SDL_RenderPresent(s_pRenderer);
-
-	
-	HRESULT rval = s_lpD3DDev->Present(pRC, pRC, hWnd, NULL);
-	if(D3D_OK == rval)
-	{
-		//s_hWndPresent = hWnd; // Present window handle 을 저장해 놓는다.
-	}
-	else if(D3DERR_DEVICELOST == rval || D3DERR_DEVICENOTRESET == rval)
-	{
-		rval = s_lpD3DDev->Reset(&s_DevParam);
-		if(D3D_OK != rval)
-		{
-#ifdef _N3GAME
-//			char szErr[256];
-//			D3DXGetErrorString(rval, szErr, 256);
-//			CLogWriter::Write("CNEng::Present - device present failed (%s)", szErr);
-//			Beep(2000, 50);
-#endif
-		}
-		else
-		{
-			rval = s_lpD3DDev->Present(pRC, pRC, hWnd, NULL);
-		}
-		return;
-	}
-	else
-	{
-#ifdef _N3GAME
-//		char szErr[256];
-//		D3DXGetErrorString(rval, szErr, 256);
-//		CLogWriter::Write("CNEng::Present - device present failed (%s)", szErr);
-//		Beep(2000, 50);
-#endif
-	}
-	
-
-	////////////////////////////////////////////////////////////////////////////////
-	// 프레임 율 측정...
-//	float fTime = CN3Base::TimerProcess(TIMER_GETABSOLUTETIME);
-//	static float fTimePrev = fTime - 0.03333f;
-//	static uint32_t dwFrm = 0;
-//	dwFrm++;
-//	if(fTime - fTimePrev > 1.0f) // 1 초 이상 지나야 프레임 측정한다.. 그렇지 않으면 들쭉 날쭉 한 수치가 나온다..
-//	{
-//		s_fFrmPerSec = (float)dwFrm / (fTime - fTimePrev);
-//		dwFrm = 0;
-//		fTimePrev = fTime;
-//	}
-
-	s_fSecPerFrm = CN3Base::TimerProcess(TIMER_GETELAPSEDTIME);
-	if(s_fSecPerFrm <= 0.001f || s_fSecPerFrm >= 1.0f) s_fSecPerFrm = 0.033333f; // 너무 안나오면 기본 값인 30 프레임으로 맞춘다..
-	s_fFrmPerSec = 1.0f / s_fSecPerFrm; // 초당 프레임 수 측정..
-
-//	fTimePrev = fTime;
-	// 프레임 율 측정...
-	////////////////////////////////////////////////////////////////////////////////
-}
-
 #ifdef _N3TOOL
 void CN3Eng::Present(HWND hWnd, RECT* pRC) {
 	RECT rc;
@@ -604,6 +677,92 @@ void CN3Eng::Present(HWND hWnd, RECT* pRC) {
 	if (s_fSecPerFrm <= 0.001f || s_fSecPerFrm >= 1.0f) s_fSecPerFrm = 0.033333f; // 너무 안나오면 기본 값인 30 프레임으로 맞춘다..
 	s_fFrmPerSec = 1.0f / s_fSecPerFrm; // 초당 프레임 수 측정..
 }
+#else
+
+void CN3Eng::Present(HWND hWnd, RECT* pRC)
+{
+	//	HRESULT rval = s_lpD3DDev->TestCooperativeLevel();
+	//	if(D3D_OK != rval)
+	//	{
+	//#if _DEBUG
+	//		char szDebug[256];
+	//		D3DXGetErrorString(rval, szDebug, 256);
+	//#endif
+	//		return;
+	//	}
+
+		/*
+		RECT rc;
+		if(s_DevParam.Windowed) // 윈도우 모드면...
+		{
+			GetClientRect(s_hWndBase, &rc);
+			pRC = &rc;
+		}
+		*/
+
+
+
+
+		//SDL_Renderer* s_pRenderer = SDL_GetRenderer(pWindow);
+		//SDL_RenderPresent(s_pRenderer);
+
+
+	HRESULT rval = s_lpD3DDev->Present(pRC, pRC, hWnd, NULL);
+	if (D3D_OK == rval)
+	{
+		//s_hWndPresent = hWnd; // Present window handle 을 저장해 놓는다.
+	}
+	else if (D3DERR_DEVICELOST == rval || D3DERR_DEVICENOTRESET == rval)
+	{
+		rval = s_lpD3DDev->Reset(&s_DevParam);
+		if (D3D_OK != rval)
+		{
+#ifdef _N3GAME
+			//			char szErr[256];
+			//			D3DXGetErrorString(rval, szErr, 256);
+			//			CLogWriter::Write("CNEng::Present - device present failed (%s)", szErr);
+			//			Beep(2000, 50);
+#endif
+		}
+		else
+		{
+			rval = s_lpD3DDev->Present(pRC, pRC, hWnd, NULL);
+		}
+		return;
+	}
+	else
+	{
+#ifdef _N3GAME
+		//		char szErr[256];
+		//		D3DXGetErrorString(rval, szErr, 256);
+		//		CLogWriter::Write("CNEng::Present - device present failed (%s)", szErr);
+		//		Beep(2000, 50);
+#endif
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////
+	// 프레임 율 측정...
+//	float fTime = CN3Base::TimerProcess(TIMER_GETABSOLUTETIME);
+//	static float fTimePrev = fTime - 0.03333f;
+//	static uint32_t dwFrm = 0;
+//	dwFrm++;
+//	if(fTime - fTimePrev > 1.0f) // 1 초 이상 지나야 프레임 측정한다.. 그렇지 않으면 들쭉 날쭉 한 수치가 나온다..
+//	{
+//		s_fFrmPerSec = (float)dwFrm / (fTime - fTimePrev);
+//		dwFrm = 0;
+//		fTimePrev = fTime;
+//	}
+
+	s_fSecPerFrm = CN3Base::TimerProcess(TIMER_GETELAPSEDTIME);
+	if (s_fSecPerFrm <= 0.001f || s_fSecPerFrm >= 1.0f) s_fSecPerFrm = 0.033333f; // 너무 안나오면 기본 값인 30 프레임으로 맞춘다..
+	s_fFrmPerSec = 1.0f / s_fSecPerFrm; // 초당 프레임 수 측정..
+
+//	fTimePrev = fTime;
+	// 프레임 율 측정...
+	////////////////////////////////////////////////////////////////////////////////
+}
+
 #endif
 
 void CN3Eng::Clear(D3DCOLOR crFill, RECT* pRC)

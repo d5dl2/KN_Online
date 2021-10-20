@@ -56,15 +56,13 @@ public:
 		BOOL bWindowed, SDL_Window* pWindow,
 		uint32_t dwWidth, uint32_t dwHeight, uint32_t dwBPP, BOOL bUseHW
 	);
+	bool Init(BOOL bWindowed, HWND hwnd, uint32_t dwWidth, uint32_t dwHeight, uint32_t dwBPP, BOOL bUseHW);
 
 	BOOL FindDepthStencilFormat(
 		UINT iAdapter, D3DDEVTYPE DeviceType,
 		D3DFORMAT TargetFormat, D3DFORMAT* pDepthStencilFormat
 	);
 
-#ifdef _N3TOOL
-	static void Present(HWND hWnd, RECT* pRC = NULL);
-#endif
 
 public:
 	CN3Eng(void);
