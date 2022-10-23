@@ -28,6 +28,7 @@ public:
 	virtual uint32_t MouseProc(uint32_t dwFlags, const POINT& ptCur, const POINT& ptOld);
 	void			SetTargetId(std::string targetId);
 	void			SetBarState(eUI_STATE state);
+	void			SetButtonState(eUI_STATE state);
 	bool			DefaultPositionChanged() { return m_bPositionChanged; };
 	CUIWhisperCloseDlg(CN3UIBase* buddy);
 };

@@ -396,6 +396,7 @@ void CUIWhisperOpenDlg::ToggleOpenClose(bool opened)
 	SetVisible(opened);
 	m_pUIWhisperCloseDlg->SetVisible(!opened);
 	m_pUIWhisperCloseDlg->SetBarState(UI_STATE_BUTTON_NORMAL);
+	m_pUIWhisperCloseDlg->SetButtonState(UI_STATE_BUTTON_NORMAL);
 	manager->RePosAll();
 	if (opened)
 	{
@@ -629,6 +630,11 @@ uint32_t  CUIWhisperCloseDlg::MouseProc(uint32_t dwFlags, const POINT& ptCur, co
 void CUIWhisperCloseDlg::SetBarState(eUI_STATE state)
 {
 	m_pBtnBar->SetState(state);
+}
+
+void CUIWhisperCloseDlg::SetButtonState(eUI_STATE state)
+{
+	m_pBtnOpen->SetState(state);
 }
 
 

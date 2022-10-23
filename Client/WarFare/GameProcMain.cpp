@@ -482,7 +482,11 @@ void CGameProcMain::Tick()
 #ifdef _DEBUG
 	if (s_pLocalInput->IsKeyPressed(DIK_F11))
 	{
-		m_pWhisperMgr->IncomingMessage((rand() % 33) + "q", "asdasdasd");
+		// m_pWhisperMgr->IncomingMessage((rand() % 33) + "q", "asdasdasd");
+		char c = rand() % (122 - 97) + 97;
+		std::string senderId;
+		senderId.push_back(c);
+		m_pWhisperMgr->IncomingMessage(senderId, "asdasdasd");
 		/*uint8_t byBuff[32];
 		int iOffset = 0;
 		CAPISocket::MP_AddByte(byBuff, iOffset, WIZ_TEST_PACKET);
