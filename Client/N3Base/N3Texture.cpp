@@ -108,7 +108,24 @@ bool CN3Texture::Create(int nWidth, int nHeight, D3DFORMAT Format, BOOL bGenerat
 		CLogWriter::Write("N3Texture: createtexture err E_OUTOFMEMORY(%s)", m_szFileName.c_str());
 		return false;
 	}
+#else
+	if (rval == D3DERR_INVALIDCALL)
+	{
+		printf("N3Texture: createtexture err D3DERR_INVALIDCALL(%s)", m_szFileName.c_str());
+		return false;
+	}
+	if (rval == D3DERR_OUTOFVIDEOMEMORY)
+	{
+		printf("N3Texture: createtexture err D3DERR_OUTOFVIDEOMEMORY(%s)", m_szFileName.c_str());
+		return false;
+	}
+	if (rval == E_OUTOFMEMORY)
+	{
+		printf("N3Texture: createtexture err E_OUTOFMEMORY(%s)", m_szFileName.c_str());
+		return false;
+	}
 #endif
+	
 	if(NULL == m_lpTexture)
 	{
 		__ASSERT(m_lpTexture, "Texture pointer is NULL!");

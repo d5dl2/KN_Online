@@ -53,10 +53,6 @@ public:
 		D3DFORMAT TargetFormat, D3DFORMAT* pDepthStencilFormat
 	);
 
-#ifdef _N3TOOL
-	static void Present(HWND hWnd, RECT* pRC = NULL);
-#endif
-
 public:
 	CN3Eng(void);
 	virtual ~CN3Eng(void);

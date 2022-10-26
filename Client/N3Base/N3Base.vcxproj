@@ -353,7 +353,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>DIRECTINPUT_VERSION=0x0800;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;_N3TOOL;_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>..\..\Server\;$(DXSDK_DIR)include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
