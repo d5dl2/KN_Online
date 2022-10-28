@@ -31,6 +31,7 @@ enum e_UIWND				{
 								UIWND_EXCHANGE_REPAIR,		// Exchange Repair Wnd..
 								UIWND_WARE_HOUSE,			// 보관함..
 								UIWND_UNKNOWN,				// Wnd Unknown..
+								UIWND_ANVIL
 							};
 
 // District Info..
@@ -48,6 +49,8 @@ enum e_UIWND_DISTRICT		{
 								UIWND_DISTRICT_TRADE_MY,			// Npc 와의 거래에서 내 영역..
 								UIWND_DISTRICT_PER_TRADE_INV,		// Inv District of Per Trade Wnd ..
 								UIWND_DISTRICT_UNKNOWN,				// District Unknown..
+								UIWND_DISTRICT_UPGRADE_SLOT,
+								UIWND_DISTRICT_UPGRADE_ITEM
 							};
 
 enum e_UIIconState			{

@@ -1,5 +1,6 @@
 ﻿/*
 */
+//#define DEBUG_STATISTICS
 
 //#include "StdAfx.h"
 #include "UIChat.h"

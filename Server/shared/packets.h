@@ -573,6 +573,7 @@ enum FriendRemoveResult
 
 enum
 {
+	ITEM_UPGRADE_OPEN		= 0,
 	ITEM_UPGRADE_REQ		= 1,
 	ITEM_UPGRADE			= 2,
 	ITEM_ACCESSORIES		= 3,
@@ -584,6 +585,15 @@ enum
 	ITEM_SPECIAL_EXCHANGE	= 11,
 };
 
+enum UpgradeErrorCodes
+{
+	UpgradeFailed = 0,
+	UpgradeSucceeded = 1,
+	UpgradeTrading = 2,
+	UpgradeNeedCoins = 3,
+	UpgradeNoMatch = 4,
+	UpgradeRental = 5
+};
 
 ////////////////////////////////////////////////////////////////
 // Party BBS subpacket define

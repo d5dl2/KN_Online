@@ -204,6 +204,7 @@
     <ClCompile Include="PvsMgr.cpp" />
     <ClCompile Include="ServerMesh.cpp" />
     <ClCompile Include="SubProcPerTrade.cpp" />
+    <ClCompile Include="UIAnvil.cpp" />
     <ClCompile Include="UICharacterCreate.cpp" />
     <ClCompile Include="UICharacterSelect.cpp" />
     <ClCompile Include="UIChat.cpp" />
@@ -221,6 +222,7 @@
     <ClCompile Include="UIInn.cpp" />
     <ClCompile Include="UIInventory.cpp" />
     <ClCompile Include="UIItemExchange.cpp" />
+    <ClCompile Include="UIItemUpgradeDlg.cpp" />
     <ClCompile Include="UIKnightsOperation.cpp" />
     <ClCompile Include="UILoading.cpp" />
     <ClCompile Include="UILoadingDlg.cpp" />
@@ -284,6 +286,7 @@
     <ClInclude Include="IMouseWheelInputDlg.h" />
     <ClInclude Include="LauncherReplacer.h" />
     <ClInclude Include="resource1.h" />
+    <ClInclude Include="UIAnvil.h" />
     <ClInclude Include="UICmdEdit.h" />
     <ClInclude Include="UICmdList.h" />
     <ClInclude Include="ItemRepairMgr.h" />
@@ -333,6 +336,7 @@
     <ClInclude Include="UIInn.h" />
     <ClInclude Include="UIInventory.h" />
     <ClInclude Include="UIItemExchange.h" />
+    <ClInclude Include="UIItemUpgradeDlg.h" />
     <ClInclude Include="UIKnightsOperation.h" />
     <ClInclude Include="UILoading.h" />
     <ClInclude Include="UILoadingDlg.h" />

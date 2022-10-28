@@ -1299,8 +1299,9 @@ const int	FXID_REGION_TARGET_KA_PRIEST	= 10040;
 const int	FXID_CLAN_RANK_1				= 10041;
 const int	FXID_WARP_KARUS					= 10046;
 const int	FXID_WARP_ELMORAD				= 10047;
-const int	FXID_REGION_POISON				= 10100;
-
+const int	FXID_ITEM_FAIL					= 10100;
+const int	FXID_ITEM_SUCCESS				= 10101;
+const int	FXID_REGION_POISON				= 99999;
 //define skillmagic_type4_bufftype
 enum e_SkillMagicType4	{	BUFFTYPE_MAXHP = 1,				//MaxHP변화..
 							BUFFTYPE_AC = 2,				//AC변화..
@@ -1328,6 +1329,7 @@ enum e_ObjectType	{	OBJECT_TYPE_BINDPOINT,
 						OBJECT_TYPE_LEVER_TOPDOWN,
 						OBJECT_TYPE_FLAG,
 						OBJECT_TYPE_WARP_POINT,
+						OBJECT_TYPE_ANVIL = 8,
 						OBJECT_TYPE_UNKNOWN = 0xffffffff
 					};
 

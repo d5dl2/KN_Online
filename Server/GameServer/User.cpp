@@ -4567,7 +4567,9 @@ void CUser::ObjectEvent(Packet & pkt)
 			break;
 
 		case OBJECT_ANVIL:
-			SendAnvilRequest(nid);
+			bSuccess = SendAnvilRequest(nid);
+			if (bSuccess)
+				return;
 			return;
 		}
 
@@ -4581,11 +4583,12 @@ void CUser::ObjectEvent(Packet & pkt)
 	}
 }
 
-void CUser::SendAnvilRequest(uint16_t sNpcID, uint8_t bType /*= ITEM_UPGRADE_REQ*/)
+bool CUser::SendAnvilRequest(uint16_t sNpcID, uint8_t bType /*= ITEM_UPGRADE_REQ*/)
 {
 	Packet result(WIZ_ITEM_UPGRADE);
 	result << uint8_t(bType) << sNpcID;
 	Send(&result);
+	return true;
 }
 
 void CUser::UpdateVisibility(InvisibilityType bNewType)

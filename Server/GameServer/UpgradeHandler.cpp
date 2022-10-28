@@ -29,6 +29,9 @@ void CUser::ItemUpgradeProcess(Packet & pkt)
 	uint8_t opcode = pkt.read<uint8_t>();
 	switch (opcode)
 	{
+	case ITEM_UPGRADE_REQ:
+		ItemUpgradeRequest(pkt);
+		break;
 	case ITEM_UPGRADE:
 		ItemUpgrade(pkt);
 		break;
@@ -59,6 +62,16 @@ void CUser::ItemUpgradeProcess(Packet & pkt)
 	}
 }
 
+void CUser::ItemUpgradeRequest(Packet& pkt)
+{
+	Packet result(WIZ_ITEM_UPGRADE);
+	uint16_t npcId;
+	pkt >> npcId;
+	result << (int8_t)ITEM_UPGRADE_REQ << npcId;
+	Send(&result);
+}
+
+
 /**
 * @brief	Packet handler for the standard item upgrade system.
 *
@@ -66,16 +79,6 @@ void CUser::ItemUpgradeProcess(Packet & pkt)
 */
 void CUser::ItemUpgrade(Packet & pkt, uint8_t nUpgradeType)
 {
-	enum UpgradeErrorCodes
-	{
-		UpgradeFailed		= 0,
-		UpgradeSucceeded	= 1,
-		UpgradeTrading		= 2,
-		UpgradeNeedCoins	= 3,
-		UpgradeNoMatch		= 4,
-		UpgradeRental		= 5
-	};
-
 	enum UpgradeType { UpgradeTypeNormal = 1, UpgradeTypePreview = 2 };
 
 	Packet result(WIZ_ITEM_UPGRADE);

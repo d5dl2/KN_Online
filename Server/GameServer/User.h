@@ -648,7 +648,7 @@ public:
 	void SendPartyHPUpdate();
 	void ShowEffect(uint32_t nSkillID);
 	void ShowNpcEffect(uint32_t nEffectID, bool bSendToRegion = false);
-	void SendAnvilRequest(uint16_t sNpcID, uint8_t bType = ITEM_UPGRADE_REQ);
+	bool SendAnvilRequest(uint16_t sNpcID, uint8_t bType = ITEM_UPGRADE_OPEN);
 	void RecastSavedMagic(uint8_t buffType = 0);
 	void RecastLockableScrolls(uint8_t buffType);
 
@@ -709,6 +709,7 @@ public:
 
 	COMMAND_HANDLER(HandleTestCommand);
 	COMMAND_HANDLER(HandleGiveItemCommand);
+	COMMAND_HANDLER(HandleClearInventoryCommand);
 	COMMAND_HANDLER(HandleZoneChangeCommand);
 	COMMAND_HANDLER(HandleMonsterSummonCommand);
 	COMMAND_HANDLER(HandleNPCSummonCommand);
@@ -853,6 +854,7 @@ public:
 	bool AttemptSelectMsg(uint8_t bMenuID, int8_t bySelectedReward);
 
 	// from the client
+	void ItemUpgradeRequest(Packet& pkt);
 	void ItemUpgradeProcess(Packet & pkt);
 	void ItemUpgrade(Packet & pkt, uint8_t nUpgradeType = ITEM_UPGRADE);
 	void ItemUpgradeNotice(_ITEM_TABLE * pItem, uint8_t UpgradeResult);

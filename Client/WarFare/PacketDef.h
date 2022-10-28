@@ -141,6 +141,12 @@ const int SOCKET_PORT_LOGIN = 15100;
 									N3_SP_WARE_INN =				0x10,	// 맨처음..여관주인임을 받음..
 									N3_SP_WARE_UNKNOWN };
 
+	enum e_SubPacket_Anvil {
+									N3_SP_ANVIL_OPEN =				0x00,
+									N3_SP_ANVIL_ITEM_UPGRADE_OPEN = 0x01,
+									N3_SP_ANVIL_ITEM_UPGRADE_REQ =	0x02
+	};
+
 	enum e_SubPacket_NoahChange {	N3_SP_NOAH_GET = 0x01,	// 노아 습득,
 									N3_SP_NOAH_LOST	= 0x02,	// 노아 분실..
 									N3_SP_NOAH_SPEND = 0x03	// 노아 소비..

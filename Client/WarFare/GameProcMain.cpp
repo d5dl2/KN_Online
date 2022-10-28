@@ -62,6 +62,8 @@
 #include "MagicSkillMng.h"
 #include "WarMessage.h"
 #include "GameCursor.h"
+#include "UIAnvil.h"
+#include "UIItemUpgradeDlg.h"
 
 #include "N3WorldManager.h"
 
@@ -155,7 +157,8 @@ CGameProcMain::CGameProcMain()				// r±âº» »ý¼ºÀÚ.. °¢ º¯¼öÀÇ ¿ªÈ°Àº Çì´õ ÂüÁ¶..
 	m_pUIQuestMenu = new CUIQuestMenu();
 	m_pUIQuestTalk = new CUIQuestTalk();
 	m_pUIDead = new CUIDead();
-
+	m_pUIAnvil = new CUIAnvil();
+	m_pUIItemUpgradeDlg = new CUIItemUpgradeDlg();
 
 	m_pSubProcPerTrade = new CSubProcPerTrade();
 	m_pMagicSkillMng = new CMagicSkillMng(this);
@@ -211,6 +214,8 @@ CGameProcMain::~CGameProcMain()
 	delete m_pMagicSkillMng;
 	delete m_pWarMessage;
 	delete m_pTargetSymbol; // ÇÃ·¹ÀÌ¾î°¡ Å¸°ÙÀ¸·Î ÀâÀº Ä³¸¯ÅÍÀÇ À§Ä¡À§¿¡ ±×¸®¸é µÈ´Ù..
+	delete m_pUIAnvil;
+	delete m_pUIItemUpgradeDlg;
 
 	delete m_pLightMgr;
 
@@ -261,6 +266,8 @@ void CGameProcMain::ReleaseUIs()
 	m_pUIWarp->Release();
 	m_pUIInn->Release();
 	m_pUICreateClanName->Release();
+	m_pUIAnvil->Release();
+	m_pUIItemUpgradeDlg->Release();
 	CN3UIBase::DestroyTooltip();
 }
 
@@ -521,7 +528,7 @@ void CGameProcMain::Tick()
 	s_pPlayer->Tick();									// ÇÃ·¹ÀÌ¾î Æ½(°»½Å)
 	s_pWorldMgr->Tick();
 	s_pOPMgr->Tick(s_pPlayer->Position());				// ´Ù¸¥ À¯Àú °ü¸®ÀÚ Æ½(°»½Å)
-//	s_pFX->Tick(); //³»ºÎ¿¡¼­ Ä«¸Þ¶ó °ªÀ» ¾µ °æ¿ì À§Ä¡°¡ ¿ÀÂ÷°¡ »ý°Ü Render()ÇÔ¼ö ¾ÈÀ¸·Î ¿Å±è...
+	//	s_pFX->Tick(); //³»ºÎ¿¡¼­ Ä«¸Þ¶ó °ªÀ» ¾µ °æ¿ì À§Ä¡°¡ ¿ÀÂ÷°¡ »ý°Ü Render()ÇÔ¼ö ¾ÈÀ¸·Î ¿Å±è...
 
 	__Vector3 ListenerPos = s_pPlayer->Position();
 	__Vector3 ListenerDir = s_pPlayer->Direction();
@@ -536,7 +543,7 @@ void CGameProcMain::Tick()
 	this->UpdateBGM(); // ¹è°æÀ½¾ÇÀ» »óÈ²¿¡ µû¶ó Ã³¸®..
 	this->UpdateCameraAndLight(); // Ä«¸Þ¶ó¿Í ¶óÀÌÆ® Ã³¸®..
 
-//	ProcessPlayerInclination();							// °æ»ç Ã³¸®..(°¡¸¸È÷ ÀÖ¾îµµ °æ»ç°¡ ±ÞÇÏ¸é ¹Ì²ô·¯Áü..).
+	//	ProcessPlayerInclination();							// °æ»ç Ã³¸®..(°¡¸¸È÷ ÀÖ¾îµµ °æ»ç°¡ ±ÞÇÏ¸é ¹Ì²ô·¯Áü..).
 #ifdef _N3_64GRID_
 	m_SMesh.Tick(s_pPlayer, &m_Terrain);				// ¼­¹ö ¸Þ½Ã Æ½.(°»½Å)
 #endif
@@ -1045,6 +1052,7 @@ bool CGameProcMain::ProcessPacket(Packet& pkt)
 		//			this->MsgRecv_Clan(pkt);
 		//			return true;
 	case WIZ_QUEST:
+	{
 		uint8_t start = pkt.read<uint8_t>();
 		uint16_t questId = pkt.read<uint16_t>();
 		uint8_t state = pkt.read<uint8_t>();
@@ -1052,10 +1060,14 @@ bool CGameProcMain::ProcessPacket(Packet& pkt)
 		{
 			char buff[100];
 			sprintf(buff, "You have started quest:%d", questId);
-			//::_LoadStringFromResource(IDS_SKILL_FAIL_CASTING, buff);
 			this->MsgOutput(buff, D3DCOLOR_ARGB(255, 255, 255, 255));
 			return true;
 		}
+		break;
+	}
+	case WIZ_ITEM_UPGRADE:
+		this->MsgRecv_Anvil(pkt);
+		return true;
 		break;
 	}
 
@@ -3155,7 +3167,7 @@ bool CGameProcMain::MsgRecv_Attack(Packet& pkt)
 
 	if (NULL == pTarget) return false; // Å¸°ÙÀÌ ¾ø´Ù!!!!
 
-//	pTarget->m_iIDTargetMe = iIDAttacker; // ¾î¶² ³ðÀÌ °ø°ÝÇÏ´Â °Å¾ß??
+	//	pTarget->m_iIDTargetMe = iIDAttacker; // ¾î¶² ³ðÀÌ °ø°ÝÇÏ´Â °Å¾ß??
 
 	if (pAttacker != s_pPlayer && pAttacker && pAttacker->IsAlive()) // °ø°ÝÇÏ´Â ³ÑÀÌ ³»°¡ ¾Æ´Ï°í ´Ù¸¥ »ì¾ÆÀÖ´Â ³ÑÀÏ¶§..
 	{
@@ -3163,7 +3175,7 @@ bool CGameProcMain::MsgRecv_Attack(Packet& pkt)
 		pAttacker->m_iIDTarget = iIDTarget; // Å¸°Ù ID ¼³Á¤..
 		if (0x01 == iType) pAttacker->Action(PSA_ATTACK, false, pTarget); // ¹°¸®ÀûÀÎ Á÷Á¢ °ø°Ý..
 		else if (0x02 == iType) pAttacker->Action(PSA_SPELLMAGIC, false, pTarget); // ¸¶¹ý °ø°Ý..
-//		else if(0x03 == iType) pAttacker->Action(PSA_SPELLMAGIC, false, pTarget); // Áö¼Ó ¸¶¹ý °ø°Ý..
+		//		else if(0x03 == iType) pAttacker->Action(PSA_SPELLMAGIC, false, pTarget); // Áö¼Ó ¸¶¹ý °ø°Ý..
 	}
 
 	pTarget->m_bGuardSuccess = false; // ¹æ¾î¿¡ ¼º°øÇß´ÂÁö¿¡ ´ëÇÑ ÇÃ·¡±×..
@@ -3915,9 +3927,9 @@ void CGameProcMain::InitUI()
 	iX = iW - (rc.right - rc.left);
 	m_pUIPartyOrForce->SetPos(iX, 0);
 	m_pUIPartyOrForce->SetVisible(false); // °­Á¦·Î ¾Èº¸ÀÌ±â~
-//	CGameProcedure::UIPostData_Read(UI_POST_WND_PARTY, m_pUIPartyOrForce, iX, 0);
+	//	CGameProcedure::UIPostData_Read(UI_POST_WND_PARTY, m_pUIPartyOrForce, iX, 0);
 
-	// Dropped Item Dlg.. 
+		// Dropped Item Dlg.. 
 	m_pUIDroppedItemDlg->Init(s_pUIMgr);
 	m_pUIDroppedItemDlg->LoadFromFile(pTbl->szDroppedItem);
 	m_pUIDroppedItemDlg->SetVisibleWithNoSound(false);
@@ -4025,6 +4037,16 @@ void CGameProcMain::InitUI()
 	m_pUIWareHouseDlg->SetState(UI_STATE_COMMON_NONE);
 	m_pUIWareHouseDlg->SetStyle(UISTYLE_USER_MOVE_HIDE | UISTYLE_POS_RIGHT);
 
+	m_pUIItemUpgradeDlg->Init(s_pUIMgr);
+	m_pUIItemUpgradeDlg->LoadFromFile(pTbl->szItemUpgrade);
+	rc = m_pUIItemUpgradeDlg->GetRegion();
+	m_pUIItemUpgradeDlg->SetPos(iW - (rc.right - rc.left), 10);
+	m_pUIItemUpgradeDlg->SetVisibleWithNoSound(false);
+	m_pUIItemUpgradeDlg->InitIconWnd(UIWND_ANVIL);
+	m_pUIItemUpgradeDlg->SetUIType(UI_TYPE_ICON_MANAGER);
+	m_pUIItemUpgradeDlg->SetState(UI_STATE_COMMON_NONE);
+	m_pUIItemUpgradeDlg->SetStyle(UISTYLE_USER_MOVE_HIDE | UISTYLE_POS_RIGHT);
+
 	m_pTargetSymbol->LoadFromFile(pTbl->szTargetSymbolShape); // ÇÃ·¹ÀÌ¾î°¡ Å¸°ÙÀ¸·Î ÀâÀº Ä³¸¯ÅÍÀÇ À§Ä¡À§¿¡ ±×¸®¸é µÈ´Ù..
 
 	m_pUIInn->Init(s_pUIMgr);
@@ -4035,6 +4057,15 @@ void CGameProcMain::InitUI()
 	iX = (iW - (rc.right - rc.left)) / 2;
 	iY = (iH - (rc.bottom - rc.top)) / 2;
 	m_pUIInn->SetPos(iX, iY);
+
+	m_pUIAnvil->Init(s_pUIMgr);
+	m_pUIAnvil->LoadFromFile(pTbl->szUpgradeSelect);
+	m_pUIAnvil->SetVisibleWithNoSound(false);
+	m_pUIAnvil->SetStyle(UISTYLE_SHOW_ME_ALONE | UISTYLE_USER_MOVE_HIDE);
+	rc = m_pUIAnvil->GetRegion();
+	iX = (iW - (rc.right - rc.left)) / 2;
+	iY = (iH - (rc.bottom - rc.top)) / 2;
+	m_pUIAnvil->SetPos(iX, iY);
 
 	m_pUICreateClanName->Init(s_pUIMgr);
 	m_pUICreateClanName->LoadFromFile(pTbl->szInputClanName);
@@ -4098,6 +4129,8 @@ void CGameProcMain::InitUI()
 	iX = (iW - (rc.right - rc.left)) / 2;
 	iY = (iH - (rc.bottom - rc.top)) / 2;
 	m_pUITradeBBSEdit->SetPos(iX, iY);
+
+
 }
 
 void CGameProcMain::MsgSend_RequestTargetHP(int16_t siIDTarget, uint8_t byUpdateImmediately)
@@ -4628,8 +4661,16 @@ bool CGameProcMain::CommandToggleUIInventory()
 
 	if (m_pUIInn->IsVisible()) return bNeedOpen;
 	if (m_pUICreateClanName->IsVisible()) return bNeedOpen;
+	if (m_pUIAnvil->IsVisible()) return bNeedOpen;
 
 	if (m_pUIWareHouseDlg->IsVisible())
+	{
+		if (m_pUIInventory->IsVisible())
+			m_pUIInventory->Close(true);
+		return bNeedOpen;
+	}
+
+	if (m_pUIItemUpgradeDlg->IsVisible())
 	{
 		if (m_pUIInventory->IsVisible())
 			m_pUIInventory->Close(true);
@@ -4676,7 +4717,8 @@ bool CGameProcMain::CommandToggleUISkillTree()
 			m_pUITransactionDlg->LeaveTransactionState();
 		if (m_pUIWareHouseDlg->IsVisible())
 			m_pUIWareHouseDlg->LeaveWareHouseState();
-
+		if (m_pUIItemUpgradeDlg->IsVisible())
+			m_pUIItemUpgradeDlg->LeaveAnvilState();
 		s_pUIMgr->SetFocusedUI(m_pUISkillTreeDlg);
 		m_pUISkillTreeDlg->Open();
 	}
@@ -4709,6 +4751,8 @@ bool CGameProcMain::CommandToggleCmdList()
 			m_pUITransactionDlg->LeaveTransactionState();
 		if (m_pUIWareHouseDlg->IsVisible())
 			m_pUIWareHouseDlg->LeaveWareHouseState();
+		if (m_pUIItemUpgradeDlg->IsVisible())
+			m_pUIItemUpgradeDlg->LeaveAnvilState();
 
 		s_pUIMgr->SetFocusedUI(m_pUICmdListDlg);
 		m_pUICmdListDlg->Open();
@@ -5241,6 +5285,13 @@ void CGameProcMain::MsgRecv_PerTrade(Packet& pkt)
 			break;
 		}
 
+		if (m_pUIItemUpgradeDlg->IsVisible())
+		{
+			m_pUIItemUpgradeDlg->LeaveAnvilState();
+			m_pSubProcPerTrade->LeavePerTradeState(PER_TRADE_RESULT_MY_DISAGREE);
+			break;
+		}
+
 		if (m_pUIInventory->IsVisible())
 			m_pUIInventory->Close();
 
@@ -5530,6 +5581,22 @@ void CGameProcMain::MsgRecv_ObjectEvent(Packet& pkt)
 				}
 			}
 			this->MsgOutput(szMsg, 0xff00ff00);
+		}
+	}
+	else if (OBJECT_TYPE_ANVIL == iType)
+	{
+		{
+			int iID = pkt.read<uint16_t>();	
+
+			CPlayerNPC* pNPC = s_pOPMgr->NPCGetByID(iID, true);
+			__ASSERT(pNPC, "Invalid NPC ID");
+			if (pNPC)
+			{			
+				if (iResult == UpgradeFailed)
+					CGameProcedure::s_pFX->TriggerBundle(0, -1, FXID_ITEM_FAIL, iID, -1);
+				else if (iResult == UpgradeSucceeded)
+					CGameProcedure::s_pFX->TriggerBundle(0, -1, FXID_ITEM_SUCCESS, iID, -1);
+			}
 		}
 	}
 	else
@@ -6319,6 +6386,48 @@ void CGameProcMain::MsgRecv_WareHouseOpen(Packet& pkt)		// º¸°üÇÔ ¿ÀÇÂ..
 		m_pUISkillTreeDlg->Close();
 
 	m_pUIWareHouseDlg->EnterWareHouseStateEnd();
+}
+
+void CGameProcMain::MsgRecv_Anvil(Packet& pkt)
+{
+	uint8_t	bResult, bSubCom = pkt.read<uint8_t>();
+
+	switch ((e_SubPacket_Anvil)bSubCom)
+	{
+	case N3_SP_ANVIL_OPEN:
+	{
+		uint16_t npcId = pkt.read<uint16_t>();
+		m_pUIAnvil->SetNpcId(npcId);
+		m_pUIAnvil->SetVisible(true);
+		break;
+	}
+	case N3_SP_ANVIL_ITEM_UPGRADE_OPEN:
+		MsgRecv_AnvilItemUpgradeOpen(pkt);
+		break;
+	case N3_SP_ANVIL_ITEM_UPGRADE_REQ:
+		m_pUIItemUpgradeDlg->ReceiveResultItemUpgradeMsg(pkt);
+		break;
+	}
+}
+void CGameProcMain::MsgRecv_AnvilItemUpgradeOpen(Packet& pkt)
+{
+	if (m_pUIAnvil->IsVisible())
+		return;
+	uint16_t npcId = pkt.read<uint16_t>();
+
+	m_pUIItemUpgradeDlg->SetNpcId(npcId);
+	m_pUIItemUpgradeDlg->EnterItemUpgradeStateStart();
+
+	if (!m_pUIItemUpgradeDlg->IsVisible())
+		m_pUIItemUpgradeDlg->SetVisible(true);
+
+	if (m_pUIInventory->IsVisible())		// ÀÎº¥Åä¸®°¡ ¾È¿­·Á ÀÖÀ¸¸é..
+		this->CommandToggleUIInventory();
+
+	if (m_pUISkillTreeDlg->IsVisible())
+		m_pUISkillTreeDlg->Close();
+
+	m_pUIItemUpgradeDlg->EnterItemUpgradeStateEnd();
 }
 
 void CGameProcMain::PlayBGM_Town()
@@ -7572,7 +7681,7 @@ bool CGameProcMain::OnMouseRBtnPress(POINT ptCur, POINT ptPrev)
 	{
 		if (pNPC->m_pShapeExtraRef) // ¿ÀºêÁ§Æ® ÇüÅÂÀÇ NPC ÀÌ¸é.. ÄÁÆ®·Ñ ÇÒ NPCÀÇ ID °¡ ÀÖÀ¸¸é..
 		{
-			if (pNPC->m_pShapeExtraRef->m_iNPC_ID > 0)
+			//if (pNPC->m_pShapeExtraRef->m_iNPC_ID > 0) // anvil için iNPC_ID 0 geliyor acaba bu kontrol gerekli mi ?
 			{
 				float fD = (s_pPlayer->Position() - pNPC->m_pShapeExtraRef->Pos()).Magnitude();
 				float fDLimit = (s_pPlayer->Radius() + pNPC->m_pShapeExtraRef->Radius()) * 2.0f;

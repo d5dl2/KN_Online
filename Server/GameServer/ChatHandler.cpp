@@ -56,6 +56,7 @@ void CUser::InitChatCommands()
 		// Command				Handler											Help message
 		{ "test",				&CUser::HandleTestCommand,						"Test command" },
 		{ "give_item",			&CUser::HandleGiveItemCommand,					"Gives a player an item. Arguments: character name | item ID | [optional stack size]" },
+		{ "clear_inventory",	&CUser::HandleClearInventoryCommand,			"Clears the players inventory. Arguments: character name"},
 		{ "zonechange",			&CUser::HandleZoneChangeCommand,				"Teleports you to the specified zone. Arguments: zone ID" },
 		{ "monsummon",			&CUser::HandleMonsterSummonCommand,				"Spawns the specified monster (does not respawn). Arguments: monster's database ID" },
 		{ "npcsummon",			&CUser::HandleNPCSummonCommand,					"Spawns the specified NPC (does not respawn). Arguments: NPC's database ID" },
@@ -498,10 +499,53 @@ COMMAND_HANDLER(CUser::HandleGiveItemCommand)
 	if (!vargs.empty())
 		Time = atoi(vargs.front().c_str());
 
+	if (pItem->m_bCountable)
+	{
+		if (!pUser->GiveItem(nItemID, sCount, true, Time))
+			g_pMain->SendHelpDescription(this, "Error : Item could not be added");
+	}
+	else
+	{
+		for (size_t i = 0; i < sCount; i++)
+		{
+			if (!pUser->GiveItem(nItemID, 1, true, Time))
+				g_pMain->SendHelpDescription(this, "Error : Item could not be added");
+		}
+	}
+	return true;
+}
 
-	if (!pUser->GiveItem(nItemID, sCount, true, Time))
-		g_pMain->SendHelpDescription(this, "Error : Item could not be added");
+COMMAND_HANDLER(CUser::HandleClearInventoryCommand)
+{
+	if (!isGM())
+		return false;
 
+	std::string strUserID = "";
+	if (vargs.size() > 0)
+	{
+		strUserID = vargs.front();
+		vargs.pop_front();
+	}
+	else
+	{
+		strUserID = GetName();
+	}
+
+	CUser* pUser = g_pMain->GetUserPtr(strUserID, TYPE_CHARACTER);
+	if (pUser == nullptr)
+	{
+		g_pMain->SendHelpDescription(this, "Error : User is not online");
+		return true;
+	}
+
+	for (uint8_t i = SLOT_MAX; i < SLOT_MAX + HAVE_MAX; i++)
+	{
+		auto item = GetItem(i);
+		if (item->nNum > 0)
+			if (!RobItem(item->nNum, item->sCount))
+				g_pMain->SendHelpDescription(this, "Error : Item could not be deleted");
+	}
+	
 	return true;
 }
 

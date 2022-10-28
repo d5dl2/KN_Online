@@ -285,6 +285,12 @@
     <ClCompile Include="LauncherReplacer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UIAnvil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIItemUpgradeDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameProcedure.h">
@@ -612,6 +618,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LauncherReplacer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIAnvil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIItemUpgradeDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
