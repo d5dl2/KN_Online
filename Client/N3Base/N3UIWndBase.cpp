@@ -90,10 +90,10 @@ CN3UIArea* CN3UIWndBase::GetChildAreaByiOrder(eUI_AREA_TYPE eUAT, int iOrder)
 	return NULL;
 }
 
-CN3UIString* CN3UIWndBase::GetChildStringByiOrder(int iOrder)
+CN3UIString* CN3UIWndBase::GetChildStringByiOrder(int iOrder, const char* format /* = "%d" */)
 {
 	char pszID[32];
-	sprintf(pszID, "%d",iOrder);
+	sprintf(pszID, format, iOrder);
 
 	for(UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
 	{

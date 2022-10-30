@@ -595,6 +595,19 @@ enum UpgradeErrorCodes
 	UpgradeRental = 5
 };
 
+enum UpgradeTableRateTypes
+{
+	LowClass = 1,
+	MiddleClass = 2,
+	HighClass = 3,
+	Reduce = 7,
+};
+
+enum UpgradeScrolls
+{
+	Trina = 700002000
+};
+
 ////////////////////////////////////////////////////////////////
 // Party BBS subpacket define
 ////////////////////////////////////////////////////////////////

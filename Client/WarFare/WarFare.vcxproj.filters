@@ -291,6 +291,9 @@
     <ClCompile Include="UIItemUpgradeDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UIBaseInventory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameProcedure.h">
@@ -624,6 +627,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UIItemUpgradeDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIBaseInventory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -45,10 +45,13 @@ CN3UIArea* m_pAreaSlot[MAX_UPGRADE_SLOT];
 __InfoSelectedIcon upgradeItem;
 __InfoSelectedIcon upgradeSlots[MAX_UPGRADE_SLOT];
 
+TABLE_ITEM_BASIC* trinasPiece;
+
 CUIItemUpgradeDlg::CUIItemUpgradeDlg()
 {
 	m_pUITooltipDlg = NULL;
-
+	trinasPiece = NULL;
+	npcId = -1;
 	int i;
 	for (i = 0; i < MAX_ITEM_INVENTORY; i++)	m_pMyItemUpgradeInv[i] = NULL;
 	for (i = 0; i < MAX_UPGRADE_SLOT; i++) upgradeSlots[i].pItemSelect = NULL;
@@ -112,6 +115,7 @@ bool CUIItemUpgradeDlg::Load(HANDLE hFile)
 	m_pAreaUpgrade = (CN3UIArea*)(this->GetChildByID("a_upgrade"));				__ASSERT(m_pAreaUpgrade, "NULL UI Component!!");
 	m_pAreaResult = (CN3UIArea*)(this->GetChildByID("a_result"));				__ASSERT(m_pAreaResult, "NULL UI Component!!");
 
+	trinasPiece = CGameBase::s_pTbl_Items_Basic.Find(Trina / 1000 * 1000);
 	return true;
 }
 
@@ -176,7 +180,7 @@ void CUIItemUpgradeDlg::Render()
 
 	POINT ptCur = CGameProcedure::s_pLocalInput->MouseGetPos();
 	m_pUITooltipDlg->DisplayTooltipsDisable();
-	
+
 	bool bTooltipRender = false;
 	__IconItemSkill* spItem = NULL;
 
@@ -203,7 +207,7 @@ void CUIItemUpgradeDlg::Render()
 			|| (m_pMyItemUpgradeInv[i]->pItemBasic->byContable == UIITEM_TYPE_COUNTABLE_SMALL)))
 		{
 			// string ¾ò±â..
-			CN3UIString* pStr = GetChildStringByiOrder(i);
+			CN3UIString* pStr = GetChildStringByiOrder(i, "s_count_%d");
 			if (pStr)
 			{
 				if ((GetState() == UI_STATE_ICON_MOVING) && (m_pMyItemUpgradeInv[i] == CN3UIWndBase::m_sSelectedIconInfo.pItemSelect))
@@ -228,7 +232,7 @@ void CUIItemUpgradeDlg::Render()
 		else
 		{
 			// string ¾ò±â..
-			CN3UIString* pStr = GetChildStringByiOrder(i);
+			CN3UIString* pStr = GetChildStringByiOrder(i, "s_count_%d");
 			if (pStr)
 				pStr->SetVisible(false);
 		}
@@ -332,23 +336,6 @@ void CUIItemUpgradeDlg::ItemMoveFromThisToInv()
 	}
 }
 
-CN3UIArea* CUIItemUpgradeDlg::GetChildAreaByiOrder(eUI_AREA_TYPE eUAT, int iOrder, const char* nameFormat)
-{
-	char pszID[32];
-	sprintf(pszID, nameFormat, iOrder);
-
-	for (UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
-	{
-		CN3UIArea* pChild = (CN3UIArea*)(*itor);
-		if ((pChild->UIType() == UI_TYPE_AREA) && (pChild->m_eAreaType == eUAT))
-		{
-			if (pChild->m_szID == pszID) return pChild;
-		}
-	}
-
-	return NULL;
-}
-
 
 int CUIItemUpgradeDlg::GetItemiOrder(__IconItemSkill* spItem)
 {
@@ -361,19 +348,6 @@ int CUIItemUpgradeDlg::GetItemiOrder(__IconItemSkill* spItem)
 			return i;
 	}
 	return iReturn;
-}
-
-
-void	CUIItemUpgradeDlg::InitIconWnd(e_UIWND eWnd) {
-	__TABLE_UI_RESRC* pTbl = CGameBase::s_pTbl_UI.Find(CGameBase::s_pPlayer->m_InfoBase.eNation);
-
-	m_pUITooltipDlg = new CUIImageTooltipDlg();
-	m_pUITooltipDlg->Init(this);
-	m_pUITooltipDlg->LoadFromFile(pTbl->szItemInfo);
-	m_pUITooltipDlg->InitPos();
-	m_pUITooltipDlg->SetVisible(FALSE);
-
-	CN3UIWndBase::InitIconWnd(eWnd);
 }
 
 uint32_t		CUIItemUpgradeDlg::MouseProc(uint32_t dwFlags, const POINT& ptCur, const POINT& ptOld) {
@@ -611,7 +585,7 @@ bool CUIItemUpgradeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 	return true;
 }
 
-bool				CUIItemUpgradeDlg::ReceiveIconDrop(__IconItemSkill* spItem, POINT ptCur) {
+bool CUIItemUpgradeDlg::ReceiveIconDrop(__IconItemSkill* spItem, POINT ptCur) {
 
 	CN3UIArea* pArea;
 	e_UIWND_DISTRICT eUIWnd = UIWND_DISTRICT_UNKNOWN;
@@ -624,14 +598,25 @@ bool				CUIItemUpgradeDlg::ReceiveIconDrop(__IconItemSkill* spItem, POINT ptCur)
 
 	int i, iDestiOrder = -1; bool bFound = false, scroolAllreadyAdded = false;
 
-	if (CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->pItemBasic->dwEffectID2 == 255) // scroll grubu
+	if (CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->pItemBasic->dwEffectID2 == 255) // trina ve scroll grubu
 	{
 		for (i = 0; i < 9; i++)
 		{
-			if (upgradeSlots[i].pItemSelect && upgradeSlots[i].pItemSelect->pItemBasic->dwEffectID2 == 255)
+			if (CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->pItemBasic == trinasPiece) // eklenmek istenen item trina ise
 			{
-				scroolAllreadyAdded = true;
-				break;
+				if (upgradeSlots[i].pItemSelect && upgradeSlots[i].pItemSelect->pItemBasic == trinasPiece) // slotlardan birinde zaten trina var ise
+				{
+					scroolAllreadyAdded = true;
+					break;
+				}
+			}
+			else // eklenmek istenen item scroll ise
+			{
+				if (upgradeSlots[i].pItemSelect && upgradeSlots[i].pItemSelect->pItemBasic != trinasPiece) // slotlardan birinde scroll var ise
+				{
+					scroolAllreadyAdded = true;
+					break;
+				}
 			}
 		}
 
@@ -749,15 +734,6 @@ RECT CUIItemUpgradeDlg::GetFirstEmptyUpgradeSlot()
 	return GetChildAreaByiOrder(UI_AREA_TYPE_SLOT, i, "a_m_%d")->GetRegion();
 }
 
-void				CUIItemUpgradeDlg::CancelIconDrop(__IconItemSkill* spItem) {
-	CN3UIWndBase::AllHighLightIconFree();
-	SetState(UI_STATE_COMMON_NONE);
-}
-
-void				CUIItemUpgradeDlg::AcceptIconDrop(__IconItemSkill* spItem) {
-	CN3UIWndBase::AllHighLightIconFree();
-	SetState(UI_STATE_COMMON_NONE);
-}
 
 void CUIItemUpgradeDlg::SetVisibleWithNoSound(bool bVisible, bool bWork, bool bReFocus)
 {
@@ -791,39 +767,6 @@ void CUIItemUpgradeDlg::LeaveAnvilState()
 void				CUIItemUpgradeDlg::InitIconUpdate()
 {
 
-}
-
-RECT CUIItemUpgradeDlg::GetSampleRect()
-{
-	RECT rect;
-	CN3UIArea* pArea;
-	POINT ptCur = CGameProcedure::s_pLocalInput->MouseGetPos();
-	pArea = GetChildAreaByiOrder(UI_AREA_TYPE_INV, 0, "a_slot_%d");
-	rect = pArea->GetRegion();
-	float fWidth = (float)(rect.right - rect.left);
-	float fHeight = (float)(rect.bottom - rect.top);
-	fWidth *= 0.5f; fHeight *= 0.5f;
-	rect.left = ptCur.x - (int)fWidth;  rect.right = ptCur.x + (int)fWidth;
-	rect.top = ptCur.y - (int)fHeight; rect.bottom = ptCur.y + (int)fHeight;
-	return rect;
-}
-
-
-CN3UIString* CUIItemUpgradeDlg::GetChildStringByiOrder(int iOrder)
-{
-	char pszID[32];
-	sprintf(pszID, "s_count_%d", iOrder);
-
-	for (UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
-	{
-		CN3UIString* pChild = (CN3UIString*)(*itor);
-		if (pChild->UIType() == UI_TYPE_STRING)
-		{
-			if (pChild->m_szID == pszID) return pChild;
-		}
-	}
-
-	return NULL;
 }
 
 e_UIWND_DISTRICT CUIItemUpgradeDlg::GetWndDistrict(__IconItemSkill* spItem)
@@ -876,8 +819,10 @@ void CUIItemUpgradeDlg::SendToServerFromItemUpgradeMsg()
 	CAPISocket::MP_AddWord(byBuff, iOffset, npcId);
 	CAPISocket::MP_AddDword(byBuff, iOffset, upgradeItem.pItemSelect->pItemBasic->dwID + upgradeItem.pItemSelect->pItemExt->dwID);
 	CAPISocket::MP_AddByte(byBuff, iOffset, upgradeItem.UIWndSelect.iOrder);
-
-	for (size_t i = 0; i < MAX_UPGRADE_SLOT; i++)
+	
+	// scrollar nereye konursa konsun ilk iki slotta gönder
+	size_t i, scrollCount = 0;
+	for (i = 0; i < MAX_UPGRADE_SLOT; i++)
 	{
 		__InfoSelectedIcon current = upgradeSlots[i];
 
@@ -885,12 +830,13 @@ void CUIItemUpgradeDlg::SendToServerFromItemUpgradeMsg()
 		{
 			CAPISocket::MP_AddDword(byBuff, iOffset, current.pItemSelect->pItemBasic->dwID + current.pItemSelect->pItemExt->dwID);
 			CAPISocket::MP_AddByte(byBuff, iOffset, current.UIWndSelect.iOrder);
+			scrollCount++;
 		}
-		else
-		{
-			CAPISocket::MP_AddDword(byBuff, iOffset, -1);
-			CAPISocket::MP_AddByte(byBuff, iOffset, -1);
-		}
+	}
+	for (i = scrollCount; i < MAX_UPGRADE_SLOT; i++)
+	{
+		CAPISocket::MP_AddDword(byBuff, iOffset, -1);
+		CAPISocket::MP_AddByte(byBuff, iOffset, -1);
 	}
 
 	CGameProcedure::s_pSocket->Send(byBuff, iOffset);

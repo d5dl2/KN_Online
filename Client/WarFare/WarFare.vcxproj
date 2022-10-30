@@ -205,6 +205,7 @@
     <ClCompile Include="ServerMesh.cpp" />
     <ClCompile Include="SubProcPerTrade.cpp" />
     <ClCompile Include="UIAnvil.cpp" />
+    <ClCompile Include="UIBaseInventory.cpp" />
     <ClCompile Include="UICharacterCreate.cpp" />
     <ClCompile Include="UICharacterSelect.cpp" />
     <ClCompile Include="UIChat.cpp" />
@@ -287,6 +288,7 @@
     <ClInclude Include="LauncherReplacer.h" />
     <ClInclude Include="resource1.h" />
     <ClInclude Include="UIAnvil.h" />
+    <ClInclude Include="UIBaseInventory.h" />
     <ClInclude Include="UICmdEdit.h" />
     <ClInclude Include="UICmdList.h" />
     <ClInclude Include="ItemRepairMgr.h" />

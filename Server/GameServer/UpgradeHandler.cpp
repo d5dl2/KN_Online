@@ -149,130 +149,141 @@ void CUser::ItemUpgrade(Packet & pkt, uint8_t nUpgradeType)
 			if( nItemID[1]== 700002000 || nItemID[2]== 700002000 || nItemID[1]== 379258000 || nItemID[2]== 379258000)
 				trina = true;//How many trina did I put there ?
 
-			if( pUpgrade->bRateType == 1)
-			if( nItemID[1] == 	379221000	|| //Upgrade Scroll (Low)
-				nItemID[1] == 	379222000	||
-				nItemID[1] == 	379223000	||
-				nItemID[1] == 	379224000	||
-				nItemID[1] == 	379225000	||
-				nItemID[1] == 	379226000	||
-				nItemID[1] == 	379227000	||
-				nItemID[1] == 	379228000	||
-				nItemID[1] == 	379229000	||
-				nItemID[1] == 	379230000	||
-				nItemID[1] == 	379231000	||
-				nItemID[1] == 	379232000	||
-				nItemID[1] == 	379233000	||
-				nItemID[1] == 	379234000	||
-				nItemID[1] == 	379235000	||
-				nItemID[1] == 	379255000	||
-				nItemID[2] == 	379221000	||
-				nItemID[2] == 	379222000	||
-				nItemID[2] == 	379223000	||
-				nItemID[2] == 	379224000	||
-				nItemID[2] == 	379225000	||
-				nItemID[2] == 	379226000	||
-				nItemID[2] == 	379227000	||
-				nItemID[2] == 	379228000	||
-				nItemID[2] == 	379229000	||
-				nItemID[2] == 	379230000	||
-				nItemID[2] == 	379231000	||
-				nItemID[2] == 	379232000	||
-				nItemID[2] == 	379233000	||
-				nItemID[2] == 	379234000	||
-				nItemID[2] == 	379235000	||
-				nItemID[2] == 	379255000	)
-				ItemClass = 1;
+			if (pUpgrade->bRateType == LowClass)
+			{
+				if (nItemID[1] == 379221000 || //Upgrade Scroll (Low)
+					nItemID[1] == 379222000 ||
+					nItemID[1] == 379223000 ||
+					nItemID[1] == 379224000 ||
+					nItemID[1] == 379225000 ||
+					nItemID[1] == 379226000 ||
+					nItemID[1] == 379227000 ||
+					nItemID[1] == 379228000 ||
+					nItemID[1] == 379229000 ||
+					nItemID[1] == 379230000 ||
+					nItemID[1] == 379231000 ||
+					nItemID[1] == 379232000 ||
+					nItemID[1] == 379233000 ||
+					nItemID[1] == 379234000 ||
+					nItemID[1] == 379235000 ||
+					nItemID[1] == 379255000 ||
+					nItemID[2] == 379221000 ||
+					nItemID[2] == 379222000 ||
+					nItemID[2] == 379223000 ||
+					nItemID[2] == 379224000 ||
+					nItemID[2] == 379225000 ||
+					nItemID[2] == 379226000 ||
+					nItemID[2] == 379227000 ||
+					nItemID[2] == 379228000 ||
+					nItemID[2] == 379229000 ||
+					nItemID[2] == 379230000 ||
+					nItemID[2] == 379231000 ||
+					nItemID[2] == 379232000 ||
+					nItemID[2] == 379233000 ||
+					nItemID[2] == 379234000 ||
+					nItemID[2] == 379235000 ||
+					nItemID[2] == 379255000)
+					ItemClass = 1;
 				else
 					continue;
+			}
+				
 
-			if( pUpgrade->bRateType == 2)
-			if(
-				nItemID[1] == 	379205000	||//Upgrade Scroll (Middle)
-				nItemID[1] == 	379206000	||
-				nItemID[1] == 	379208000	||
-				nItemID[1] == 	379209000	||
-				nItemID[1] == 	379210000	||
-				nItemID[1] == 	379211000	||
-				nItemID[1] == 	379212000	||
-				nItemID[1] == 	379213000	||
-				nItemID[1] == 	379214000	||
-				nItemID[1] == 	379215000	||
-				nItemID[1] == 	379216000	||
-				nItemID[1] == 	379217000	||
-				nItemID[1] == 	379218000	||
-				nItemID[1] == 	379219000	||
-				nItemID[1] == 	379220000	||
-				nItemID[2] == 	379205000	||
-				nItemID[2] == 	379206000	||
-				nItemID[2] == 	379208000	||
-				nItemID[2] == 	379209000	||
-				nItemID[2] == 	379210000	||
-				nItemID[2] == 	379211000	||
-				nItemID[2] == 	379212000	||
-				nItemID[2] == 	379213000	||
-				nItemID[2] == 	379214000	||
-				nItemID[2] == 	379215000	||
-				nItemID[2] == 	379216000	||
-				nItemID[2] == 	379217000	||
-				nItemID[2] == 	379218000	||
-				nItemID[2] == 	379219000	||
-				nItemID[2] == 	379220000	)
-				ItemClass = 2;
+			if (pUpgrade->bRateType == MiddleClass)
+			{
+				if (
+					nItemID[1] == 379205000 ||//Upgrade Scroll (Middle)
+					nItemID[1] == 379206000 ||
+					nItemID[1] == 379208000 ||
+					nItemID[1] == 379209000 ||
+					nItemID[1] == 379210000 ||
+					nItemID[1] == 379211000 ||
+					nItemID[1] == 379212000 ||
+					nItemID[1] == 379213000 ||
+					nItemID[1] == 379214000 ||
+					nItemID[1] == 379215000 ||
+					nItemID[1] == 379216000 ||
+					nItemID[1] == 379217000 ||
+					nItemID[1] == 379218000 ||
+					nItemID[1] == 379219000 ||
+					nItemID[1] == 379220000 ||
+					nItemID[2] == 379205000 ||
+					nItemID[2] == 379206000 ||
+					nItemID[2] == 379208000 ||
+					nItemID[2] == 379209000 ||
+					nItemID[2] == 379210000 ||
+					nItemID[2] == 379211000 ||
+					nItemID[2] == 379212000 ||
+					nItemID[2] == 379213000 ||
+					nItemID[2] == 379214000 ||
+					nItemID[2] == 379215000 ||
+					nItemID[2] == 379216000 ||
+					nItemID[2] == 379217000 ||
+					nItemID[2] == 379218000 ||
+					nItemID[2] == 379219000 ||
+					nItemID[2] == 379220000)
+					ItemClass = 2;
 				else
 					continue;
+			}
+				
 
-			if( pUpgrade->bRateType == 3)
-			if( nItemID[1] == 	379021000	||//Blessed Upgrade Scroll
-				nItemID[1] == 	379022000	||
-				nItemID[1] == 	379023000	||
-				nItemID[1] == 	379024000	||
-				nItemID[1] == 	379025000	||
-				nItemID[1] == 	379030000	||
-				nItemID[1] == 	379031000	||
-				nItemID[1] == 	379032000	||
-				nItemID[1] == 	379033000	||
-				nItemID[1] == 	379034000	||
-				nItemID[1] == 	379035000	||
-				nItemID[1] == 	379138000	||
-				nItemID[1] == 	379139000	||
-				nItemID[1] == 	379140000	||
-				nItemID[1] == 	379141000	||
-				nItemID[1] == 	379016000	||
-				nItemID[2] == 	379021000	||
-				nItemID[2] == 	379022000	||
-				nItemID[2] == 	379023000	||
-				nItemID[2] == 	379024000	||
-				nItemID[2] == 	379025000	||
-				nItemID[2] == 	379030000	||
-				nItemID[2] == 	379031000	||
-				nItemID[2] == 	379032000	||
-				nItemID[2] == 	379033000	||
-				nItemID[2] == 	379034000	||
-				nItemID[2] == 	379035000	||
-				nItemID[2] == 	379138000	||
-				nItemID[2] == 	379139000	||
-				nItemID[2] == 	379140000	||
-				nItemID[2] == 	379141000	||
-				nItemID[1] == 	379016000	)
-				ItemClass = 3;
+			if (pUpgrade->bRateType == HighClass)
+			{
+				if (nItemID[1] == 379021000 ||//Blessed Upgrade Scroll
+					nItemID[1] == 379022000 ||
+					nItemID[1] == 379023000 ||
+					nItemID[1] == 379024000 ||
+					nItemID[1] == 379025000 ||
+					nItemID[1] == 379030000 ||
+					nItemID[1] == 379031000 ||
+					nItemID[1] == 379032000 ||
+					nItemID[1] == 379033000 ||
+					nItemID[1] == 379034000 ||
+					nItemID[1] == 379035000 ||
+					nItemID[1] == 379138000 ||
+					nItemID[1] == 379139000 ||
+					nItemID[1] == 379140000 ||
+					nItemID[1] == 379141000 ||
+					nItemID[1] == 379016000 ||
+					nItemID[2] == 379021000 ||
+					nItemID[2] == 379022000 ||
+					nItemID[2] == 379023000 ||
+					nItemID[2] == 379024000 ||
+					nItemID[2] == 379025000 ||
+					nItemID[2] == 379030000 ||
+					nItemID[2] == 379031000 ||
+					nItemID[2] == 379032000 ||
+					nItemID[2] == 379033000 ||
+					nItemID[2] == 379034000 ||
+					nItemID[2] == 379035000 ||
+					nItemID[2] == 379138000 ||
+					nItemID[2] == 379139000 ||
+					nItemID[2] == 379140000 ||
+					nItemID[2] == 379141000 ||
+					nItemID[2] == 379016000)
+					ItemClass = 3;
 				else
 					continue;
+			}
+				
 
-			if( pUpgrade->bRateType == 4)
-				if(
-				nItemID[1] == 	379256000	||
-				nItemID[1] == 	379257000	||
-				nItemID[2] == 	379256000	||
-				nItemID[2] == 	379257000	) 
-				ItemClass = 4;
+			if (pUpgrade->bRateType == 4)
+			{
+				if (
+					nItemID[1] == 379256000 ||
+					nItemID[1] == 379257000 ||
+					nItemID[2] == 379256000 ||
+					nItemID[2] == 379257000)
+					ItemClass = 4;
 				else
 					continue;
-			
+			}
+
 			if (proto->m_bClass == 8) 
 			{
 					Accessories=true;
-					if (pUpgrade->bRateType != 8 )//|| proto->ItemExt != pUpgrade->bOriginType
+					if (pUpgrade->bRateType != 8)//|| proto->ItemExt != pUpgrade->bOriginType
 					continue;
 			}
 			
