@@ -142,9 +142,8 @@ const int SOCKET_PORT_LOGIN = 15100;
 									N3_SP_WARE_UNKNOWN };
 
 	enum e_SubPacket_Anvil {
-									N3_SP_ANVIL_OPEN =				0x00,
-									N3_SP_ANVIL_ITEM_UPGRADE_OPEN = 0x01,
-									N3_SP_ANVIL_ITEM_UPGRADE_REQ =	0x02
+									N3_SP_ANVIL_OPEN =				0x01,
+									N3_SP_ANVIL_ITEM_UPGRADE =		0x02
 	};
 
 	enum e_SubPacket_NoahChange {	N3_SP_NOAH_GET = 0x01,	// ³ë¾Æ ½Àµæ,

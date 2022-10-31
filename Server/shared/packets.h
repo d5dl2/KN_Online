@@ -573,7 +573,6 @@ enum FriendRemoveResult
 
 enum
 {
-	ITEM_UPGRADE_OPEN		= 0,
 	ITEM_UPGRADE_REQ		= 1,
 	ITEM_UPGRADE			= 2,
 	ITEM_ACCESSORIES		= 3,

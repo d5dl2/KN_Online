@@ -648,7 +648,7 @@ public:
 	void SendPartyHPUpdate();
 	void ShowEffect(uint32_t nSkillID);
 	void ShowNpcEffect(uint32_t nEffectID, bool bSendToRegion = false);
-	bool SendAnvilRequest(uint16_t sNpcID, uint8_t bType = ITEM_UPGRADE_OPEN);
+	bool SendAnvilRequest(uint16_t sNpcID, uint8_t bType = ITEM_UPGRADE_REQ);
 	void RecastSavedMagic(uint8_t buffType = 0);
 	void RecastLockableScrolls(uint8_t buffType);
 

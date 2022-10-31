@@ -55,10 +55,7 @@ void CUIAnvil::MsgSend_OpenItemUpgrade()
 	uint8_t byBuff[4];		// ÆÐÅ¶ ¹öÆÛ..
 	int iOffset = 0;		// ÆÐÅ¶ ¿ÀÇÁ¼Â..
 
-	CAPISocket::MP_AddByte(byBuff, iOffset, WIZ_ITEM_UPGRADE);
-	CAPISocket::MP_AddByte(byBuff, iOffset, N3_SP_ANVIL_ITEM_UPGRADE_OPEN);
-	CAPISocket::MP_AddWord(byBuff, iOffset, this->npcId);
-	CGameProcedure::s_pSocket->Send(byBuff, iOffset);
+	CGameProcedure::s_pProcMain->ItemUpgradeOpen(this->npcId);	
 }
 
 void CUIAnvil::SetVisible(bool bVisible)

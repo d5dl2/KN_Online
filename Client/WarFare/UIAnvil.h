@@ -20,7 +20,7 @@ public:
 	virtual bool OnKeyPress(int iChar);
 	void		SetNpcId(uint16_t npcId);
 
-	void MsgSend_OpenItemUpgrade();
+	void OpenItemUpgradeDlg();
 
 	uint16_t npcId;
 };

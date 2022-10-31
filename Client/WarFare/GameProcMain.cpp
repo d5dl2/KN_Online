@@ -6401,20 +6401,13 @@ void CGameProcMain::MsgRecv_Anvil(Packet& pkt)
 		m_pUIAnvil->SetVisible(true);
 		break;
 	}
-	case N3_SP_ANVIL_ITEM_UPGRADE_OPEN:
-		MsgRecv_AnvilItemUpgradeOpen(pkt);
-		break;
-	case N3_SP_ANVIL_ITEM_UPGRADE_REQ:
+	case N3_SP_ANVIL_ITEM_UPGRADE:
 		m_pUIItemUpgradeDlg->ReceiveResultItemUpgradeMsg(pkt);
 		break;
 	}
 }
-void CGameProcMain::MsgRecv_AnvilItemUpgradeOpen(Packet& pkt)
+void CGameProcMain::ItemUpgradeOpen(uint16_t npcId)
 {
-	if (m_pUIAnvil->IsVisible())
-		return;
-	uint16_t npcId = pkt.read<uint16_t>();
-
 	m_pUIItemUpgradeDlg->SetNpcId(npcId);
 	m_pUIItemUpgradeDlg->EnterItemUpgradeStateStart();
 

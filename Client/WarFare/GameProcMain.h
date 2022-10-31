@@ -182,7 +182,6 @@ protected:
 	void	MsgRecv_WareHouseOpen(Packet& pkt);		// º¸°üÇÔ ¿ÀÇÂ..
 
 	void	MsgRecv_Anvil(Packet& pkt);			// Anvil Mesajlarını handle et
-	void	MsgRecv_AnvilItemUpgradeOpen(Packet& pkt);		// Anvil ekranını aç ve inventory yükle
 
 	void	MsgRecv_NpcChangeOpen(Packet& pkt);		// Class Change¿Í ÃÊ±âÈ­..
 	void	MsgRecv_AllPointInit(Packet& pkt);			// All Point ÃÊ±âÈ­..
@@ -219,6 +218,7 @@ public:
 
 	// added by d5dl2
 	bool	OnMouseMBtnPress(POINT ptCur, POINT ptPrev);
+	void	ItemUpgradeOpen(uint16_t npcId);	// Anvil ekranını aç ve inventory yükle
 
 	void	ControlViewVDegree(int16_t sValue);
 	void	PlayBGM_Town();

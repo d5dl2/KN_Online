@@ -29,9 +29,6 @@ void CUser::ItemUpgradeProcess(Packet & pkt)
 	uint8_t opcode = pkt.read<uint8_t>();
 	switch (opcode)
 	{
-	case ITEM_UPGRADE_REQ:
-		ItemUpgradeRequest(pkt);
-		break;
 	case ITEM_UPGRADE:
 		ItemUpgrade(pkt);
 		break;
@@ -61,16 +58,6 @@ void CUser::ItemUpgradeProcess(Packet & pkt)
 		break;
 	}
 }
-
-void CUser::ItemUpgradeRequest(Packet& pkt)
-{
-	Packet result(WIZ_ITEM_UPGRADE);
-	uint16_t npcId;
-	pkt >> npcId;
-	result << (int8_t)ITEM_UPGRADE_REQ << npcId;
-	Send(&result);
-}
-
 
 /**
 * @brief	Packet handler for the standard item upgrade system.
@@ -151,7 +138,7 @@ void CUser::ItemUpgrade(Packet & pkt, uint8_t nUpgradeType)
 
 			if (pUpgrade->bRateType == LowClass)
 			{
-				if (nItemID[1] == 379221000 || //Upgrade Scroll (Low)
+				if (nItemID[1] == 379221000 ||
 					nItemID[1] == 379222000 ||
 					nItemID[1] == 379223000 ||
 					nItemID[1] == 379224000 ||
@@ -192,7 +179,7 @@ void CUser::ItemUpgrade(Packet & pkt, uint8_t nUpgradeType)
 			if (pUpgrade->bRateType == MiddleClass)
 			{
 				if (
-					nItemID[1] == 379205000 ||//Upgrade Scroll (Middle)
+					nItemID[1] == 379205000 ||
 					nItemID[1] == 379206000 ||
 					nItemID[1] == 379208000 ||
 					nItemID[1] == 379209000 ||
@@ -230,7 +217,7 @@ void CUser::ItemUpgrade(Packet & pkt, uint8_t nUpgradeType)
 
 			if (pUpgrade->bRateType == HighClass)
 			{
-				if (nItemID[1] == 379021000 ||//Blessed Upgrade Scroll
+				if (nItemID[1] == 379021000 ||
 					nItemID[1] == 379022000 ||
 					nItemID[1] == 379023000 ||
 					nItemID[1] == 379024000 ||
@@ -440,7 +427,7 @@ void CUser::ItemUpgrade(Packet & pkt, uint8_t nUpgradeType)
 			memset(pOriginItem, 0, sizeof(_ITEM_DATA));
 
 			// Send upgrade notice.
-			//ItemUpgradeNotice(proto, UpgradeFailed);
+			ItemUpgradeNotice(proto, UpgradeFailed);
 			GoldLose(pUpgrade->nReqNoah,true); 
 		}
 		else
@@ -471,7 +458,7 @@ void CUser::ItemUpgrade(Packet & pkt, uint8_t nUpgradeType)
 				pOriginItem->sDuration = newProto->m_sDuration;
 
 				// Send upgrade notice.
-				//ItemUpgradeNotice(newProto, UpgradeSucceeded);
+				ItemUpgradeNotice(newProto, UpgradeSucceeded);
 
 				// Rob gold upgrade noah
 				GoldLose(pUpgrade->nReqNoah,true); 
@@ -541,7 +528,7 @@ void CUser::ItemUpgradeNotice(_ITEM_TABLE * pItem, uint8_t UpgradeResult)
 	std::string sUpgradeNotice;
 
 	// Notice is only rebirth upgrade a Offical stuff.
-	if (pItem->m_ItemType == 11 || pItem->m_ItemType == 12) 
+	if (pItem->m_ItemType == 11 || pItem->m_ItemType == 12 || true /* always send notice */)
 		bSendUpgradeNotice = true;
 
 	if (bSendUpgradeNotice)
@@ -551,7 +538,7 @@ void CUser::ItemUpgradeNotice(_ITEM_TABLE * pItem, uint8_t UpgradeResult)
 		else if (UpgradeResult == 1)
 			sUpgradeNotice = string_format("%s has succeeded to upgrade %s.",GetName().c_str(),pItem->m_sName.c_str());
 
-		g_pMain->SendAnnouncement(sUpgradeNotice.c_str());
+		//g_pMain->SendAnnouncement(sUpgradeNotice.c_str());
 		g_pMain->SendNotice(sUpgradeNotice.c_str());
 	}
 }
