@@ -30,7 +30,7 @@ bool CUIAnvil::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 	{
 		if (pSender->m_szID == "upgrade_1")	//Ã¢°íÀÌ¿ë..
 		{
-			MsgSend_OpenItemUpgrade();
+			OpenItemUpgradeDlg();
 			SetVisible(false);
 			return true;
 		}
@@ -50,7 +50,7 @@ bool CUIAnvil::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 }
 
 
-void CUIAnvil::MsgSend_OpenItemUpgrade()
+void CUIAnvil::OpenItemUpgradeDlg()
 {
 	uint8_t byBuff[4];		// ÆÐÅ¶ ¹öÆÛ..
 	int iOffset = 0;		// ÆÐÅ¶ ¿ÀÇÁ¼Â..

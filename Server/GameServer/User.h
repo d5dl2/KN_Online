@@ -858,6 +858,7 @@ public:
 	void ItemUpgradeProcess(Packet & pkt);
 	void ItemUpgrade(Packet & pkt, uint8_t nUpgradeType = ITEM_UPGRADE);
 	void ItemUpgradeNotice(_ITEM_TABLE * pItem, uint8_t UpgradeResult);
+	void SendUpgradeRate(uint16_t rate, int randomed);
 	void ItemUpgradeAccessories(Packet & pkt);
 	void BifrostPieceProcess(Packet & pkt); // originally named BeefRoastPieceProcess() -- that's not happening.
 	void SpecialItemExchange(Packet & pkt);

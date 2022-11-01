@@ -6404,6 +6404,15 @@ void CGameProcMain::MsgRecv_Anvil(Packet& pkt)
 	case N3_SP_ANVIL_ITEM_UPGRADE:
 		m_pUIItemUpgradeDlg->ReceiveResultItemUpgradeMsg(pkt);
 		break;
+	case N3_SP_ANVIL_RATE:
+		uint16_t rate = pkt.read<uint16_t>();
+		int32_t randomed = pkt.read<int32_t>();
+
+		char buff[100];
+		sprintf(buff, "You have %.3f change to succeed upgrade, and you randomed: %d", rate / 10000.0, randomed);
+		this->MsgOutput(buff, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+		break;
 	}
 }
 void CGameProcMain::ItemUpgradeOpen(uint16_t npcId)

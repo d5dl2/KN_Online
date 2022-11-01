@@ -582,6 +582,7 @@ enum
 	ITEM_SEAL				= 8,
 	ITEM_CHARACTER_SEAL		= 9,
 	ITEM_SPECIAL_EXCHANGE	= 11,
+	ITEM_UPGRADE_RATE		= 255
 };
 
 enum UpgradeErrorCodes
@@ -593,6 +594,7 @@ enum UpgradeErrorCodes
 	UpgradeNoMatch = 4,
 	UpgradeRental = 5
 };
+enum UpgradeType { UpgradeTypeNormal = 1, UpgradeTypePreview = 2 };
 
 enum UpgradeTableRateTypes
 {

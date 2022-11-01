@@ -816,6 +816,7 @@ void CUIItemUpgradeDlg::SendToServerFromItemUpgradeMsg()
 	int iOffset = 0;
 	CAPISocket::MP_AddByte(byBuff, iOffset, WIZ_ITEM_UPGRADE);
 	CAPISocket::MP_AddByte(byBuff, iOffset, ITEM_UPGRADE);
+	CAPISocket::MP_AddByte(byBuff, iOffset, UpgradeTypeNormal);
 	CAPISocket::MP_AddWord(byBuff, iOffset, npcId);
 	CAPISocket::MP_AddDword(byBuff, iOffset, upgradeItem.pItemSelect->pItemBasic->dwID + upgradeItem.pItemSelect->pItemExt->dwID);
 	CAPISocket::MP_AddByte(byBuff, iOffset, upgradeItem.UIWndSelect.iOrder);
@@ -847,6 +848,8 @@ void CUIItemUpgradeDlg::ReceiveResultItemUpgradeMsg(Packet& pkt)
 	int8_t resultItemPos;
 	int32_t resultItemId;
 	CN3UIWndBase::m_sRecoveryJobInfo.m_bWaitFromServer = false;
+	int8_t upgradeType;
+	pkt >> upgradeType;
 	pkt >> UpgradeState;
 	pkt >> resultItemId >> resultItemPos;
 
