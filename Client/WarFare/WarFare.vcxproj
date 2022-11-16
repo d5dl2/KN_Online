@@ -215,6 +215,7 @@
     <ClCompile Include="UICreateClanName.cpp" />
     <ClCompile Include="UICmdList.cpp" />
     <ClCompile Include="UIDead.cpp" />
+    <ClCompile Include="UIDisguiseRing.cpp" />
     <ClCompile Include="UIDroppedItemDlg.cpp" />
     <ClCompile Include="UIEndingDisplay.cpp" />
     <ClCompile Include="UIHelp.cpp" />
@@ -330,6 +331,7 @@
     <ClInclude Include="UICmd.h" />
     <ClInclude Include="UICreateClanName.h" />
     <ClInclude Include="UIDead.h" />
+    <ClInclude Include="UIDisguiseRing.h" />
     <ClInclude Include="UIDroppedItemDlg.h" />
     <ClInclude Include="UIEndingDisplay.h" />
     <ClInclude Include="UIHelp.h" />

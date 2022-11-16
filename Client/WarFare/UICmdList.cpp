@@ -110,13 +110,6 @@ void CUICmdList::Release()
 
 }
 
-void CUICmdList::Render()
-{
-	if (false == m_bVisible) return;
-
-	CN3UIBase::Render();
-}
-
 void CUICmdList::Tick()
 {
 	if (m_bOpenningNow) // 오른쪽에서 왼쪽으로 스르륵...열려야 한다면..

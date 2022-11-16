@@ -619,7 +619,7 @@ bool CUIStateBar::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 					uint8_t byBuff[32];
 					int iOffset=0;
 					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_CANCEL);
+					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_CANCEL);
 					CAPISocket::MP_AddDword(byBuff, iOffset, (int)MagicID);
 					CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)CGameBase::s_pPlayer->IDNumber());
 					CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)CGameBase::s_pPlayer->IDNumber());

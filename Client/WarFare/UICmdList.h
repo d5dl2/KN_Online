@@ -57,7 +57,6 @@ public:
 	bool	ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg); // 메시지를 받는다.. 보낸놈, msg
 
 	virtual void	Tick();
-	virtual void	Render(); // 미니맵 렌더링..
 	virtual bool	Load(HANDLE hFile);
 
 	virtual void	Release();

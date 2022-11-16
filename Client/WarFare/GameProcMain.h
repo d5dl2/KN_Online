@@ -57,7 +57,7 @@ public:
 	class CUICreateClanName* m_pUICreateClanName;
 	class CUIAnvil* m_pUIAnvil;
 	class CUIItemUpgradeDlg* m_pUIItemUpgradeDlg;
-
+	class CUIDisguiseRing* m_pUIDisguiseRingDlg;
 
 	class CUIKnightsOperation* m_pUIKnightsOp;					// ±â»ç´Ü ¸®½ºÆ® º¸±â, °¡ÀÔ, µî...
 	class CUIPartyBBS* m_pUIPartyBBS;					// ÆÄÆ¼ Áö¿ø °Ô½ÃÆÇ.

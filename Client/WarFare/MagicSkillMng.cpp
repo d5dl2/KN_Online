@@ -1360,7 +1360,7 @@ void CMagicSkillMng::StartSkillMagicAtPosPacket(__TABLE_UPC_SKILL* pSkill, __Vec
 		uint8_t byBuff[32];
 		int iOffset = 0;
 		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_EFFECTING);
+		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_EFFECTING);
 		CAPISocket::MP_AddDword(byBuff, iOffset, (int)pSkill->dwID);
 		CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)SourceID);
 		CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)-1);
@@ -1414,7 +1414,7 @@ void CMagicSkillMng::StartSkillMagicAtPosPacket(__TABLE_UPC_SKILL* pSkill, __Vec
 	uint8_t byBuff[32];
 	int iOffset = 0;
 	CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-	CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_CASTING);
+	CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_CASTING);
 	CAPISocket::MP_AddDword(byBuff, iOffset, (int)pSkill->dwID);
 	CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)SourceID);
 	CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)-1);
@@ -1500,7 +1500,7 @@ void CMagicSkillMng::StartSkillMagicAtTargetPacket(__TABLE_UPC_SKILL* pSkill, in
 		uint8_t byBuff[32];
 		int iOffset = 0;
 		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_EFFECTING);
+		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_EFFECTING);
 		CAPISocket::MP_AddDword(byBuff, iOffset, (int)pSkill->dwID);
 		CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)SourceID);
 		CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)TargetID);
@@ -1528,7 +1528,7 @@ void CMagicSkillMng::StartSkillMagicAtTargetPacket(__TABLE_UPC_SKILL* pSkill, in
 		uint8_t byBuff[32];
 		int iOffset = 0;
 		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_EFFECTING);
+		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_EFFECTING);
 		CAPISocket::MP_AddDword(byBuff, iOffset, (int)pSkill->dwID);
 		CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)SourceID);
 		CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)TargetID);
@@ -1581,7 +1581,7 @@ void CMagicSkillMng::StartSkillMagicAtTargetPacket(__TABLE_UPC_SKILL* pSkill, in
 	uint8_t byBuff[32];
 	int iOffset = 0;
 	CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-	CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_CASTING);
+	CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_CASTING);
 	CAPISocket::MP_AddDword(byBuff, iOffset, (int)pSkill->dwID);
 	CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)SourceID);
 	CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)TargetID);
@@ -1656,7 +1656,7 @@ void CMagicSkillMng::Tick()
 			uint8_t byBuff[32];
 			int iOffset = 0;
 			CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-			CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_EFFECTING);
+			CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_EFFECTING);
 			CAPISocket::MP_AddDword(byBuff, iOffset, (int)m_dwNonActionMagicID);
 			CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)s_pPlayer->IDNumber());
 			CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)m_iNonActionMagicTarget);
@@ -1703,10 +1703,10 @@ void CMagicSkillMng::SuccessCast(__TABLE_UPC_SKILL* pSkill, CPlayerBase* pTarget
 
 	int idx = 0;
 	if (pSkill->iFlyingFX == 0)
-		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_EFFECTING);
+		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_EFFECTING);
 	else
 	{
-		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_FLYING);
+		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_FLYING);
 		if (pSkill->dw1stTableType == 2 || pSkill->dw2ndTableType == 2)//È­»ì½î±â..
 		{
 			int iNumArrow = 1;
@@ -1863,7 +1863,7 @@ void CMagicSkillMng::FailCast(__TABLE_UPC_SKILL* pSkill)
 	uint8_t byBuff[32];
 	int iOffset = 0;
 	CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-	CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_FAIL);
+	CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_FAIL);
 	CAPISocket::MP_AddDword(byBuff, iOffset, (int)pSkill->dwID);
 	CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)s_pPlayer->IDNumber());
 	CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)s_pPlayer->IDNumber());
@@ -1943,10 +1943,10 @@ void CMagicSkillMng::MobCasting(__TABLE_UPC_SKILL* pSkill, int iSourceID)
 
 	int idx = 0;
 	if (pSkill->iFlyingFX == 0)
-		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_EFFECTING);
+		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_EFFECTING);
 	else
 	{
-		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_FLYING);
+		CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_FLYING);
 		if (pSkill->dw1stTableType == 2 || pSkill->dw2ndTableType == 2)//È­»ì½î±â..
 		{
 			int iNumArrow = 1;

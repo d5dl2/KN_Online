@@ -28,6 +28,7 @@ CN3TableBase<__TABLE_EXCHANGE_QUEST>	CGameBase::s_pTbl_Exchange_Quest;
 CN3TableBase<__TABLE_FX>				CGameBase::s_pTbl_FXSource;
 CN3TableBase<__TABLE_QUEST_MENU>		CGameBase::s_pTbl_QuestMenu;
 CN3TableBase<__TABLE_QUEST_TALK>		CGameBase::s_pTbl_QuestTalk;
+CN3TableBase<__TABLE_DISGUISE_RING>		CGameBase::s_pTbl_Disguise_Ring;
 
 
 CN3WorldManager*	CGameBase::s_pWorldMgr = NULL;		// 월드 매니져..
@@ -77,6 +78,7 @@ void CGameBase::StaticMemberInit()
 	szFN = "Data\\skill_magic_main" + szLangTail;	s_pTbl_Skill.LoadFromFile(szFN.c_str());			// Skill 정보에 관한 Table
 	szFN = "Data\\Exchange_Quest.tbl";				s_pTbl_Exchange_Quest.LoadFromFile(szFN.c_str());	// 교환 퀘스트에 관한 테이블..
 	szFN = "Data\\fx.tbl";							s_pTbl_FXSource.LoadFromFile(szFN.c_str());
+	szFN = "Data\\DisguiseRing" + szLangTail;		s_pTbl_Disguise_Ring.LoadFromFile(szFN.c_str());
 
 	s_pWorldMgr = new CN3WorldManager();
 	s_pOPMgr = new CPlayerOtherMgr();

@@ -350,7 +350,7 @@ void CN3FXMgr::Tick()
 						uint8_t byBuff[32];
 						int iOffset=0;
 						CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-						CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_EFFECTING);
+						CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_EFFECTING);
 						CAPISocket::MP_AddDword(byBuff, iOffset, iMagicID);
 						CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pBundle->m_iSourceID);
 						CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)s_pPlayer->IDNumber());
@@ -367,7 +367,7 @@ void CN3FXMgr::Tick()
 
 						iOffset=0;
 						CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-						CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_FAIL);
+						CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_FAIL);
 						CAPISocket::MP_AddDword(byBuff, iOffset, iMagicID);
 						CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pBundle->m_iSourceID);
 						CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)s_pPlayer->IDNumber());
@@ -405,7 +405,7 @@ void CN3FXMgr::Tick()
 						uint8_t byBuff[32];
 						int iOffset=0;
 						CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-						CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_EFFECTING);
+						CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_EFFECTING);
 						CAPISocket::MP_AddDword(byBuff, iOffset, iMagicID);
 						CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pBundle->m_iSourceID);
 						CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pUPC->IDNumber());
@@ -422,7 +422,7 @@ void CN3FXMgr::Tick()
 
 						iOffset=0;
 						CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-						CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_FAIL);
+						CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_FAIL);
 						CAPISocket::MP_AddDword(byBuff, iOffset, iMagicID);
 						CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pBundle->m_iSourceID);
 						CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pUPC->IDNumber());
@@ -475,7 +475,7 @@ void CN3FXMgr::Tick()
 								uint8_t byBuff[32];
 								int iOffset=0;
 								CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-								CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_EFFECTING);
+								CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_EFFECTING);
 								CAPISocket::MP_AddDword(byBuff, iOffset, iMagicID);
 								CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pBundle->m_iSourceID);
 								CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pNPC->IDNumber());
@@ -492,7 +492,7 @@ void CN3FXMgr::Tick()
 								
 								iOffset=0;
 								CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-								CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_FAIL);
+								CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_FAIL);
 								CAPISocket::MP_AddDword(byBuff, iOffset, iMagicID);
 								CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pBundle->m_iSourceID);
 								CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pNPC->IDNumber());
@@ -523,7 +523,7 @@ void CN3FXMgr::Tick()
 							uint8_t byBuff[32];
 							int iOffset=0;
 							CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-							CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_EFFECTING);
+							CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_EFFECTING);
 							CAPISocket::MP_AddDword(byBuff, iOffset, iMagicID);
 							CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pBundle->m_iSourceID);
 							CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pNPC->IDNumber());
@@ -540,7 +540,7 @@ void CN3FXMgr::Tick()
 							
 							iOffset=0;
 							CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-							CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_FAIL);
+							CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_FAIL);
 							CAPISocket::MP_AddDword(byBuff, iOffset, iMagicID);
 							CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pBundle->m_iSourceID);
 							CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pNPC->IDNumber());
@@ -574,7 +574,7 @@ void CN3FXMgr::Tick()
 					int iOffset=0;
 
 					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_EFFECTING);
+					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_EFFECTING);
 					CAPISocket::MP_AddDword(byBuff, iOffset, iMagicID);
 					CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pBundle->m_iSourceID);
 					CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)-1);
@@ -591,7 +591,7 @@ void CN3FXMgr::Tick()
 
 					iOffset=0;
 					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_FAIL);
+					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_FAIL);
 					CAPISocket::MP_AddDword(byBuff, iOffset, iMagicID);
 					CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pBundle->m_iSourceID);
 					CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)-1);
@@ -621,7 +621,7 @@ void CN3FXMgr::Tick()
 					int iOffset=0;
 
 					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_EFFECTING);
+					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_EFFECTING);
 					CAPISocket::MP_AddDword(byBuff, iOffset, iMagicID);
 					CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pBundle->m_iSourceID);
 					CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)-1);
@@ -638,7 +638,7 @@ void CN3FXMgr::Tick()
 
 					iOffset=0;
 					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)WIZ_MAGIC_PROCESS);
-					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)N3_SP_MAGIC_FAIL);
+					CAPISocket::MP_AddByte(byBuff, iOffset, (uint8_t)MAGIC_FAIL);
 					CAPISocket::MP_AddDword(byBuff, iOffset, iMagicID);
 					CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)pBundle->m_iSourceID);
 					CAPISocket::MP_AddShort(byBuff, iOffset, (int16_t)-1);

@@ -56,15 +56,6 @@ const int SOCKET_PORT_LOGIN = 15100;
 								N3_SP_PER_TRADE_DONE =			0x07,
 								N3_SP_PER_TRADE_CANCEL =		0x08 };	
 
-	// Sub Packet
-	enum e_SubPacket_Magic {	N3_SP_MAGIC_CASTING =	0x01,
-								N3_SP_MAGIC_FLYING =	0x02,
-								N3_SP_MAGIC_EFFECTING =	0x03,
-								N3_SP_MAGIC_FAIL = 		0x04,
-								N3_SP_MAGIC_TYPE4BUFFTYPE = 0x05,
-								N3_SP_MAGIC_CANCEL = 0x06								
-	};
-
 	// Sub Packet..
 	enum e_SubPacket_ClassChange_Main {
 		N3_SP_CLASS_CHANGE_PURE = 0x01,		// Class Change Real..

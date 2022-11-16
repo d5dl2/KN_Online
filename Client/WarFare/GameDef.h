@@ -557,6 +557,17 @@ typedef struct __TABLE_TEXTS
 	std::string	szText;
 } TABLE_TEXTS;
 
+typedef struct __TABLE_DISGUISE_RING
+{
+	uint32_t		dwID;
+	std::string		szName;
+	int				iLevelRequired;
+	uint32_t		iMagicId;
+	uint32_t		iUseItemId;
+	uint8_t			byGroupId; // 1 or 3 -> something like group id, i will show only type 3
+	std::string		szError;
+} TABLE_DISGUISE_RING;
+
 typedef struct __TABLE_ZONE
 {
 	uint32_t       dwID;                 // zone ID

@@ -64,6 +64,7 @@
 #include "GameCursor.h"
 #include "UIAnvil.h"
 #include "UIItemUpgradeDlg.h"
+#include "UIDisguiseRing.h"
 
 #include "N3WorldManager.h"
 
@@ -159,6 +160,7 @@ CGameProcMain::CGameProcMain()				// r기본 생성자.. 각 변수의 역활은 헤더 참조..
 	m_pUIDead = new CUIDead();
 	m_pUIAnvil = new CUIAnvil();
 	m_pUIItemUpgradeDlg = new CUIItemUpgradeDlg();
+	m_pUIDisguiseRingDlg = new CUIDisguiseRing();
 
 	m_pSubProcPerTrade = new CSubProcPerTrade();
 	m_pMagicSkillMng = new CMagicSkillMng(this);
@@ -216,6 +218,7 @@ CGameProcMain::~CGameProcMain()
 	delete m_pTargetSymbol; // 플레이어가 타겟으로 잡은 캐릭터의 위치위에 그리면 된다..
 	delete m_pUIAnvil;
 	delete m_pUIItemUpgradeDlg;
+	delete m_pUIDisguiseRingDlg;
 
 	delete m_pLightMgr;
 
@@ -268,6 +271,7 @@ void CGameProcMain::ReleaseUIs()
 	m_pUICreateClanName->Release();
 	m_pUIAnvil->Release();
 	m_pUIItemUpgradeDlg->Release();
+	m_pUIDisguiseRingDlg->Release();
 	CN3UIBase::DestroyTooltip();
 }
 
@@ -4047,6 +4051,26 @@ void CGameProcMain::InitUI()
 	m_pUIItemUpgradeDlg->SetState(UI_STATE_COMMON_NONE);
 	m_pUIItemUpgradeDlg->SetStyle(UISTYLE_USER_MOVE_HIDE | UISTYLE_POS_RIGHT);
 
+
+	/*
+	m_pUICmdListDlg->Init(s_pUIMgr);
+	m_pUICmdListDlg->LoadFromFile(pTbl->szCmdList);
+	m_pUICmdListDlg->SetVisibleWithNoSound(false);
+	rc = m_pUICmdListDlg->GetRegion();
+	m_pUICmdListDlg->SetPos(iW - (rc.right - rc.left), 10);
+	m_pUICmdListDlg->SetUIType(UI_TYPE_BASE);
+	m_pUICmdListDlg->SetState(UI_STATE_COMMON_NONE);
+	m_pUICmdListDlg->SetStyle(m_pUISkillTreeDlg->GetStyle() | UISTYLE_POS_RIGHT);
+	*/
+	m_pUIDisguiseRingDlg->Init(s_pUIMgr);
+	m_pUIDisguiseRingDlg->LoadFromFile(pTbl->szDisguiseRing);
+	rc = m_pUIDisguiseRingDlg->GetRegion();
+	m_pUIDisguiseRingDlg->SetPos(iW - (rc.right - rc.left), 10);
+	m_pUIDisguiseRingDlg->SetVisibleWithNoSound(false);
+	m_pUIDisguiseRingDlg->SetUIType(UI_TYPE_BASE);
+	m_pUIDisguiseRingDlg->SetState(UI_STATE_COMMON_NONE);
+	m_pUIDisguiseRingDlg->SetStyle(m_pUISkillTreeDlg->GetStyle() | UISTYLE_POS_RIGHT);
+
 	m_pTargetSymbol->LoadFromFile(pTbl->szTargetSymbolShape); // 플레이어가 타겟으로 잡은 캐릭터의 위치위에 그리면 된다..
 
 	m_pUIInn->Init(s_pUIMgr);
@@ -5443,24 +5467,33 @@ void CGameProcMain::MsgRecv_SkillChange(Packet& pkt)			// 스킬 변화..
 
 void CGameProcMain::MsgRecv_MagicProcess(Packet& pkt)
 {
-	e_SubPacket_Magic eSP = (e_SubPacket_Magic)pkt.read<uint8_t>();
+	uint8_t subCode = pkt.read<uint8_t>();
+	MagicOpcode eSP = (MagicOpcode)subCode;
 
 	switch (eSP)
 	{
-	case N3_SP_MAGIC_CASTING:
+	case MAGIC_CASTING:
 		m_pMagicSkillMng->MsgRecv_Casting(pkt);
 		break;
-	case N3_SP_MAGIC_FLYING:
+	case MAGIC_FLYING:
 		m_pMagicSkillMng->MsgRecv_Flying(pkt);
 		break;
-	case N3_SP_MAGIC_EFFECTING:
+	case MAGIC_EFFECTING:
 		m_pMagicSkillMng->MsgRecv_Effecting(pkt);
 		break;
-	case N3_SP_MAGIC_FAIL:
+	case MAGIC_FAIL:
 		m_pMagicSkillMng->MsgRecv_Fail(pkt);
 		break;
-	case N3_SP_MAGIC_TYPE4BUFFTYPE:
+	case MAGIC_DURATION_EXPIRED:
 		m_pMagicSkillMng->MsgRecv_BuffType(pkt);
+		break;
+	case MAGIC_TRANSFORM_LIST:
+		m_pUIDisguiseRingDlg->SetVisible(true);
+		break;
+	default:
+		char buff[100];
+		sprintf(buff, "Unknown WIZ_MAGIC_PROCESS packet, SubCode: %d", subCode);
+		this->MsgOutput(buff, D3DCOLOR_ARGB(255, 255, 0, 0));
 		break;
 	}
 }
