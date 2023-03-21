@@ -275,6 +275,7 @@ bool CCountableItemEditDlg::OnKeyPress(int iKey)
 {
 	switch(iKey)
 	{
+	case DIK_NUMPADENTER:
 	case DIK_RETURN:
 		ReceiveMessage(m_pBtnOk, UIMSG_BUTTON_CLICK);
 		return true;
