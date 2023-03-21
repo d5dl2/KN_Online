@@ -43,7 +43,7 @@ void CUIDisguiseRing::FillLists()
 			break;
 
 		m_pList_Group->AddString(buff);
-		m_mapMonsters[current]
+		//m_mapMonsters[current]
 	}
 }
 
