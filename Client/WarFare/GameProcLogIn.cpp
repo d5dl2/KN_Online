@@ -98,8 +98,8 @@ void CGameProcLogIn::Init()
 	if (pTbl) m_pUILogIn->LoadFromFile(pTbl->szLogIn);//, N3FORMAT_VER_1298);
 
 	RECT rc = m_pUILogIn->GetRegion();
-	int iX = (CN3Base::s_CameraData.vp.Width - (rc.right - rc.left))/2;
-	int iY = CN3Base::s_CameraData.vp.Height - (rc.bottom - rc.top);
+	int iX = ((int)CN3Base::s_CameraData.vp.Width - (rc.right - rc.left))/2;
+	int iY = (int)CN3Base::s_CameraData.vp.Height - (rc.bottom - rc.top);
 	m_pUILogIn->SetPos(iX, iY);
 	m_pUILogIn->RecalcGradePos();
 	rc.left = 0; rc.top = 0; rc.right = CN3Base::s_CameraData.vp.Width; rc.bottom = CN3Base::s_CameraData.vp.Height;
