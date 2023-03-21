@@ -491,6 +491,7 @@ bool CUIWareHouseDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 			break;
 
 		case UIMSG_ICON_RDOWN_FIRST:
+		{
 			CN3UIWndBase::AllHighLightIconFree();
 
 			// Get Item..
@@ -500,26 +501,25 @@ bool CUIWareHouseDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 			eUIWnd = GetWndDistrict(spItem);
 			if (eUIWnd == UIWND_DISTRICT_UNKNOWN)	FAIL_CODE
 
-			CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.UIWndDistrict = eUIWnd;
+				CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.UIWndDistrict = eUIWnd;
 			iOrder = GetItemiOrder(spItem, eUIWnd);
 			if (iOrder == -1)	FAIL_CODE
-			CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.iOrder = iOrder;
+				CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.iOrder = iOrder;
 			CN3UIWndBase::m_sSelectedIconInfo.pItemSelect = spItem;
 			// Do Ops..
 			((CN3UIIcon*)pSender)->SetRegion(GetSampleRect());
 			RECT destRect = GetFirstEmptyRect(eUIWnd);
 			((CN3UIIcon*)pSender)->SetMoveRect(destRect);
-			// Sound..
-			if (spItem) PlayItemSound(spItem->pItemBasic);
-			long x = destRect.left + ((destRect.right - destRect.left) / 2);
-			long y = destRect.top + ((destRect.bottom - destRect.top) / 2);
+			POINT p;
+			p.x = destRect.left + ((destRect.right - destRect.left) / 2);
+			p.y = destRect.top + ((destRect.bottom - destRect.top) / 2);
+			
+			if (!ReceiveIconDrop(spItem, p))
+				IconRestore();
 
-			if (!CGameProcedure::s_pUIMgr->BroadcastIconDropWithRBMsg(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect, x, y))
-				// ¾ÆÀÌÄÜ À§Ä¡ ¿ø·¡´ë·Î..
-				IconRestore();		
-			// 3 satır yukarıda PlayItemSound var tekrar ediyor mu bu şilem kontrol edilmeli
 			if (CN3UIWndBase::m_sSelectedIconInfo.pItemSelect) PlayItemSound(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->pItemBasic);
 			break;
+		}
 	}
 
 	return true;
@@ -1843,13 +1843,11 @@ void CUIWareHouseDlg::GoldCountToWareOK()	//µ·À» ³Ö´Â °æ¿ì..
 {
 	int iGold, iMyMoney, iWareMoney;
 
-	// µ·À» º¸°üÇÔ¿¡ º¸°üÇÏ´Â °æ¿ì..
 	iGold = CN3UIWndBase::m_pCountableItemEdit->GetQuantity();
 
 	// Gold Offset Backup..
 	m_iGoldOffsetBackup = iGold;
 
-	// ÇöÀç ³»°¡ °¡Áø µ·À» ¾ò¾î ¿Â´Ù..
 	iMyMoney = CGameBase::s_pPlayer->m_InfoExt.iGold;
 
 	iWareMoney = m_pStrWareGold->GetStringAsCommaSeperatedGold();
@@ -1859,7 +1857,6 @@ void CUIWareHouseDlg::GoldCountToWareOK()	//µ·À» ³Ö´Â °æ¿ì..
 
 	m_bSendedItemGold = true;
 
-	// µ·À» °¨¼Ò ½ÃÅ²´Ù..
 	iMyMoney -= iGold;
 	CGameBase::s_pPlayer->m_InfoExt.iGold = iMyMoney;
 
@@ -1869,10 +1866,8 @@ void CUIWareHouseDlg::GoldCountToWareOK()	//µ·À» ³Ö´Â °æ¿ì..
 	CGameProcedure::s_pProcMain->m_pUIInventory->GoldUpdate();
 	m_pStrMyGold->SetStringAsCommaSeperatedGold(iMyMoney);
 
-	// ¼­¹ö¿¡°Ô ÆÐÅ¶ ¸¸µé¾î¼­ ³¯¸²..
 	SendToServerToWareMsg(dwGold, 0xff, 0xff, 0xff, iGold);
 
-	// »óÅÂ¸¦ º¯È­½ÃÅ°°í.. Ã¢À» ´Ý°í..
 	CN3UIWndBase::m_sRecoveryJobInfo.m_bWaitFromServer = true;
 	CN3UIWndBase::m_pCountableItemEdit->Close();
 

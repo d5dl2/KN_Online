@@ -885,10 +885,11 @@ bool CUIPerTradeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 			((CN3UIIcon*)pSender)->SetMoveRect(destRect);
 			// Sound..
 			if (spItem) PlayItemSound(spItem->pItemBasic);
-			long x = destRect.left + ((destRect.right - destRect.left) / 2);
-			long y = destRect.top + ((destRect.bottom - destRect.top) / 2);
+			POINT p;
+			p.x = destRect.left + ((destRect.right - destRect.left) / 2);
+			p.y = destRect.top + ((destRect.bottom - destRect.top) / 2);
 
-			if (!CGameProcedure::s_pUIMgr->BroadcastIconDropWithRBMsg(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect, x, y))
+			if (!ReceiveIconDrop(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect, p))
 				// 아이콘 위치 원래대로..
 				IconRestore();
 			// Sound..
