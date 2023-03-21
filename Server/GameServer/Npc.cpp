@@ -138,7 +138,7 @@ void CNpc::SendInOut(uint8_t bType, float fX, float fZ, float fY)
 void CNpc::GetNpcInfo(Packet & pkt)
 {
 	pkt.SByte();
-	pkt /*<< GetProtoID()*/
+	pkt << GetProtoID()
 		<< m_sNid
 		<< m_sPid
 		<< m_sSid //

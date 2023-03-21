@@ -1,6 +1,8 @@
 // GameProcMain.cpp: implementation of the CGameProcMain class.
 //
 //////////////////////////////////////////////////////////////////////
+#include <iostream>
+#include <sstream>
 #include <io.h>
 
 //#include "stdafx.h"
@@ -2781,6 +2783,7 @@ bool CGameProcMain::MsgRecv_NPCInOut(Packet& pkt)
 
 bool CGameProcMain::MsgRecv_NPCIn(Packet& pkt)
 {
+	int		iProtoId = pkt.read<int16_t>();
 	int		iID = pkt.read<int16_t>(); // Server에서 관리하는 고유 ID
 	int		iIDResrc = pkt.read<int16_t>(); // 리소스 ID
 	int		iType = pkt.read<uint8_t>();	// NPC Type - 0x05 : 상인
@@ -2794,6 +2797,9 @@ bool CGameProcMain::MsgRecv_NPCIn(Packet& pkt)
 	else szName = "";
 
 #ifdef _DEBUG
+	std::stringstream os;
+	os << szName << " [" << iProtoId << "]";
+	szName = os.str();
 	CLogWriter::Write("NPC In - ID(%d) Name(%s) Time(%.1f)", iID, szName.c_str(), CN3Base::TimeGet()); // 캐릭 세팅..
 #endif
 
@@ -3798,13 +3804,14 @@ void CGameProcMain::InitUI()
 	m_pUICmd->SetPos((iW - (rc.right - rc.left)) / 2, iH - (rc.bottom - rc.top));
 	m_pUICmd->SetStyle(UISTYLE_FOCUS_UNABLE | UISTYLE_HIDE_UNABLE);
 
-	m_pUIChatDlg->Init(s_pUIMgr);					//Manager 자식으로 리스트에 추가 
+	m_pUIChatDlg->Init(s_pUIMgr);					//Manager
 	m_pUIChatDlg->LoadFromFile(pTbl->szChat);
 	rc = m_pUIChatDlg->GetRegion();
-	RECT rcCmd = m_pUICmd->GetRegion(); rcCmd.top += 5; // .. 하드 코딩..
+	RECT rcCmd = m_pUICmd->GetRegion(); 
 	iX = 0;
 	iY = iH - ((rc.bottom - rc.top) + (rcCmd.bottom - rcCmd.top));
 	CGameProcedure::UIPostData_Read(UI_POST_WND_CHAT, m_pUIChatDlg, iX, iY);
+	rc = m_pUIChatDlg->GetRegion();
 	m_pUIChatDlg->SetStyle(UISTYLE_FOCUS_UNABLE | UISTYLE_HIDE_UNABLE);
 	m_pUIChatDlg->SetVisibleWithNoSound(true);
 
