@@ -1177,8 +1177,8 @@ void CUITransactionDlg::ReceiveResultTradeFromServer(byte bResult, byte bType, i
 				pInfoExt->iGold = iMoney; 
 				CGameProcedure::s_pProcMain->m_pUIInventory->GoldUpdate();
 				__ASSERT(pStatic, "NULL UI Component!!");
-				if(pStatic)	pStatic->SetStringAsInt(pInfoExt->iGold);
-				if(m_pStrMyGold)	m_pStrMyGold->SetStringAsInt(pInfoExt->iGold); // 상거래창..
+				if(pStatic)	pStatic->SetStringAsCommaSeperatedGold(pInfoExt->iGold);
+				if(m_pStrMyGold)	m_pStrMyGold->SetStringAsCommaSeperatedGold(pInfoExt->iGold);
 			}
 			
 			CN3UIWndBase::AllHighLightIconFree();
@@ -1245,8 +1245,8 @@ void CUITransactionDlg::ReceiveResultTradeFromServer(byte bResult, byte bType, i
 				pInfoExt->iGold = iMoney;
 				CGameProcedure::s_pProcMain->m_pUIInventory->GoldUpdate();
 				__ASSERT(pStatic, "NULL UI Component!!");
-				if(pStatic)	pStatic->SetStringAsInt(pInfoExt->iGold);
-				if(m_pStrMyGold) m_pStrMyGold->SetStringAsInt(pInfoExt->iGold); // 상거래창..
+				if(pStatic)	pStatic->SetStringAsCommaSeperatedGold(pInfoExt->iGold);
+				if(m_pStrMyGold) m_pStrMyGold->SetStringAsCommaSeperatedGold(pInfoExt->iGold); // 상거래창..
 			}
 
 			CN3UIWndBase::AllHighLightIconFree();
@@ -1539,8 +1539,8 @@ bool CUITransactionDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 			POINT p;
 			p.x = destRect.left + ((destRect.right - destRect.left) / 2);
 			p.y = destRect.top + ((destRect.bottom - destRect.top) / 2);
-
-			if (!CGameProcedure::s_pUIMgr->BroadcastIconDropWithRBMsg(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect, x, y))
+			
+			if (!ReceiveIconDrop(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect, p))
 				// 아이콘 위치 원래대로..
 				IconRestore();
 
