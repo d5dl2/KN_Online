@@ -167,7 +167,7 @@ void CCountableItemEditDlg::Open(e_UIWND eUW, e_UIWND_DISTRICT eUD, bool bCountG
 	int iCX, iCY;
 
 	m_bLocked = true;
-	if (bCountGold || bWareGold || eUW == UIWND_TRANSACTION) {
+	if (bCountGold || bWareGold) {
 		this->SetQuantity(-1);
 	}
 	else {
