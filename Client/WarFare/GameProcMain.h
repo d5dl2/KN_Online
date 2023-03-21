@@ -28,11 +28,11 @@ public:
 #endif
 	class CUIInventory*			m_pUIInventory;			// ÀÎº¥Åä¸®
 	class CUIVarious* m_pUIVar;				// Ä³¸¯ÅÍ »óÅÂÃ¢, ±â»ç´Ü °ü¸® µîÀÌ ÆäÀÌÁö·Î µé¾î°£ ´Ù¿ëµµ UI
-	class CUIChat* m_pUIChatDlg;			// Ã¤ÆÃ ÀÔÃâ·Â ´ëÈ­»óÀÚ..
+	class CUIChat* m_pUIChatDlg;			// Main Chat Window
 	class CUIMessageWnd* m_pUIMsgDlg;			// °ÔÀÓ ¸Þ½ÃÁö Ãâ·Â »óÀÚ.
 
 	// Folded UI
-	class CUIChat2* m_pUIChatDlg2;
+	class CUIChat2* m_pUIChatDlg2;			// Main Chat window toggle off window
 	class CUIMessageWnd2* m_pUIMsgDlg2;
 
 	class CUIStateBar* m_pUIStateBarAndMiniMap;	// mp,hp,exp, minimap....

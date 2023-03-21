@@ -12,6 +12,7 @@
 #include "N3SndObj.h"
 
 #include "resource.h"
+#include <sstream>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -258,7 +259,7 @@ void CPlayerBase::SetSoundAndInitFont(uint32_t dwFontFlag)
 		m_pIDFont->InitDeviceObjects( s_lpD3DDev );
 		m_pIDFont->RestoreDeviceObjects();
 
-		m_pIDFont->SetText(m_InfoBase.szID.c_str()); // 폰트에 텍스트 지정.
+		m_pIDFont->SetText(m_InfoBase.szID); // 폰트에 텍스트 지정.
 		m_pIDFont->SetFontColor(m_InfoBase.crID);
 	}
 }
@@ -356,11 +357,11 @@ void CPlayerBase::BalloonStringSet(const std::string& szBalloon, D3DCOLOR crFont
 void CPlayerBase::IDSet(int iID, const std::string& szID, D3DCOLOR crID)
 {
 	m_InfoBase.iID = iID;
-	m_InfoBase.szID = szID; // 이름으로 ID 를 대체한다.
+	m_InfoBase.szID = szID; 
 	m_InfoBase.crID = crID;
 
 #ifdef _DEBUG
-	m_Chr.m_szName = szID; // 디버깅을 위해서 이름을 넣어논다.. 그래야 구별 가능하다..
+	m_Chr.m_szName = szID;
 #endif
 }
 
