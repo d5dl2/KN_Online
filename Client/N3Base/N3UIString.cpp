@@ -85,6 +85,35 @@ void CN3UIString::SetStringAsInt(int iVal)
 	this->SetString(szBuff);
 }
 
+void CN3UIString::SetStringAsCommaSeperatedGold(int iGold)
+{
+	char szBuff[32] = "";
+	sprintf(szBuff, "%d", iGold);
+	int buffLength = strlen(szBuff);
+	int goldLength = buffLength + (buffLength / 3) - (buffLength % 3 == 0 ? 1 : 0);
+
+	char szGold[42] = "";
+	szGold[goldLength] = '\0';
+
+	for (int i = buffLength - 1, k = goldLength - 1; i >= 0; i--, k--)
+	{
+		if ((buffLength - 1 - i) % 3 == 0 && (buffLength - 1 != i))
+			szGold[k--] = ',';
+
+		szGold[k] = szBuff[i];
+	}
+
+
+	this->SetString(szGold);
+}
+
+int CN3UIString::GetStringAsCommaSeperatedGold()
+{
+	std::string str = m_szString;
+	str.erase(std::remove(str.begin(), str.end(), ','), str.end());
+	return atoi(str.c_str());
+}
+
 void CN3UIString::SetString_NoWordWrap(const std::string& szString)
 {
 	// 왼쪽위 정렬해서 그린다.

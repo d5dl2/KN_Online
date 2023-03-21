@@ -367,7 +367,7 @@ void CUITransactionDlg::EnterTransactionState()
 	if(m_pStrMyGold)
 	{
 		__InfoPlayerMySelf*	pInfoExt = &(CGameBase::s_pPlayer->m_InfoExt);
-		m_pStrMyGold->SetStringAsInt(pInfoExt->iGold);
+		m_pStrMyGold->SetStringAsCommaSeperatedGold(pInfoExt->iGold);
 	}
 
 	switch ((int)(m_iTradeID/1000))
@@ -387,7 +387,7 @@ void CUITransactionDlg::GoldUpdate()
 	if(m_pStrMyGold)
 	{
 		__InfoPlayerMySelf*	pInfoExt = &(CGameBase::s_pPlayer->m_InfoExt);
-		m_pStrMyGold->SetStringAsInt(pInfoExt->iGold);
+		m_pStrMyGold->SetStringAsCommaSeperatedGold(CGameBase::s_pPlayer->m_InfoExt.iGold);
 	}
 }
 

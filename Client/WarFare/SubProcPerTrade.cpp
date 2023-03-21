@@ -558,10 +558,8 @@ void CSubProcPerTrade::ItemCountEditOK()
 	iMyMoney -= iGoldOffset;
 	s_pPlayer->m_InfoExt.iGold = iMyMoney;
 
-	// 돈 표시.. 인벤토리..
-	sprintf(szGold, "%d", iMyMoney);
 	CGameProcedure::s_pProcMain->m_pUIInventory->GoldUpdate();
-	if(m_pUIPerTradeDlg->m_pStrMyGold) m_pUIPerTradeDlg->m_pStrMyGold->SetString(szGold);
+	if(m_pUIPerTradeDlg->m_pStrMyGold) m_pUIPerTradeDlg->m_pStrMyGold->SetStringAsCommaSeperatedGold(iMyMoney);
 
 	// 돈 표시.. 개인 거래 창..
 	iGold += iGoldOffset;

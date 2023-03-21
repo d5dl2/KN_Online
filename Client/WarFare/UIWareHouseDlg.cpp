@@ -579,7 +579,7 @@ void CUIWareHouseDlg::EnterWareHouseStateStart(int iWareGold)
 	}
 
 	if(m_pStrWareGold)
-		m_pStrWareGold->SetStringAsInt(iWareGold);
+		m_pStrWareGold->SetStringAsCommaSeperatedGold(iWareGold);
 }
 
 void CUIWareHouseDlg::EnterWareHouseStateEnd()
@@ -621,7 +621,7 @@ void CUIWareHouseDlg::EnterWareHouseStateEnd()
 	if(m_pStrMyGold)
 	{
 		__InfoPlayerMySelf*	pInfoExt = &(CGameBase::s_pPlayer->m_InfoExt);
-		m_pStrMyGold->SetStringAsInt(pInfoExt->iGold);
+		m_pStrMyGold->SetStringAsCommaSeperatedGold(pInfoExt->iGold);
 	}
 }
 
@@ -1841,9 +1841,7 @@ void CUIWareHouseDlg::AddItemInWare(int iItem, int iDurability, int iCount, int 
 
 void CUIWareHouseDlg::GoldCountToWareOK()	//µ·À» ³Ö´Â °æ¿ì..
 {
-	char szGold[32];
-	int iGold, iMyMoney, iWareMoney;			// ÀÎº¥Åä¸®ÀÇ °ª..
-	std::string str;
+	int iGold, iMyMoney, iWareMoney;
 
 	// µ·À» º¸°üÇÔ¿¡ º¸°üÇÏ´Â °æ¿ì..
 	iGold = CN3UIWndBase::m_pCountableItemEdit->GetQuantity();
@@ -1854,17 +1852,12 @@ void CUIWareHouseDlg::GoldCountToWareOK()	//µ·À» ³Ö´Â °æ¿ì..
 	// ÇöÀç ³»°¡ °¡Áø µ·À» ¾ò¾î ¿Â´Ù..
 	iMyMoney = CGameBase::s_pPlayer->m_InfoExt.iGold;
 
-	// º¸°üÇÔÀÇ µ·À» ¾ò¾î¿Â´Ù..
-	CN3UIString* pStr = NULL;
-	pStr = (CN3UIString* )GetChildByID("string_wareitem_name");	 
-	__ASSERT(pStr, "NULL UI Component!!");
-	str = pStr->GetString();
-	iWareMoney = atoi(str.c_str());
+	iWareMoney = m_pStrWareGold->GetStringAsCommaSeperatedGold();
 
 	if ( iGold <= 0 ) return;
 	if ( iGold > iMyMoney ) return;
 
-	m_bSendedItemGold = true;		// º¸³½ ¾ÆÀÌÅÛÀÌ µ·ÀÌ´Ù.. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	m_bSendedItemGold = true;
 
 	// µ·À» °¨¼Ò ½ÃÅ²´Ù..
 	iMyMoney -= iGold;
@@ -1872,15 +1865,9 @@ void CUIWareHouseDlg::GoldCountToWareOK()	//µ·À» ³Ö´Â °æ¿ì..
 
 	iWareMoney += iGold;
 
-	// µ· Ç¥½Ã.. Ware..
-	pStr->SetStringAsInt(iWareMoney);
-	// µ· Ç¥½Ã.. ÀÎº¥Åä¸®..
-	sprintf(szGold, "%d", iMyMoney);	pStr = NULL;
-	str = szGold;
+	m_pStrWareGold->SetStringAsCommaSeperatedGold(iWareMoney);
 	CGameProcedure::s_pProcMain->m_pUIInventory->GoldUpdate();
-	// µ· Ç¥½Ã.. Inv..
-	pStr = (CN3UIString* )GetChildByID("string_item_name"); __ASSERT(pStr, "NULL UI Component!!");
-	if(pStr) pStr->SetStringAsInt(iMyMoney);
+	m_pStrMyGold->SetStringAsCommaSeperatedGold(iMyMoney);
 
 	// ¼­¹ö¿¡°Ô ÆÐÅ¶ ¸¸µé¾î¼­ ³¯¸²..
 	SendToServerToWareMsg(dwGold, 0xff, 0xff, 0xff, iGold);
@@ -1894,11 +1881,7 @@ void CUIWareHouseDlg::GoldCountToWareOK()	//µ·À» ³Ö´Â °æ¿ì..
 
 void CUIWareHouseDlg::GoldCountFromWareOK()		// µ·À» »©´Â °æ¿ì..
 {
-	char szGold[32];
-	int iGold, iMyMoney, iWareMoney;			// ÀÎº¥Åä¸®ÀÇ °ª..
-	std::string str;
-
-	// µ·À» º¸°üÇÔ¿¡¼­ »©´Â °æ¿ì..
+	int iGold, iMyMoney, iWareMoney;
 	iGold = CN3UIWndBase::m_pCountableItemEdit->GetQuantity();
 
 	// Gold Offset Backup..
@@ -1907,12 +1890,7 @@ void CUIWareHouseDlg::GoldCountFromWareOK()		// µ·À» »©´Â °æ¿ì..
 	// ÇöÀç ³»°¡ °¡Áø µ·À» ¾ò¾î ¿Â´Ù..
 	iMyMoney = CGameBase::s_pPlayer->m_InfoExt.iGold;
 
-	// º¸°üÇÔÀÇ µ·À» ¾ò¾î¿Â´Ù..
-	CN3UIString* pStr = NULL;
-	pStr = (CN3UIString* )GetChildByID("string_wareitem_name");	 
-	__ASSERT(pStr, "NULL UI Component!!");
-	str = pStr->GetString();
-	iWareMoney = atoi(str.c_str());
+	iWareMoney = m_pStrWareGold->GetStringAsCommaSeperatedGold();
 
 	if ( iGold <= 0 ) return;
 	if ( iGold > iWareMoney ) return;
@@ -1925,15 +1903,9 @@ void CUIWareHouseDlg::GoldCountFromWareOK()		// µ·À» »©´Â °æ¿ì..
 
 	iWareMoney -= iGold;
 
-	// µ· Ç¥½Ã.. Ware..
-	pStr->SetStringAsInt(iWareMoney);
-	// µ· Ç¥½Ã.. ÀÎº¥Åä¸®..
-	sprintf(szGold, "%d", iMyMoney);	pStr = NULL;
-	str = szGold;
+	m_pStrWareGold->SetStringAsCommaSeperatedGold(iWareMoney);	
 	CGameProcedure::s_pProcMain->m_pUIInventory->GoldUpdate();
-	// µ· Ç¥½Ã.. Inv..
-	pStr = (CN3UIString* )GetChildByID("string_item_name"); __ASSERT(pStr, "NULL UI Component!!");
-	if(pStr) pStr->SetStringAsInt(iMyMoney);
+	m_pStrMyGold->SetStringAsCommaSeperatedGold(iMyMoney);
 
 	// ¼­¹ö¿¡°Ô ÆÐÅ¶ ¸¸µé¾î¼­ ³¯¸²..
 	SendToServerFromWareMsg(dwGold, 0xff, 0xff, 0xff, iGold);

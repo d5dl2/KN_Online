@@ -44,6 +44,7 @@ public:
 	int					GetStartLine() const {return m_iStartLine;}
 	int					GetStringRealWidth(int iNum);
 	int					GetStringRealWidth(std::string& szText);
+	int					GetStringAsCommaSeperatedGold();
 
 	virtual	uint32_t	MouseProc(uint32_t dwFlags, const POINT& ptCur, const POINT& ptOld);
 	virtual void	Render();
@@ -67,6 +68,7 @@ public:
 
 	virtual void	SetString(const std::string& szString);
 	virtual void	SetStringAsInt(int iVal);
+	void			SetStringAsCommaSeperatedGold(int iGold);
 	void			SetString_NoWordWrap(const std::string& szString);	// 글자 정렬 하지 않는다.
 	virtual void	SetFont(const std::string& szFontName, uint32_t dwHeight, BOOL bBold, BOOL bItalic); // dwHeight는 point size이다.
 	BOOL			GetTextExtent(const std::string& szString, int iStrLen, SIZE* pSize )
