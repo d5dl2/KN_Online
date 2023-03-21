@@ -87,26 +87,30 @@ enum eKeyMap {
 
 enum e_PlayerType { PLAYER_BASE = 0, PLAYER_NPC = 1, PLAYER_OTHER = 2, PLAYER_MYSELF = 3 };
 
-enum e_Race {	RACE_ALL = 0,
-				RACE_KA_ARKTUAREK = 1, RACE_KA_TUAREK = 2, RACE_KA_WRINKLETUAREK = 3, RACE_KA_PURITUAREK = 4, 
-				RACE_EL_BABARIAN = 11, RACE_EL_MAN = 12, RACE_EL_WOMEN = 13,
-				//RACE_KA_NORMAL = 11, RACE_KA_WARRIOR = 12, RACE_KA_ROGUE = 13, RACE_KA_MAGE = 14,
-				RACE_NPC = 100,
-				RACE_UNKNOWN = 0xffffffff };
+enum e_Race {
+	RACE_ALL = 0,
+	RACE_KA_ARKTUAREK = 1, RACE_KA_TUAREK = 2, RACE_KA_WRINKLETUAREK = 3, RACE_KA_PURITUAREK = 4,
+	RACE_EL_BABARIAN = 11, RACE_EL_MAN = 12, RACE_EL_WOMEN = 13,
+	//RACE_KA_NORMAL = 11, RACE_KA_WARRIOR = 12, RACE_KA_ROGUE = 13, RACE_KA_MAGE = 14,
+	RACE_NPC = 100,
+	RACE_UNKNOWN = 0xffffffff
+};
 
-enum e_Class {	CLASS_KINDOF_WARRIOR = 1, CLASS_KINDOF_ROGUE, CLASS_KINDOF_WIZARD, CLASS_KINDOF_PRIEST,
-				CLASS_KINDOF_ATTACK_WARRIOR, CLASS_KINDOF_DEFEND_WARRIOR, CLASS_KINDOF_ARCHER, CLASS_KINDOF_ASSASSIN, 
-				CLASS_KINDOF_ATTACK_WIZARD, CLASS_KINDOF_PET_WIZARD, CLASS_KINDOF_HEAL_PRIEST, CLASS_KINDOF_CURSE_PRIEST,
+enum e_Class {
+	CLASS_KINDOF_WARRIOR = 1, CLASS_KINDOF_ROGUE, CLASS_KINDOF_WIZARD, CLASS_KINDOF_PRIEST,
+	CLASS_KINDOF_ATTACK_WARRIOR, CLASS_KINDOF_DEFEND_WARRIOR, CLASS_KINDOF_ARCHER, CLASS_KINDOF_ASSASSIN,
+	CLASS_KINDOF_ATTACK_WIZARD, CLASS_KINDOF_PET_WIZARD, CLASS_KINDOF_HEAL_PRIEST, CLASS_KINDOF_CURSE_PRIEST,
 
-				CLASS_KA_WARRIOR = 101, CLASS_KA_ROGUE, CLASS_KA_WIZARD, CLASS_KA_PRIEST, // 여기까지 기본 직업
-				CLASS_KA_BERSERKER = 105, CLASS_KA_GUARDIAN, CLASS_KA_HUNTER = 107, CLASS_KA_PENETRATOR, 
-				CLASS_KA_SORCERER = 109, CLASS_KA_NECROMANCER, CLASS_KA_SHAMAN = 111, CLASS_KA_DARKPRIEST, 
-				
-				CLASS_EL_WARRIOR = 201, CLASS_EL_ROGUE, CLASS_EL_WIZARD, CLASS_EL_PRIEST, // 여기까지 기본 직업 
-				CLASS_EL_BLADE = 205, CLASS_EL_PROTECTOR, CLASS_EL_RANGER = 207, CLASS_EL_ASSASIN, 
-				CLASS_EL_MAGE = 209, CLASS_EL_ENCHANTER, CLASS_EL_CLERIC = 211, CLASS_EL_DRUID,
-				
-				CLASS_UNKNOWN = 0xffffffff };
+	CLASS_KA_WARRIOR = 101, CLASS_KA_ROGUE, CLASS_KA_WIZARD, CLASS_KA_PRIEST, // 여기까지 기본 직업
+	CLASS_KA_BERSERKER = 105, CLASS_KA_GUARDIAN, CLASS_KA_HUNTER = 107, CLASS_KA_PENETRATOR,
+	CLASS_KA_SORCERER = 109, CLASS_KA_NECROMANCER, CLASS_KA_SHAMAN = 111, CLASS_KA_DARKPRIEST,
+
+	CLASS_EL_WARRIOR = 201, CLASS_EL_ROGUE, CLASS_EL_WIZARD, CLASS_EL_PRIEST, // 여기까지 기본 직업 
+	CLASS_EL_BLADE = 205, CLASS_EL_PROTECTOR, CLASS_EL_RANGER = 207, CLASS_EL_ASSASIN,
+	CLASS_EL_MAGE = 209, CLASS_EL_ENCHANTER, CLASS_EL_CLERIC = 211, CLASS_EL_DRUID,
+
+	CLASS_UNKNOWN = 0xffffffff
+};
 
 enum e_Class_Represent { CLASS_REPRESENT_WARRIOR = 0, CLASS_REPRESENT_ROGUE, CLASS_REPRESENT_WIZARD, CLASS_REPRESENT_PRIEST, CLASS_REPRESENT_UNKNOWN = 0xffffffff };
 
@@ -114,76 +118,78 @@ const float WEAPON_WEIGHT_STAND_SWORD = 5.0f; // 무기의 무게 기준...칼
 const float WEAPON_WEIGHT_STAND_AXE = 5.0f; // 무기의 무게 기준...도끼
 const float WEAPON_WEIGHT_STAND_BLUNT = 8.0f; // 무기의 무게 기준...몽둥이 종류
 
-enum e_Ani {	ANI_BREATH = 0, ANI_WALK, ANI_RUN, ANI_WALK_BACKWARD, ANI_STRUCK0, ANI_STRUCK1, ANI_STRUCK2, ANI_GUARD,
-				ANI_DEAD_NEATLY = 8, ANI_DEAD_KNOCKDOWN, ANI_DEAD_ROLL, ANI_SITDOWN, ANI_SITDOWN_BREATH, ANI_STANDUP,
-				ANI_ATTACK_WITH_WEAPON_WHEN_MOVE = 14, ANI_ATTACK_WITH_NAKED_WHEN_MOVE, 
+enum e_Ani {
+	ANI_BREATH = 0, ANI_WALK, ANI_RUN, ANI_WALK_BACKWARD, ANI_STRUCK0, ANI_STRUCK1, ANI_STRUCK2, ANI_GUARD,
+	ANI_DEAD_NEATLY = 8, ANI_DEAD_KNOCKDOWN, ANI_DEAD_ROLL, ANI_SITDOWN, ANI_SITDOWN_BREATH, ANI_STANDUP,
+	ANI_ATTACK_WITH_WEAPON_WHEN_MOVE = 14, ANI_ATTACK_WITH_NAKED_WHEN_MOVE,
 
-				ANI_SPELLMAGIC0_A = 16, ANI_SPELLMAGIC0_B, 
-				ANI_SPELLMAGIC1_A = 18, ANI_SPELLMAGIC1_B, 
-				ANI_SPELLMAGIC2_A = 20, ANI_SPELLMAGIC2_B, 
-				ANI_SPELLMAGIC3_A = 22, ANI_SPELLMAGIC3_B, 
-				ANI_SPELLMAGIC4_A = 24, ANI_SPELLMAGIC4_B, 
-				
-				ANI_SHOOT_ARROW_A = 26, ANI_SHOOT_ARROW_B, 
-				ANI_SHOOT_QUARREL_A = 28, ANI_SHOOT_QUARREL_B, 
-				ANI_SHOOT_JAVELIN_A = 30, ANI_SHOOT_JAVELIN_B, 
-				
-				ANI_SWORD_BREATH_A = 32,	ANI_SWORD_ATTACK_A0, ANI_SWORD_ATTACK_A1,
-				ANI_SWORD_BREATH_B,			ANI_SWORD_ATTACK_B0, ANI_SWORD_ATTACK_B1,		// 한손검
-				
-				ANI_DAGGER_BREATH_A = 38,	ANI_DAGGER_ATTACK_A0, ANI_DAGGER_ATTACK_A1,
-				ANI_DAGGER_BREATH_B,		ANI_DAGGER_ATTACK_B0, ANI_DAGGER_ATTACK_B1,		// 단도
-				
-				ANI_DUAL_BREATH_A = 44,		ANI_DUAL_ATTACK_A0, ANI_DUAL_ATTACK_A1, 
-				ANI_DUAL_BREATH_B,			ANI_DUAL_ATTACK_B0, ANI_DUAL_ATTACK_B1,			// 이도류
-				
-				ANI_SWORD2H_BREATH_A = 50,	ANI_SWORD2H_ATTACK_A0, ANI_SWORD2H_ATTACK_A1, 
-				ANI_SWORD2H_BREATH_B,		ANI_SWORD2H_ATTACK_B0, ANI_SWORD2H_ATTACK_B1,	// 양손검
-				
-				ANI_BLUNT_BREATH_A = 56,	ANI_BLUNT_ATTACK_A0, ANI_BLUNT_ATTACK_A1, 
-				ANI_BLUNT_BREATH_B,			ANI_BLUNT_ATTACK_B0, ANI_BLUNT_ATTACK_B1,		// 둔기 - 몽둥이 ?
-				
-				ANI_BLUNT2H_BREATH_A = 62,	ANI_BLUNT2H_ATTACK_A0, ANI_BLUNT2H_ATTACK_A1, 
-				ANI_BLUNT2H_BREATH_B,		ANI_BLUNT2H_ATTACK_B0, ANI_BLUNT2H_ATTACK_B1,	// 양손으로 잡는 둔기. - 양손 도끼와 같다.
-				
-				ANI_AXE_BREATH_A = 68,		ANI_AXE_ATTACK_A0, ANI_AXE_ATTACK_A1, 
-				ANI_AXE_BREATH_B,			ANI_AXE_ATTACK_B0, ANI_AXE_ATTACK_B1,			// 한손 도끼 
-				
-				ANI_SPEAR_BREATH_A = 74,	ANI_SPEAR_ATTACK_A0, ANI_SPEAR_ATTACK_A1, 
-				ANI_SPEAR_BREATH_B,			ANI_SPEAR_ATTACK_B0, ANI_SPEAR_ATTACK_B1,		// 창 - 베는 날이 없는 그냥 창이다.
-				
-				ANI_POLEARM_BREATH_A = 80,	ANI_POLEARM_ATTACK_A0, ANI_POLEARM_ATTACK_A1, 
-				ANI_POLEARM_BREATH_B,		ANI_POLEARM_ATTACK_B0, ANI_POLEARM_ATTACK_B1,	// 양손으로 잡는 날있는 창 - 청룡도 ??
-				
-				ANI_NAKED_BREATH_A = 86,	ANI_NAKED_ATTACK_A0, ANI_NAKED_ATTACK_A1, 
-				ANI_NAKED_BREATH_B,			ANI_NAKED_ATTACK_B0, ANI_NAKED_ATTACK_B1,		// 맨몸으로 ??
-				
-				ANI_BOW_BREATH = 92,		ANI_CROSS_BOW_BREATH, ANI_LAUNCHER_BREATH, 
-				ANI_BOW_BREATH_B,			ANI_BOW_ATTACK_B0, ANI_BOW_ATTACK_B1,			// 활 공격
-				
-				ANI_SHIELD_BREATH_A = 98,	ANI_SHIELD_ATTACK_A0, ANI_SHIELD_ATTACK_A1, 
-				ANI_SHIELD_BREATH_B,		ANI_SHIELD_ATTACK_B0, ANI_SHIELD_ATTACK_B1,		// 방패 공격
+	ANI_SPELLMAGIC0_A = 16, ANI_SPELLMAGIC0_B,
+	ANI_SPELLMAGIC1_A = 18, ANI_SPELLMAGIC1_B,
+	ANI_SPELLMAGIC2_A = 20, ANI_SPELLMAGIC2_B,
+	ANI_SPELLMAGIC3_A = 22, ANI_SPELLMAGIC3_B,
+	ANI_SPELLMAGIC4_A = 24, ANI_SPELLMAGIC4_B,
 
-				ANI_GREETING0 = 104, ANI_GREETING1, ANI_GREETING2, 
-				ANI_WAR_CRY0 = 107, ANI_WAR_CRY1, ANI_WAR_CRY2, ANI_WAR_CRY3, ANI_WAR_CRY4, 
+	ANI_SHOOT_ARROW_A = 26, ANI_SHOOT_ARROW_B,
+	ANI_SHOOT_QUARREL_A = 28, ANI_SHOOT_QUARREL_B,
+	ANI_SHOOT_JAVELIN_A = 30, ANI_SHOOT_JAVELIN_B,
 
-				ANI_SKILL_AXE0 = 112, ANI_SKILL_AXE1, ANI_SKILL_AXE2, ANI_SKILL_AXE3, 
-				ANI_SKILL_DAGGER0 = 116, ANI_SKILL_DAGGER1,
-				ANI_SKILL_DUAL0 = 118, ANI_SKILL_DUAL1,
-				ANI_SKILL_BLUNT0 = 120, ANI_SKILL_BLUNT1, ANI_SKILL_BLUNT2, ANI_SKILL_BLUNT3, 
-				ANI_SKILL_POLEARM0 = 124, ANI_SKILL_POLEARM1,
-				ANI_SKILL_SPEAR0 = 126, ANI_SKILL_SPEAR1,
-				ANI_SKILL_SWORD0 = 128, ANI_SKILL_SWORD1, ANI_SKILL_SWORD2, ANI_SKILL_SWORD3, 
-				ANI_SKILL_AXE2H0 = 132, ANI_SKILL_AXE2H1,
-				ANI_SKILL_SWORD2H0 = 134, ANI_SKILL_SWORD2H1,
+	ANI_SWORD_BREATH_A = 32, ANI_SWORD_ATTACK_A0, ANI_SWORD_ATTACK_A1,
+	ANI_SWORD_BREATH_B, ANI_SWORD_ATTACK_B0, ANI_SWORD_ATTACK_B1,		// 한손검
 
-				// 여기부터는 NPC Animation
-				ANI_NPC_BREATH = 0, ANI_NPC_WALK, ANI_NPC_RUN, ANI_NPC_WALK_BACKWARD,
-				ANI_NPC_ATTACK0 = 4, ANI_NPC_ATTACK1, ANI_NPC_STRUCK0, ANI_NPC_STRUCK1, ANI_NPC_STRUCK2, ANI_NPC_GUARD, 
-				ANI_NPC_DEAD0 = 10, ANI_NPC_DEAD1, ANI_NPC_TALK0, ANI_NPC_TALK1, ANI_NPC_TALK2, ANI_NPC_TALK3, 
-				ANI_NPC_SPELLMAGIC0 = 16, ANI_NPC_SPELLMAGIC1, 
+	ANI_DAGGER_BREATH_A = 38, ANI_DAGGER_ATTACK_A0, ANI_DAGGER_ATTACK_A1,
+	ANI_DAGGER_BREATH_B, ANI_DAGGER_ATTACK_B0, ANI_DAGGER_ATTACK_B1,		// 단도
 
-				ANI_UNKNOWN = 0xffffffff };
+	ANI_DUAL_BREATH_A = 44, ANI_DUAL_ATTACK_A0, ANI_DUAL_ATTACK_A1,
+	ANI_DUAL_BREATH_B, ANI_DUAL_ATTACK_B0, ANI_DUAL_ATTACK_B1,			// 이도류
+
+	ANI_SWORD2H_BREATH_A = 50, ANI_SWORD2H_ATTACK_A0, ANI_SWORD2H_ATTACK_A1,
+	ANI_SWORD2H_BREATH_B, ANI_SWORD2H_ATTACK_B0, ANI_SWORD2H_ATTACK_B1,	// 양손검
+
+	ANI_BLUNT_BREATH_A = 56, ANI_BLUNT_ATTACK_A0, ANI_BLUNT_ATTACK_A1,
+	ANI_BLUNT_BREATH_B, ANI_BLUNT_ATTACK_B0, ANI_BLUNT_ATTACK_B1,		// 둔기 - 몽둥이 ?
+
+	ANI_BLUNT2H_BREATH_A = 62, ANI_BLUNT2H_ATTACK_A0, ANI_BLUNT2H_ATTACK_A1,
+	ANI_BLUNT2H_BREATH_B, ANI_BLUNT2H_ATTACK_B0, ANI_BLUNT2H_ATTACK_B1,	// 양손으로 잡는 둔기. - 양손 도끼와 같다.
+
+	ANI_AXE_BREATH_A = 68, ANI_AXE_ATTACK_A0, ANI_AXE_ATTACK_A1,
+	ANI_AXE_BREATH_B, ANI_AXE_ATTACK_B0, ANI_AXE_ATTACK_B1,			// 한손 도끼 
+
+	ANI_SPEAR_BREATH_A = 74, ANI_SPEAR_ATTACK_A0, ANI_SPEAR_ATTACK_A1,
+	ANI_SPEAR_BREATH_B, ANI_SPEAR_ATTACK_B0, ANI_SPEAR_ATTACK_B1,		// 창 - 베는 날이 없는 그냥 창이다.
+
+	ANI_POLEARM_BREATH_A = 80, ANI_POLEARM_ATTACK_A0, ANI_POLEARM_ATTACK_A1,
+	ANI_POLEARM_BREATH_B, ANI_POLEARM_ATTACK_B0, ANI_POLEARM_ATTACK_B1,	// 양손으로 잡는 날있는 창 - 청룡도 ??
+
+	ANI_NAKED_BREATH_A = 86, ANI_NAKED_ATTACK_A0, ANI_NAKED_ATTACK_A1,
+	ANI_NAKED_BREATH_B, ANI_NAKED_ATTACK_B0, ANI_NAKED_ATTACK_B1,		// 맨몸으로 ??
+
+	ANI_BOW_BREATH = 92, ANI_CROSS_BOW_BREATH, ANI_LAUNCHER_BREATH,
+	ANI_BOW_BREATH_B, ANI_BOW_ATTACK_B0, ANI_BOW_ATTACK_B1,			// 활 공격
+
+	ANI_SHIELD_BREATH_A = 98, ANI_SHIELD_ATTACK_A0, ANI_SHIELD_ATTACK_A1,
+	ANI_SHIELD_BREATH_B, ANI_SHIELD_ATTACK_B0, ANI_SHIELD_ATTACK_B1,		// 방패 공격
+
+	ANI_GREETING0 = 104, ANI_GREETING1, ANI_GREETING2,
+	ANI_WAR_CRY0 = 107, ANI_WAR_CRY1, ANI_WAR_CRY2, ANI_WAR_CRY3, ANI_WAR_CRY4,
+
+	ANI_SKILL_AXE0 = 112, ANI_SKILL_AXE1, ANI_SKILL_AXE2, ANI_SKILL_AXE3,
+	ANI_SKILL_DAGGER0 = 116, ANI_SKILL_DAGGER1,
+	ANI_SKILL_DUAL0 = 118, ANI_SKILL_DUAL1,
+	ANI_SKILL_BLUNT0 = 120, ANI_SKILL_BLUNT1, ANI_SKILL_BLUNT2, ANI_SKILL_BLUNT3,
+	ANI_SKILL_POLEARM0 = 124, ANI_SKILL_POLEARM1,
+	ANI_SKILL_SPEAR0 = 126, ANI_SKILL_SPEAR1,
+	ANI_SKILL_SWORD0 = 128, ANI_SKILL_SWORD1, ANI_SKILL_SWORD2, ANI_SKILL_SWORD3,
+	ANI_SKILL_AXE2H0 = 132, ANI_SKILL_AXE2H1,
+	ANI_SKILL_SWORD2H0 = 134, ANI_SKILL_SWORD2H1,
+
+	// 여기부터는 NPC Animation
+	ANI_NPC_BREATH = 0, ANI_NPC_WALK, ANI_NPC_RUN, ANI_NPC_WALK_BACKWARD,
+	ANI_NPC_ATTACK0 = 4, ANI_NPC_ATTACK1, ANI_NPC_STRUCK0, ANI_NPC_STRUCK1, ANI_NPC_STRUCK2, ANI_NPC_GUARD,
+	ANI_NPC_DEAD0 = 10, ANI_NPC_DEAD1, ANI_NPC_TALK0, ANI_NPC_TALK1, ANI_NPC_TALK2, ANI_NPC_TALK3,
+	ANI_NPC_SPELLMAGIC0 = 16, ANI_NPC_SPELLMAGIC1,
+
+	ANI_UNKNOWN = 0xffffffff
+};
 
 
 //MAX_INCLINE_CLIMB = sqrt( 1 - sin(90-최대경사각)^2 )
@@ -200,51 +206,63 @@ const float MOVE_DELTA_WHEN_RUNNING = 3.0f; // 뛸때 곱해지는 변수..
 const float MOVE_SPEED_WHEN_WALK = 1.5f; // Player 들이 걸을때 표준속도
 
 // 현재 상태...
-enum e_StateMove {	PSM_STOP = 0,
-					PSM_WALK,
-					PSM_RUN,
-					PSM_WALK_BACKWARD,
-					PSM_COUNT };
+enum e_StateMove {
+	PSM_STOP = 0,
+	PSM_WALK,
+	PSM_RUN,
+	PSM_WALK_BACKWARD,
+	PSM_COUNT
+};
 
-enum e_StateAction {	PSA_BASIC = 0,		// 아무짓도 안하고 있음...
-						PSA_ATTACK,			// 공격 상태.. 
-						PSA_GUARD,			// 방어성공 - 막음..
-						PSA_STRUCK,			// 얻어터짐.
-						PSA_DYING,			// 죽고 있는중(쓰러지는중)
-						PSA_DEATH,			// 죽어서 뻗음..
-						PSA_SPELLMAGIC,		// 마법 주문 외우는 중..
-						PSA_SITDOWN, 		// 앉아 있는중...
-						PSA_COUNT }; 
+enum e_StateAction {
+	PSA_BASIC = 0,		// 아무짓도 안하고 있음...
+	PSA_ATTACK,			// 공격 상태.. 
+	PSA_GUARD,			// 방어성공 - 막음..
+	PSA_STRUCK,			// 얻어터짐.
+	PSA_DYING,			// 죽고 있는중(쓰러지는중)
+	PSA_DEATH,			// 죽어서 뻗음..
+	PSA_SPELLMAGIC,		// 마법 주문 외우는 중..
+	PSA_SITDOWN, 		// 앉아 있는중...
+	PSA_COUNT
+};
 
-enum e_StateDying {		PSD_DISJOINT = 0,	// 분해되어 죽는다.. 
-						PSD_KNOCK_DOWN,		// 날아가거나 뒤로 밀리면서 죽는다.
-						PSD_KEEP_POSITION,	// 제 자리에서 폼잡고 죽는다..
-						PSD_COUNT,
+enum e_StateDying {
+	PSD_DISJOINT = 0,	// 분해되어 죽는다.. 
+	PSD_KNOCK_DOWN,		// 날아가거나 뒤로 밀리면서 죽는다.
+	PSD_KEEP_POSITION,	// 제 자리에서 폼잡고 죽는다..
+	PSD_COUNT,
 
-						PSD_UNKNOWN = 0xffffffff };
+	PSD_UNKNOWN = 0xffffffff
+};
 
-enum e_StateParty {	PSP_NORMAL = 0,
-					PSP_POISONING = 1,
-					PSP_CURSED = 2,
-					PSP_MAGIC_TAKEN = 4,
-					PSP_BLESSED = 8,
-					PSP_UNKNOWN = 0xffffffff };
+enum e_StateParty {
+	PSP_NORMAL = 0,
+	PSP_POISONING = 1,
+	PSP_CURSED = 2,
+	PSP_MAGIC_TAKEN = 4,
+	PSP_BLESSED = 8,
+	PSP_UNKNOWN = 0xffffffff
+};
 
-enum e_PartPosition	{	PART_POS_UPPER = 0,
-						PART_POS_LOWER,
-						PART_POS_FACE,
-						PART_POS_HANDS,
-						PART_POS_FEET, 
-						PART_POS_HAIR_HELMET,
-						PART_POS_COUNT,
-						PART_POS_UNKNOWN = 0xffffffff };
+enum e_PartPosition {
+	PART_POS_UPPER = 0,
+	PART_POS_LOWER,
+	PART_POS_FACE,
+	PART_POS_HANDS,
+	PART_POS_FEET,
+	PART_POS_HAIR_HELMET,
+	PART_POS_COUNT,
+	PART_POS_UNKNOWN = 0xffffffff
+};
 
-enum e_PlugPosition {	PLUG_POS_RIGHTHAND = 0,
-						PLUG_POS_LEFTHAND, 
-						PLUG_POS_BACK, 
-						PLUG_POS_KNIGHTS_GRADE, 
-						PLUG_POS_COUNT,
-						PLUG_POS_UNKNOWN = 0xffffffff };
+enum e_PlugPosition {
+	PLUG_POS_RIGHTHAND = 0,
+	PLUG_POS_LEFTHAND,
+	PLUG_POS_BACK,
+	PLUG_POS_KNIGHTS_GRADE,
+	PLUG_POS_COUNT,
+	PLUG_POS_UNKNOWN = 0xffffffff
+};
 
 /*
 enum e_ItemClass	{	ITEM_CLASS_DAGGER = 1, // 단검(dagger)
@@ -256,23 +274,23 @@ enum e_ItemClass	{	ITEM_CLASS_DAGGER = 1, // 단검(dagger)
 						ITEM_CLASS_MACE_2H, // 7 : 두손타격무기(twohandmace)
 						ITEM_CLASS_SPEAR, // 8 : 창(spear)
 						ITEM_CLASS_POLEARM, // 9 : 폴암(polearm)
-						
+
 						ITEM_CLASS_SHIELD_SMALL = 11, // 11 : 스몰쉴드(smallshield)
 						ITEM_CLASS_SHIELD_LARGE, // 12 : 라아지쉴드(largeshield)
 						ITEM_CLASS_SHIELD_KITE, // 13 : 카이트쉴드(kiteshield)
 						ITEM_CLASS_SHIELD_LARGETKITE, // 14 : 라아지카이트(largekite)
 						ITEM_CLASS_SHIELD_PLATE, // 15 : 플레이트쉴드(plateshield)
-						
+
 						ITEM_CLASS_BOW_SHORT = 21, // 21 : 쇼트보우(Shortbow)
 						ITEM_CLASS_BOW_WRAPT, // 22 : 랩트보우(wraptbow)
 						ITEM_CLASS_BOW_COMPOSITE, // 23 : 콤포지트보우(compositebow)
 						ITEM_CLASS_BOW_IRON, // 24 : 아이언보우(ironbow)
 						ITEM_CLASS_BOW_LONG, // 25 : 롱보우(longbow)
 						ITEM_CLASS_BOW_CROSS, // 28 : 크로스보우(crossbow)
-						
+
 						ITEM_CLASS_STAFF = 31, // 31 : 지팡이(staff)
 						ITEM_CLASS_ETC, // 32 : 기타 마법 물품
-						
+
 						ITEM_CLASS_ARMOR_COTTON = 41, // 41 : 천방어구(cotton)
 						ITEM_CLASS_ARMOR_FUR, // 42 : 털가죽(Fur)
 						ITEM_CLASS_ARMOR_LEATHER, // 43 : 가죽방어구(leather)
@@ -282,61 +300,64 @@ enum e_ItemClass	{	ITEM_CLASS_DAGGER = 1, // 단검(dagger)
 						ITEM_CLASS_ARMOR_HALFPLATE, // 47 : 하프 플레이트 방어구
 						ITEM_CLASS_ARMOR_FULLPLATE, // 48 : 철판방어구(platemail)
 						ITEM_CLASS_ROBE, // 49 : 마법사로브(robe)
-						
+
 						ITEM_CLASS_ARROW = 101,
-						
-						ITEM_CLASS_UNKNOWN = 0xffffffff }; // 101: 화살(arrow) 
+
+						ITEM_CLASS_UNKNOWN = 0xffffffff }; // 101: 화살(arrow)
 */
-enum e_ItemAttrib	{
-						ITEM_ATTRIB_GENERAL = 0,
-						ITEM_ATTRIB_MAGIC	= 1,
-						ITEM_ATTRIB_LAIR	= 2,
-						ITEM_ATTRIB_CRAFT	= 3,
-						ITEM_ATTRIB_UNIQUE	= 4,
-						ITEM_ATTRIB_UPGRADE	= 5,
-						ITEM_ATTRIB_UNIQUE_REVERSE = 11,
-						ITEM_ATTRIB_UPGRADE_REVERSE = 12,
-						ITEM_ATTRIB_UNKNOWN = 0xffffffff };	
+enum e_ItemAttrib {
+	ITEM_ATTRIB_GENERAL = 0,
+	ITEM_ATTRIB_MAGIC = 1,
+	ITEM_ATTRIB_LAIR = 2,
+	ITEM_ATTRIB_CRAFT = 3,
+	ITEM_ATTRIB_UNIQUE = 4,
+	ITEM_ATTRIB_UPGRADE = 5,
+	ITEM_ATTRIB_UNIQUE_REVERSE = 11,
+	ITEM_ATTRIB_UPGRADE_REVERSE = 12,
+	ITEM_ATTRIB_UNKNOWN = 0xffffffff
+};
 
-enum e_ItemClass	{	ITEM_CLASS_DAGGER = 11, // 단검(dagger)
-						ITEM_CLASS_SWORD = 21, // 한손검(onehandsword)
-						ITEM_CLASS_SWORD_2H = 22, // 3 : 양손검(twohandsword)
-						ITEM_CLASS_AXE = 31, // 한손도끼(onehandaxe)
-						ITEM_CLASS_AXE_2H = 32, // 두손도끼(twohandaxe)
-						ITEM_CLASS_MACE = 41, // 한손타격무기(mace)
-						ITEM_CLASS_MACE_2H = 42, // 두손타격무기(twohandmace)
-						ITEM_CLASS_SPEAR = 51, // 창(spear)
-						ITEM_CLASS_POLEARM = 52, // 폴암(polearm)
-						
-						ITEM_CLASS_SHIELD = 60, // 쉴드(shield)
+enum e_ItemClass {
+	ITEM_CLASS_DAGGER = 11, // 단검(dagger)
+	ITEM_CLASS_SWORD = 21, // 한손검(onehandsword)
+	ITEM_CLASS_SWORD_2H = 22, // 3 : 양손검(twohandsword)
+	ITEM_CLASS_AXE = 31, // 한손도끼(onehandaxe)
+	ITEM_CLASS_AXE_2H = 32, // 두손도끼(twohandaxe)
+	ITEM_CLASS_MACE = 41, // 한손타격무기(mace)
+	ITEM_CLASS_MACE_2H = 42, // 두손타격무기(twohandmace)
+	ITEM_CLASS_SPEAR = 51, // 창(spear)
+	ITEM_CLASS_POLEARM = 52, // 폴암(polearm)
 
-						ITEM_CLASS_BOW = 70, //  쇼트보우(Shortbow)
-						ITEM_CLASS_BOW_CROSS = 71, // 크로스보우(crossbow)
-						ITEM_CLASS_BOW_LONG = 80, // 롱보우(longbow)
+	ITEM_CLASS_SHIELD = 60, // 쉴드(shield)
 
-						ITEM_CLASS_EARRING = 91, // 귀걸이
-						ITEM_CLASS_AMULET = 92, // 목걸이
-						ITEM_CLASS_RING = 93, // 반지
-						ITEM_CLASS_BELT = 94, // 허리띠
-						ITEM_CLASS_CHARM = 95, //인벤토리에 지니고 있는 아이템
-						ITEM_CLASS_JEWEL = 96, //보석종류
-						ITEM_CLASS_POTION = 97, // 물약
-						ITEM_CLASS_SCROLL = 98, // 스크롤
+	ITEM_CLASS_BOW = 70, //  쇼트보우(Shortbow)
+	ITEM_CLASS_BOW_CROSS = 71, // 크로스보우(crossbow)
+	ITEM_CLASS_BOW_LONG = 80, // 롱보우(longbow)
 
-						ITEM_CLASS_LAUNCHER = 100, // 창던질때 쓰는 아이템..
-						
-						ITEM_CLASS_STAFF = 110, // 지팡이(staff)
-						ITEM_CLASS_ARROW = 120, // 화살(Arrow)
-						ITEM_CLASS_JAVELIN = 130, // 투창
-						
-						ITEM_CLASS_ARMOR_WARRIOR = 210, // 전사 방어구
-						ITEM_CLASS_ARMOR_ROGUE = 220, // 로그 방어구
-						ITEM_CLASS_ARMOR_MAGE = 230, // 마법사 방어구
-						ITEM_CLASS_ARMOR_PRIEST = 240, // 사제 방어구
+	ITEM_CLASS_EARRING = 91, // 귀걸이
+	ITEM_CLASS_AMULET = 92, // 목걸이
+	ITEM_CLASS_RING = 93, // 반지
+	ITEM_CLASS_BELT = 94, // 허리띠
+	ITEM_CLASS_CHARM = 95, //인벤토리에 지니고 있는 아이템
+	ITEM_CLASS_JEWEL = 96, //보석종류
+	ITEM_CLASS_POTION = 97, // 물약
+	ITEM_CLASS_SCROLL = 98, // 스크롤
 
-						ITEM_CLASS_ETC = 251, // 기타
+	ITEM_CLASS_LAUNCHER = 100, // 창던질때 쓰는 아이템..
 
-						ITEM_CLASS_UNKNOWN = 0xffffffff }; // 
+	ITEM_CLASS_STAFF = 110, // 지팡이(staff)
+	ITEM_CLASS_ARROW = 120, // 화살(Arrow)
+	ITEM_CLASS_JAVELIN = 130, // 투창
+
+	ITEM_CLASS_ARMOR_WARRIOR = 210, // 전사 방어구
+	ITEM_CLASS_ARMOR_ROGUE = 220, // 로그 방어구
+	ITEM_CLASS_ARMOR_MAGE = 230, // 마법사 방어구
+	ITEM_CLASS_ARMOR_PRIEST = 240, // 사제 방어구
+
+	ITEM_CLASS_ETC = 251, // 기타
+
+	ITEM_CLASS_UNKNOWN = 0xffffffff
+}; // 
 
 enum e_Nation { NATION_NOTSELECTED = 0, NATION_KARUS, NATION_ELMORAD, NATION_UNKNOWN = 0xffffffff };
 
@@ -374,14 +395,15 @@ struct __InfoPlayerOther
 };
 
 // 기사단 직위..
-enum e_KnightsDuty {	KNIGHTS_DUTY_UNKNOWN = 0,		// ????? 쫓겨남??
-						KNIGHTS_DUTY_CHIEF = 1,			// 단장
-						KNIGHTS_DUTY_VICECHIEF = 2,		// 부단장 
-						KNIGHTS_DUTY_PUNISH = 3,		// 징계중.
-						KNIGHTS_DUTY_TRAINEE = 4,		// 견습기사
-						KNIGHTS_DUTY_KNIGHT = 5,		// 일반기사
-						KNIGHTS_DUTY_OFFICER = 6		// 장교
-					};
+enum e_KnightsDuty {
+	KNIGHTS_DUTY_UNKNOWN = 0,		// ????? 쫓겨남??
+	KNIGHTS_DUTY_CHIEF = 1,			// 단장
+	KNIGHTS_DUTY_VICECHIEF = 2,		// 부단장 
+	KNIGHTS_DUTY_PUNISH = 3,		// 징계중.
+	KNIGHTS_DUTY_TRAINEE = 4,		// 견습기사
+	KNIGHTS_DUTY_KNIGHT = 5,		// 일반기사
+	KNIGHTS_DUTY_OFFICER = 6		// 장교
+};
 
 #define VICTORY_ABSENCE		0
 #define VICTORY_KARUS		1
@@ -392,9 +414,9 @@ struct __InfoPlayerMySelf : public __InfoPlayerOther
 	int					iBonusPointRemain; // 남는 보너스 포인트...
 	int					iLevelPrev; // 직전의 레벨...
 
-	int					iMSPMax; 
-	int					iMSP; 
-			
+	int					iMSPMax;
+	int					iMSP;
+
 	int					iTargetHPPercent;
 	int					iGold;
 	Uint64				iExpNext;
@@ -414,7 +436,7 @@ struct __InfoPlayerMySelf : public __InfoPlayerOther
 	int					iIntelligence_Delta; // 아이템이나 마법에 의해 가감된값.
 	int 				iMagicAttak;		// 마력
 	int 				iMagicAttak_Delta;	// 아이템이나 마법에 의해 가감된값.
-	
+
 	int 				iAttack;		// 공격력
 	int 				iAttack_Delta;	// 마법에 의해 가감된 값..
 	int 				iGuard;			// 방어력
@@ -444,13 +466,13 @@ struct __InfoPlayerMySelf : public __InfoPlayerOther
 		iBonusPointRemain = 0; // 남는 보너스 포인트...
 		iLevelPrev = 0; // 직전의 레벨...
 
-		iMSPMax = 0; 
-		iMSP = 0; 
-		
+		iMSPMax = 0;
+		iMSP = 0;
+
 		iTargetHPPercent = 0;
 		iGold = 0;
 		iExpNext = 0;
-		iExp = 0; 
+		iExp = 0;
 		iRealmPoint = 0;		// 국가 기여도
 		iRealmPointMonthly = 0; // @Demircivi
 		eKnightsDuty = KNIGHTS_DUTY_UNKNOWN;		// 기사단 권한
@@ -466,7 +488,7 @@ struct __InfoPlayerMySelf : public __InfoPlayerOther
 		iIntelligence_Delta = 0; // 아이템이나 마법에 의해 가감된값.
 		iMagicAttak = 0;		// 마력
 		iMagicAttak_Delta = 0;	// 아이템이나 마법에 의해 가감된값.
-		
+
 		iAttack = 0;		// 공격력
 		iAttack_Delta = 0;	// 마법에 의해 가감된 값..
 		iGuard = 0;			// 방어력
@@ -488,7 +510,7 @@ struct __InfoPlayerMySelf : public __InfoPlayerOther
 		iZoneInit = 0x01;			// 서버한테 처음에 받은 존번호
 		iZoneCur = 0;				// 현재 존..
 		iVictoryNation = -1;		// 전쟁에서 이긴 국가
-	}
+	}	
 };
 
 const int MAX_PARTY_OR_FORCE = 8;
@@ -548,8 +570,10 @@ struct __InfoPartyBBS // 파티 지원 게시판 구조체..
 	}
 };
 
-enum {	RESRC_UI_LOGIN = 0, RESRC_UI_CHARACTERSELECT, RESRC_UI_CHARACTERCREATE, RESRC_UI_INVENTORY, RESRC_UI_CHAT,
-		RESRC_UI_MYINFORMATION, RESRC_UI_TARGET, RESRC_UI_HOTKEY, RESRC_UI_FUNCTION };
+enum {
+	RESRC_UI_LOGIN = 0, RESRC_UI_CHARACTERSELECT, RESRC_UI_CHARACTERCREATE, RESRC_UI_INVENTORY, RESRC_UI_CHAT,
+	RESRC_UI_MYINFORMATION, RESRC_UI_TARGET, RESRC_UI_HOTKEY, RESRC_UI_FUNCTION
+};
 
 typedef struct __TABLE_TEXTS
 {
@@ -832,14 +856,14 @@ typedef struct __TABLE_ITEM_EXT // 장착 아이템에 관한 리소스 레코�
 	int16_t	siMaxDurability;		// 08 내구력
 	int16_t	siPriceMultiply;		// 09 매수가 배율
 	int16_t	siDefense;				// 10 방어력
-	
+
 	int16_t	siDefenseRateDagger;	// 11 단검방어	- 퍼센트
 	int16_t	siDefenseRateSword;		// 12 검방어	- 퍼센트
 	int16_t	siDefenseRateBlow;		// 13 타격방어	- 퍼센트
 	int16_t	siDefenseRateAxe;		// 14 도끼방어	- 퍼센트
 	int16_t	siDefenseRateSpear;		// 15 창방어	- 퍼센트
 	int16_t	siDefenseRateArrow;		// 16 화살방어	- 퍼센트
-	
+
 	uint8_t	byDamageFire;			// 17 추가데미지 - 불
 	uint8_t	byDamageIce;			// 18 추가데미지 - 얼음
 	uint8_t	byDamageThuner;			// 19 추가데미지 - 전격
@@ -851,7 +875,7 @@ typedef struct __TABLE_ITEM_EXT // 장착 아이템에 관한 리소스 레코�
 	uint8_t	byReturnPhysicalDamage;	// 24 물리타격 반사
 
 	uint8_t	bySoulBind;				// 25소울 바인드 - 일대일시 아이템을 떨구는 정도 - 퍼센트 - 현재는 안쓴다.
-	
+
 	int16_t	siBonusStr;				// 26 힘 보너스
 	int16_t	siBonusSta;				// 27 체력 보너스
 	int16_t	siBonusDex;				// 28 민첩성 보너스
@@ -866,7 +890,7 @@ typedef struct __TABLE_ITEM_EXT // 장착 아이템에 관한 리소스 레코�
 	int16_t	siRegistMagic;			// 36 마법 저항
 	int16_t	siRegistPoison;			// 37 독 저항
 	int16_t	siRegistCurse;			// 38 저주 저항
-	
+
 	uint32_t	dwEffectID1;		// 39 마법 효과 ID1
 	uint32_t	dwEffectID2;		// 40 마법 효과 ID2
 
@@ -890,18 +914,22 @@ typedef struct __TABLE_NPC_SHOP
 
 enum e_ItemType { ITEM_TYPE_PLUG = 1, ITEM_TYPE_PART, ITEM_TYPE_ICONONLY, ITEM_TYPE_GOLD = 9, ITEM_TYPE_SONGPYUN = 10, ITEM_TYPE_UNKNOWN = 0xffffffff };
 
-enum e_ItemPosition {	ITEM_POS_DUAL = 0,	ITEM_POS_RIGHTHAND, ITEM_POS_LEFTHAND,	ITEM_POS_TWOHANDRIGHT,	ITEM_POS_TWOHANDLEFT,
-						ITEM_POS_UPPER = 5, ITEM_POS_LOWER,		ITEM_POS_HEAD,		ITEM_POS_GLOVES,		ITEM_POS_SHOES,
-						ITEM_POS_EAR = 10,	ITEM_POS_NECK,		ITEM_POS_FINGER,	ITEM_POS_SHOULDER,		ITEM_POS_BELT,
-						ITEM_POS_INVENTORY = 15, ITEM_POS_GOLD = 16, ITEM_POS_SONGPYUN = 17,
-						ITEM_POS_UNKNOWN = 0xffffffff };
-					
-enum e_ItemSlot {	ITEM_SLOT_EAR_RIGHT = 0,	ITEM_SLOT_HEAD	= 1,	ITEM_SLOT_EAR_LEFT	= 2,
-					ITEM_SLOT_NECK = 3,			ITEM_SLOT_UPPER	= 4,	ITEM_SLOT_SHOULDER	= 5,
-					ITEM_SLOT_HAND_RIGHT = 6,	ITEM_SLOT_BELT	= 7,	ITEM_SLOT_HAND_LEFT = 8,
-					ITEM_SLOT_RING_RIGHT = 9,	ITEM_SLOT_LOWER = 10,	ITEM_SLOT_RING_LEFT = 11,
-					ITEM_SLOT_GLOVES = 12,		ITEM_SLOT_SHOES = 13, 
-					ITEM_SLOT_COUNT = 14, ITEM_SLOT_UNKNOWN = 0xffffffff };
+enum e_ItemPosition {
+	ITEM_POS_DUAL = 0, ITEM_POS_RIGHTHAND, ITEM_POS_LEFTHAND, ITEM_POS_TWOHANDRIGHT, ITEM_POS_TWOHANDLEFT,
+	ITEM_POS_UPPER = 5, ITEM_POS_LOWER, ITEM_POS_HEAD, ITEM_POS_GLOVES, ITEM_POS_SHOES,
+	ITEM_POS_EAR = 10, ITEM_POS_NECK, ITEM_POS_FINGER, ITEM_POS_SHOULDER, ITEM_POS_BELT,
+	ITEM_POS_INVENTORY = 15, ITEM_POS_GOLD = 16, ITEM_POS_SONGPYUN = 17,
+	ITEM_POS_UNKNOWN = 0xffffffff
+};
+
+enum e_ItemSlot {
+	ITEM_SLOT_EAR_RIGHT = 0, ITEM_SLOT_HEAD = 1, ITEM_SLOT_EAR_LEFT = 2,
+	ITEM_SLOT_NECK = 3, ITEM_SLOT_UPPER = 4, ITEM_SLOT_SHOULDER = 5,
+	ITEM_SLOT_HAND_RIGHT = 6, ITEM_SLOT_BELT = 7, ITEM_SLOT_HAND_LEFT = 8,
+	ITEM_SLOT_RING_RIGHT = 9, ITEM_SLOT_LOWER = 10, ITEM_SLOT_RING_LEFT = 11,
+	ITEM_SLOT_GLOVES = 12, ITEM_SLOT_SHOES = 13,
+	ITEM_SLOT_COUNT = 14, ITEM_SLOT_UNKNOWN = 0xffffffff
+};
 
 
 typedef struct __TABLE_PLAYER_LOOKS // NPC, Mob 모습 관한 리소스 레코드...
@@ -919,7 +947,7 @@ typedef struct __TABLE_PLAYER_LOOKS // NPC, Mob 모습 관한 리소스 레코�
 	int			iJointLH;			// 왼손 끝 관절번호
 	int			iJointLH2;			// 왼손 팔뚝 관절번호
 	int			iJointCloak;		// 망토 붙을 관절 번호
-	
+
 	int			iSndID_Move;
 	int			iSndID_Attack0;
 	int			iSndID_Attack1;
@@ -994,7 +1022,7 @@ typedef struct __TABLE_UPC_SKILL
 	uint32_t		dwExhaustItem;
 	int			iCastTime;			// 캐스팅 시간
 	int			iReCastTime;		// 다시 캐스팅할때까지 걸리는 시간.
-	
+
 	float fIDK0; // TODO: will need to implement this...?
 	float fIDK1; // 1298
 
@@ -1004,7 +1032,7 @@ typedef struct __TABLE_UPC_SKILL
 	int			iValidDist;			// 유효거리
 
 	int	iIDK2; // 1298
-	
+
 } TABLE_UPC_ATTACK_B;
 
 typedef struct __TABLE_UPC_SKILL_TYPE_1
@@ -1045,12 +1073,12 @@ typedef struct __TABLE_UPC_SKILL_TYPE_3
 typedef struct __TABLE_UPC_SKILL_TYPE_4
 {
 	uint32_t		dwID;			// 일련번호
-	
-	
+
+
 	int			iBuffType;		// 버프타입
 	//int iIDK0;
 	int iIDK1;
-	
+
 	int			iDuration;
 	int			iAttackSpeed;	// 공격속도
 	int			iMoveSpeed;		// 이동속도
@@ -1196,76 +1224,78 @@ const int MAX_SKILL_PAGE_NUM = 6;			// 스킬 한개가 가지는 최대 페이�
 
 const int MAX_SKILL_HOTKEY_PAGE = 8;		// Hot Key의 총 페이지 수.. 				
 const int MAX_SKILL_IN_HOTKEY = 8;			// Hot Key의 현 페이지내의 갯수..			
-		
+
 const int MAX_AVAILABLE_CHARACTER = 3;		// 한 서버당 선택할수 있는 최대 캐릭터 수..	
 
 // 싸운도.... By ecli666
-const int ID_SOUND_ITEM_ETC_IN_INVENTORY	= 2000;
-const int ID_SOUND_ITEM_IN_REPAIR			= 2001;
+const int ID_SOUND_ITEM_ETC_IN_INVENTORY = 2000;
+const int ID_SOUND_ITEM_IN_REPAIR = 2001;
 const int ID_SOUND_ITEM_WEAPON_IN_INVENTORY = 2002;
-const int ID_SOUND_ITEM_ARMOR_IN_INVENTORY	= 2003;
-const int ID_SOUND_GOLD_IN_INVENTORY		= 3000;
-const int ID_SOUND_SKILL_THROW_ARROW		= 5500;
-const int ID_SOUND_BGM_TOWN					= 20000;
-const int ID_SOUND_BGM_KA_BATTLE			= 20002;
-const int ID_SOUND_BGM_EL_BATTLE			= 20003;
-const int ID_SOUND_CHR_SELECT_ROTATE		= 2501;
+const int ID_SOUND_ITEM_ARMOR_IN_INVENTORY = 2003;
+const int ID_SOUND_GOLD_IN_INVENTORY = 3000;
+const int ID_SOUND_SKILL_THROW_ARROW = 5500;
+const int ID_SOUND_BGM_TOWN = 20000;
+const int ID_SOUND_BGM_KA_BATTLE = 20002;
+const int ID_SOUND_BGM_EL_BATTLE = 20003;
+const int ID_SOUND_CHR_SELECT_ROTATE = 2501;
 
 const float SOUND_RANGE_TO_SET = 10.0f;
 const float SOUND_RANGE_TO_RELEASE = 20.0f;
 
 const float STUN_TIME = 3.0f;
 
-enum e_Behavior {	BEHAVIOR_NOTHING = 0,
-					BEHAVIOR_EXIT,			// 프로그램 끝내기..
-					BEHAVIOR_RESTART_GAME,	// 게임 다시 시작하기(캐릭터 선택)
-					BEHAVIOR_REGENERATION,	// 부활
-					BEHAVIOR_CANCEL,		// 취소.. 현재는 아이템 거래 신청시 유저가 취소를 눌렀을때..
+enum e_Behavior {
+	BEHAVIOR_NOTHING = 0,
+	BEHAVIOR_EXIT,			// 프로그램 끝내기..
+	BEHAVIOR_RESTART_GAME,	// 게임 다시 시작하기(캐릭터 선택)
+	BEHAVIOR_REGENERATION,	// 부활
+	BEHAVIOR_CANCEL,		// 취소.. 현재는 아이템 거래 신청시 유저가 취소를 눌렀을때..
 
-					BEHAVIOR_PARTY_PERMIT,	// 상대방이 파티가입 요청시 들어가는것을 허락.
-					BEHAVIOR_PARTY_DISBAND, // 파티 탈퇴..
-					BEHAVIOR_FORCE_PERMIT,	// 상대방이 부대가입 요청시 들어가는것을 허락.
-					BEHAVIOR_FORCE_DISBAND, // 부대 탈퇴..
+	BEHAVIOR_PARTY_PERMIT,	// 상대방이 파티가입 요청시 들어가는것을 허락.
+	BEHAVIOR_PARTY_DISBAND, // 파티 탈퇴..
+	BEHAVIOR_FORCE_PERMIT,	// 상대방이 부대가입 요청시 들어가는것을 허락.
+	BEHAVIOR_FORCE_DISBAND, // 부대 탈퇴..
 
-					BEHAVIOR_REQUEST_BINDPOINT, // 바인딩 포인트로 ... 
+	BEHAVIOR_REQUEST_BINDPOINT, // 바인딩 포인트로 ... 
 
-					BEHAVIOR_DELETE_CHR,
+	BEHAVIOR_DELETE_CHR,
 
-					BEHAVIOR_KNIGHTS_CREATE,
-					BEHAVIOR_KNIGHTS_DESTROY, // 기사단 해체..
-					BEHAVIOR_KNIGHTS_WITHDRAW, // 기사단 해체..
+	BEHAVIOR_KNIGHTS_CREATE,
+	BEHAVIOR_KNIGHTS_DESTROY, // 기사단 해체..
+	BEHAVIOR_KNIGHTS_WITHDRAW, // 기사단 해체..
 
-					BEHAVIOR_PERSONAL_TRADE_FMT_WAIT,	// 개인거래.. 내가 신청한 경우..
-					BEHAVIOR_PERSONAL_TRADE_PERMIT,		// 개인거래.. 내가 신청받은 경우..
+	BEHAVIOR_PERSONAL_TRADE_FMT_WAIT,	// 개인거래.. 내가 신청한 경우..
+	BEHAVIOR_PERSONAL_TRADE_PERMIT,		// 개인거래.. 내가 신청받은 경우..
 
-					BEHAVIOR_MGAME_LOGIN,
-					
-					BEHAVIOR_CLAN_JOIN,
-					BEHAVIOR_PARTY_BBS_REGISTER,		// 파티 게시판에 등록 
-					BEHAVIOR_PARTY_BBS_REGISTER_CANCEL, // 파티 게시판에 등록 해제
+	BEHAVIOR_MGAME_LOGIN,
 
-					BEHAVIOR_EXECUTE_OPTION,			// 게임 종료하고 옵션 실행..
-				
-					BEHAVIOR_UNKNOWN = 0xffffffff
-				};
+	BEHAVIOR_CLAN_JOIN,
+	BEHAVIOR_PARTY_BBS_REGISTER,		// 파티 게시판에 등록 
+	BEHAVIOR_PARTY_BBS_REGISTER_CANCEL, // 파티 게시판에 등록 해제
 
-enum e_SkillMagicTaget	{	SKILLMAGIC_TARGET_SELF = 1,				// 나 자신..
-							SKILLMAGIC_TARGET_FRIEND_WITHME = 2,	// 나를 포함한 우리편(국가) 중 하나 ..
-							SKILLMAGIC_TARGET_FRIEND_ONLY = 3,		// 나를 뺀 우리편 중 하나 
-							SKILLMAGIC_TARGET_PARTY = 4,			// 나를 포함한 우리파티 중 하나..
-							SKILLMAGIC_TARGET_NPC_ONLY = 5,			// NPC중 하나.
-							SKILLMAGIC_TARGET_PARTY_ALL = 6,		// 나를 호함한 우리파티 모두..
-							SKILLMAGIC_TARGET_ENEMY_ONLY = 7,		// 울편을 제외한 모든 적중 하나(NPC포함)
-							SKILLMAGIC_TARGET_ALL = 8,				// 겜상에 존재하는 모든 것중 하나.
-							
-							SKILLMAGIC_TARGET_AREA_ENEMY = 10,		// 그 지역에 있는 적들...
-							SKILLMAGIC_TARGET_AREA_FRIEND = 11,		// 그 지역에 있는 울편.
-							SKILLMAGIC_TARGET_AREA_ALL = 12,		// 그 지역에 있는 모두들.
-							SKILLMAGIC_TARGET_AREA = 13,			// 나를 중심으로 한 지역
-							SKILLMAGIC_TARGET_DEAD_FRIEND_ONLY = 25,	//죽은 사람중 나를 뺀 우리편 중 하나.
-							
-							SKILLMAGIC_TARGET_UNKNOWN = 0xffffffff
-						};
+	BEHAVIOR_EXECUTE_OPTION,			// 게임 종료하고 옵션 실행..
+
+	BEHAVIOR_UNKNOWN = 0xffffffff
+};
+
+enum e_SkillMagicTaget {
+	SKILLMAGIC_TARGET_SELF = 1,				// 나 자신..
+	SKILLMAGIC_TARGET_FRIEND_WITHME = 2,	// 나를 포함한 우리편(국가) 중 하나 ..
+	SKILLMAGIC_TARGET_FRIEND_ONLY = 3,		// 나를 뺀 우리편 중 하나 
+	SKILLMAGIC_TARGET_PARTY = 4,			// 나를 포함한 우리파티 중 하나..
+	SKILLMAGIC_TARGET_NPC_ONLY = 5,			// NPC중 하나.
+	SKILLMAGIC_TARGET_PARTY_ALL = 6,		// 나를 호함한 우리파티 모두..
+	SKILLMAGIC_TARGET_ENEMY_ONLY = 7,		// 울편을 제외한 모든 적중 하나(NPC포함)
+	SKILLMAGIC_TARGET_ALL = 8,				// 겜상에 존재하는 모든 것중 하나.
+
+	SKILLMAGIC_TARGET_AREA_ENEMY = 10,		// 그 지역에 있는 적들...
+	SKILLMAGIC_TARGET_AREA_FRIEND = 11,		// 그 지역에 있는 울편.
+	SKILLMAGIC_TARGET_AREA_ALL = 12,		// 그 지역에 있는 모두들.
+	SKILLMAGIC_TARGET_AREA = 13,			// 나를 중심으로 한 지역
+	SKILLMAGIC_TARGET_DEAD_FRIEND_ONLY = 25,	//죽은 사람중 나를 뺀 우리편 중 하나.
+
+	SKILLMAGIC_TARGET_UNKNOWN = 0xffffffff
+};
 
 
 //define fx...
@@ -1282,83 +1312,87 @@ typedef struct __TABLE_FX	// FX Table
 
 const int	MAX_COMBO = 3;
 
-const int   FXID_CLASS_CHANGE			= 603;
-const int	FXID_BLOOD					= 10002;
-const int	FXID_LEVELUP_KARUS			= 10012;
-const int	FXID_LEVELUP_ELMORAD		= 10018;
-const int	FXID_REGEN_ELMORAD			= 10019;
-const int	FXID_REGEN_KARUS			= 10020;
-const int	FXID_SWORD_FIRE_MAIN		= 10021;
-const int	FXID_SWORD_FIRE_TAIL		= 10022;
-const int	FXID_SWORD_FIRE_TARGET		= 10031;
-const int	FXID_SWORD_ICE_MAIN			= 10023;
-const int	FXID_SWORD_ICE_TAIL			= 10024;
-const int	FXID_SWORD_ICE_TARGET		= 10032;
-const int	FXID_SWORD_LIGHTNING_MAIN	= 10025;
-const int	FXID_SWORD_LIGHTNING_TAIL	= 10026;
+const int   FXID_CLASS_CHANGE = 603;
+const int	FXID_BLOOD = 10002;
+const int	FXID_LEVELUP_KARUS = 10012;
+const int	FXID_LEVELUP_ELMORAD = 10018;
+const int	FXID_REGEN_ELMORAD = 10019;
+const int	FXID_REGEN_KARUS = 10020;
+const int	FXID_SWORD_FIRE_MAIN = 10021;
+const int	FXID_SWORD_FIRE_TAIL = 10022;
+const int	FXID_SWORD_FIRE_TARGET = 10031;
+const int	FXID_SWORD_ICE_MAIN = 10023;
+const int	FXID_SWORD_ICE_TAIL = 10024;
+const int	FXID_SWORD_ICE_TARGET = 10032;
+const int	FXID_SWORD_LIGHTNING_MAIN = 10025;
+const int	FXID_SWORD_LIGHTNING_TAIL = 10026;
 const int	FXID_SWORD_LIGHTNING_TARGET = 10033;
-const int	FXID_SWORD_POISON_MAIN		= 10027;
-const int	FXID_SWORD_POISON_TAIL		= 10028;
-const int	FXID_SWORD_POISON_TARGET	= 10034;
+const int	FXID_SWORD_POISON_MAIN = 10027;
+const int	FXID_SWORD_POISON_TAIL = 10028;
+const int	FXID_SWORD_POISON_TARGET = 10034;
 //const int	FXID_GROUND_TARGET = 10035;
-const int	FXID_REGION_TARGET_EL_ROGUE		= 10035;
-const int	FXID_REGION_TARGET_EL_WIZARD	= 10036;
-const int	FXID_REGION_TARGET_EL_PRIEST	= 10037;
-const int	FXID_REGION_TARGET_KA_ROGUE		= 10038;
-const int	FXID_REGION_TARGET_KA_WIZARD	= 10039;
-const int	FXID_REGION_TARGET_KA_PRIEST	= 10040;
-const int	FXID_CLAN_RANK_1				= 10041;
-const int	FXID_WARP_KARUS					= 10046;
-const int	FXID_WARP_ELMORAD				= 10047;
-const int	FXID_ITEM_FAIL					= 10100;
-const int	FXID_ITEM_SUCCESS				= 10101;
-const int	FXID_REGION_POISON				= 99999;
+const int	FXID_REGION_TARGET_EL_ROGUE = 10035;
+const int	FXID_REGION_TARGET_EL_WIZARD = 10036;
+const int	FXID_REGION_TARGET_EL_PRIEST = 10037;
+const int	FXID_REGION_TARGET_KA_ROGUE = 10038;
+const int	FXID_REGION_TARGET_KA_WIZARD = 10039;
+const int	FXID_REGION_TARGET_KA_PRIEST = 10040;
+const int	FXID_CLAN_RANK_1 = 10041;
+const int	FXID_WARP_KARUS = 10046;
+const int	FXID_WARP_ELMORAD = 10047;
+const int	FXID_ITEM_FAIL = 10100;
+const int	FXID_ITEM_SUCCESS = 10101;
+const int	FXID_REGION_POISON = 99999;
 //define skillmagic_type4_bufftype
-enum e_SkillMagicType4	{	BUFFTYPE_MAXHP = 1,				//MaxHP변화..
-							BUFFTYPE_AC = 2,				//AC변화..
-							BUFFTYPE_RESIZE = 3,			//캐릭터 크기 조정..
-							BUFFTYPE_ATTACK = 4,			//공격력..
-							BUFFTYPE_ATTACKSPEED = 5,		//공격스피드..
-							BUFFTYPE_SPEED = 6,				//이동속도..
-							BUFFTYPE_ABILITY = 7,			//다섯가지 능력(str, sta, cha, dex int)
-							BUFFTYPE_RESIST = 8,			//다섯가지 저항력..
-							BUFFTYPE_HITRATE_AVOIDRATE = 9,	//hitrate n avoidrate
-							BUFFTYPE_TRANS = 10,			//변신, 투명..
-							BUFFTYPE_SLEEP = 11,			//잠재우기..
-							BUFFTYPE_EYE = 12				//시력관련...							
+enum e_SkillMagicType4 {
+	BUFFTYPE_MAXHP = 1,				//MaxHP변화..
+	BUFFTYPE_AC = 2,				//AC변화..
+	BUFFTYPE_RESIZE = 3,			//캐릭터 크기 조정..
+	BUFFTYPE_ATTACK = 4,			//공격력..
+	BUFFTYPE_ATTACKSPEED = 5,		//공격스피드..
+	BUFFTYPE_SPEED = 6,				//이동속도..
+	BUFFTYPE_ABILITY = 7,			//다섯가지 능력(str, sta, cha, dex int)
+	BUFFTYPE_RESIST = 8,			//다섯가지 저항력..
+	BUFFTYPE_HITRATE_AVOIDRATE = 9,	//hitrate n avoidrate
+	BUFFTYPE_TRANS = 10,			//변신, 투명..
+	BUFFTYPE_SLEEP = 11,			//잠재우기..
+	BUFFTYPE_EYE = 12				//시력관련...							
 };
 
-enum e_SkillMagicType3	{	DDTYPE_TYPE3_DUR_OUR = 100,
-							DDTYPE_TYPE3_DUR_ENEMY = 200
+enum e_SkillMagicType3 {
+	DDTYPE_TYPE3_DUR_OUR = 100,
+	DDTYPE_TYPE3_DUR_ENEMY = 200
 };
 
 
 
-enum e_ObjectType	{	OBJECT_TYPE_BINDPOINT,
-						OBJECT_TYPE_DOOR_LEFTRIGHT,
-						OBJECT_TYPE_DOOR_TOPDOWN,
-						OBJECT_TYPE_LEVER_TOPDOWN,
-						OBJECT_TYPE_FLAG,
-						OBJECT_TYPE_WARP_POINT,
-						OBJECT_TYPE_ANVIL = 8,
-						OBJECT_TYPE_UNKNOWN = 0xffffffff
-					};
+enum e_ObjectType {
+	OBJECT_TYPE_BINDPOINT,
+	OBJECT_TYPE_DOOR_LEFTRIGHT,
+	OBJECT_TYPE_DOOR_TOPDOWN,
+	OBJECT_TYPE_LEVER_TOPDOWN,
+	OBJECT_TYPE_FLAG,
+	OBJECT_TYPE_WARP_POINT,
+	OBJECT_TYPE_ANVIL = 8,
+	OBJECT_TYPE_UNKNOWN = 0xffffffff
+};
 
 //definitions related clan....
-const int	CLAN_LEVEL_LIMIT	= 20;
-const int	CLAN_COST			= 500000;
-const uint32_t KNIGHTS_FONT_COLOR	= 0xffff0000; // 기사단(클랜)이름 폰트 컬러..
+const int	CLAN_LEVEL_LIMIT = 20;
+const int	CLAN_COST = 500000;
+const uint32_t KNIGHTS_FONT_COLOR = 0xffff0000; // 기사단(클랜)이름 폰트 컬러..
 
-enum e_Cursor		{	CURSOR_ATTACK,
-						CURSOR_EL_NORMAL,
-						CURSOR_EL_CLICK,
-						CURSOR_KA_NORMAL,
-						CURSOR_KA_CLICK,
-						CURSOR_PRE_REPAIR,
-						CURSOR_NOW_REPAIR,
-						CURSOR_COUNT,
-						CURSOR_UNKNOWN = 0xffffffff
-					};
+enum e_Cursor {
+	CURSOR_ATTACK,
+	CURSOR_EL_NORMAL,
+	CURSOR_EL_CLICK,
+	CURSOR_KA_NORMAL,
+	CURSOR_KA_CLICK,
+	CURSOR_PRE_REPAIR,
+	CURSOR_NOW_REPAIR,
+	CURSOR_COUNT,
+	CURSOR_UNKNOWN = 0xffffffff
+};
 
 #endif // end of #define __GAME_DEF_H_
 
