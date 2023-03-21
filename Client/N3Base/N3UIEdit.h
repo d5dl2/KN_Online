@@ -85,6 +85,7 @@ public:
 	bool				HaveFocus() const {return (this == s_pFocusedEdit);}
 	void				SetCaretPos(UINT nPos);	//몇번째 바이트에 있는지 설정한다.
 	void				SetMaxString(size_t iMax);		// 최대 글씨 수를 정해준다.
+	void				SelectText(UINT32 start, UINT32 length);
 protected:
 	BOOL				IsHangulMiddleByte( const char* lpszStr, int iPos );	// 한글의 2번째 바이트 글자인가?
 

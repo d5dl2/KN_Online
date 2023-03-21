@@ -177,6 +177,7 @@ void CCountableItemEditDlg::Open(e_UIWND eUW, e_UIWND_DISTRICT eUD, bool bCountG
 	CN3UIEdit* pEdit = (CN3UIEdit*)this->GetChildByID("edit_trade");
 	__ASSERT(pEdit, "NULL UI Component!!");
 	if(pEdit) pEdit->SetFocus();
+	pEdit->SelectText(0, -1);
 
 	m_eCallerWnd = eUW;
 	m_eCallerWndDistrict = eUD;

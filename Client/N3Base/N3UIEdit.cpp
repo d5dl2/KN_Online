@@ -11,6 +11,7 @@
 #include "N3SndMgr.h"
 #include "N3SndObj.h"
 #include <imm.h>
+#include <Windows.h>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -790,6 +791,10 @@ void CN3UIEdit::SetImeStatus(POINT ptPos, bool bOpen)
 #endif
 }
 
+void CN3UIEdit::SelectText(UINT32 start, UINT32 length)
+{
+	SendMessage(s_hWndEdit, EM_SETSEL, start, -1);
+}
 /*
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 //	IME 관련해서
