@@ -577,6 +577,13 @@ void CGameServerDlg::SpawnEventNpc(uint16_t sSid, bool bIsMonster, uint8_t byZon
 	Send_AIServer(&result);
 }
 
+void CGameServerDlg::NpcDropTestRequest(uint16_t userId, uint16_t sSid, int count)
+{
+	Packet result(AG_NPC_DROP_TEST_REQ);
+	result << userId << sSid << count;
+	Send_AIServer(&result);
+}
+
 void CGameServerDlg::KillNpc(uint16_t sNid)
 {
 	Packet result(AG_NPC_KILL_REQ);

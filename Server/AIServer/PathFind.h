@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MAP.h"
+
 // temporary
 struct CPoint
 {

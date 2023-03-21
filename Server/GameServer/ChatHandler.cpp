@@ -60,7 +60,8 @@ void CUser::InitChatCommands()
 		{ "zonechange",			&CUser::HandleZoneChangeCommand,				"Teleports you to the specified zone. Arguments: zone ID" },
 		{ "monsummon",			&CUser::HandleMonsterSummonCommand,				"Spawns the specified monster (does not respawn). Arguments: monster's database ID" },
 		{ "npcsummon",			&CUser::HandleNPCSummonCommand,					"Spawns the specified NPC (does not respawn). Arguments: NPC's database ID" },
-		{ "monkill",			&CUser::HandleMonKillCommand,					"Kill a NPC or Monster, Arguments: select an Npc and monster than use this command" },
+		{ "monkill",			&CUser::HandleMonKillCommand,					"Kill a NPC or Monster, Arguments: select an Npc or monster than use this command" },
+		{ "droptest", 			&CUser::HandleDropTestCommand,					"Drop test for NPC or Monster, Arguments: monster ID, count" },
 		{ "open1",				&CUser::HandleWar1OpenCommand,					"Opens war zone 1" },
 		{ "open2",				&CUser::HandleWar2OpenCommand,					"Opens war zone 2" },
 		{ "open3",				&CUser::HandleWar3OpenCommand,					"Opens war zone 3" },
@@ -627,6 +628,28 @@ COMMAND_HANDLER(CUser::HandleMonKillCommand)
 
 	if (pNpc)
 		g_pMain->KillNpc(GetTargetID());
+
+	return true;
+}
+
+COMMAND_HANDLER(CUser::HandleDropTestCommand)
+{
+	if (!isGM())
+		return false;
+
+	if (vargs.size() < 2)
+	{
+		// send description
+		g_pMain->SendHelpDescription(this, "Using Sample : +droptest NPCSID COUNT");
+		return true;
+	}
+
+	int sSid = atoi(vargs.front().c_str());
+	vargs.pop_front();
+
+	int count = atoi(vargs.front().c_str());
+	
+	g_pMain->NpcDropTestRequest(this->GetID(), sSid, count);
 
 	return true;
 }

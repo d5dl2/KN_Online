@@ -99,6 +99,9 @@ bool CGameSocket::HandlePacket(Packet & pkt)
 	case AG_NPC_UPDATE:
 		RecvNpcUpdate(pkt);
 		break;
+	case AG_NPC_DROP_TEST_REQ:
+		RecvNpcDropTestRequest(pkt);
+		break;
 	}
 	return true;
 }
@@ -549,6 +552,40 @@ void CGameSocket::RecvNpcSpawnRequest(Packet & pkt)
 			fY, 
 			(float)(fZ + myrand(minRange, sRadius)), sDuration, nation, socketID, nEventRoom);
 	}
+}
+
+void CGameSocket::RecvNpcDropTestRequest(Packet& pkt)
+{
+	uint16_t sSid, sCount, userId;
+
+	pkt >> userId >> sSid >> sCount;
+	std::map<int, int> items;
+	for (uint16_t i = 0; i < sCount; i++)
+	{
+		_NpcGiveItem* results = g_pMain->DropResultEventNpc(sSid);
+
+		for (size_t i = 0; i < sizeof(results); i++)
+		{
+			auto result = results[i];
+
+			if (result.sSid == 0)
+				continue;
+
+			items[result.sSid] += result.count;
+		}
+	}
+
+	auto proto = g_pMain->m_arMonTable.GetData(sSid);
+	
+	Packet packet(AG_NPC_DROP_TEST_REQ);
+	packet << userId << proto->m_strName << sCount << items.size();
+
+	for (auto ptr = items.begin(); ptr != items.end(); ptr++)
+	{
+		packet << ptr->first << ptr->second;
+	}
+
+	Send(&packet);
 }
 
 void CGameSocket::RecvNpcKillRequest(Packet & pkt)

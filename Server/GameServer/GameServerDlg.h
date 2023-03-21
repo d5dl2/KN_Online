@@ -310,6 +310,8 @@ public:
 	// Spawns an event NPC/monster
 	void SpawnEventNpc(uint16_t sSid, bool bIsMonster, uint8_t byZone, float fX, float fY, float fZ, uint16_t sCount = 1, uint16_t sRadius = 0, uint16_t sDuration = 0, uint8_t nation = 0, int16_t socketID = -1, uint16_t nEventRoom = 0);
 
+	void NpcDropTestRequest(uint16_t userId, uint16_t sSid, int count);
+
 	// Kill a Npc/Monster
 	void KillNpc(uint16_t sNid);
 

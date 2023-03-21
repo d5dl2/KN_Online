@@ -38,6 +38,7 @@ public:
 	void RecvTimeAndWeather(Packet & pkt);
 	void RecvBattleEvent(Packet & pkt);
 	void RecvNpcSpawnRequest(Packet & pkt);
+	void RecvNpcDropTestRequest(Packet& pkt);
 	void RecvNpcKillRequest(Packet & pkt);
 	void RecvNpcUpdate(Packet & pkt);
 

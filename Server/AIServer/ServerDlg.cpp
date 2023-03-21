@@ -2,7 +2,6 @@
 #include <time.h>
 #include <cstdarg>
 #include "GameSocket.h"
-#include "Npc.h"
 #include "User.h"
 #include "NpcThread.h"
 #include "../GameServer/MagicProcess.h"
@@ -30,14 +29,14 @@
 
 using namespace std;
 
-bool g_bNpcExit	= false;
+bool g_bNpcExit = false;
 ZoneArray			g_arZone;
 
-std::vector<Thread *> g_timerThreads;
+std::vector<Thread*> g_timerThreads;
 
 CServerDlg::CServerDlg()
 {
-	m_iYear = 0; 
+	m_iYear = 0;
 	m_iMonth = 0;
 	m_iDate = 0;
 	m_iHour = 0;
@@ -56,7 +55,7 @@ bool CServerDlg::Startup()
 	g_timerThreads.push_back(new Thread(Timer_CheckLiveTimes));
 
 	m_sMapEventNpc = 0;
-	m_bFirstServerFlag = false;			
+	m_bFirstServerFlag = false;
 
 	// Server Start
 	DateTime time;
@@ -69,8 +68,8 @@ bool CServerDlg::Startup()
 
 	if (!m_GameDB.Connect(m_strGameDSN, m_strGameUID, m_strGamePWD))
 	{
-		OdbcError *pError = m_GameDB.GetError();
-		printf("ERROR: Could not connect to the database server, received error:\n%s\n", 
+		OdbcError* pError = m_GameDB.GetError();
+		printf("ERROR: Could not connect to the database server, received error:\n%s\n",
 			pError->ErrorMessage.c_str());
 		delete pError;
 		return false;
@@ -109,7 +108,7 @@ bool CServerDlg::Startup()
 	//	Start NPC THREAD
 	//----------------------------------------------------------------------
 	ResumeAI();
-	return true; 
+	return true;
 }
 
 bool CServerDlg::GetMagicTableData()
@@ -175,8 +174,8 @@ bool CServerDlg::GetObjectPostTableData()
 
 bool CServerDlg::GetNpcTableData(bool bNpcData /*= true*/)
 {
-	if (bNpcData)	{ LOAD_TABLE(CNpcTableSet, &m_GameDB, &m_arNpcTable, false, false); }
-	else			{ LOAD_TABLE(CMonTableSet, &m_GameDB, &m_arMonTable, false, false); }
+	if (bNpcData) { LOAD_TABLE(CNpcTableSet, &m_GameDB, &m_arNpcTable, false, false); }
+	else { LOAD_TABLE(CMonTableSet, &m_GameDB, &m_arMonTable, false, false); }
 }
 
 bool CServerDlg::CreateNpcThread()
@@ -188,44 +187,44 @@ bool CServerDlg::CreateNpcThread()
 
 	Guard lock(m_npcThreadLock);
 	Guard lock2(m_eventThreadLock);
-	foreach_stlmap (itr, g_arZone)
+	foreach_stlmap(itr, g_arZone)
 	{
-		CNpcThread * pNpcThread = new CNpcThread();
+		CNpcThread* pNpcThread = new CNpcThread();
 		m_arNpcThread.insert(make_pair(itr->first, pNpcThread));
 		m_arEventNpcThread.insert(make_pair(itr->first, new CNpcThread()));
 
-		foreach_stlmap (npcItr, m_arNpc)
+		foreach_stlmap(npcItr, m_arNpc)
 		{
 			if (npcItr->second->GetZoneID() != itr->first)
 				continue;
 
-			CNpc * pNpc = npcItr->second;
+			CNpc* pNpc = npcItr->second;
 			pNpc->Init();
 			pNpcThread->m_pNpcs.insert(pNpc);
 		}
 	}
 
-	printf("Monster Init - %d, threads = %lld\n", (uint16_t) m_TotalNPC, (long long) m_arNpcThread.size());
+	printf("Monster Init - %d, threads = %lld\n", (uint16_t)m_TotalNPC, (long long)m_arNpcThread.size());
 	return true;
 }
 
-bool CServerDlg::LoadSpawnCallback(OdbcCommand *dbCommand)
+bool CServerDlg::LoadSpawnCallback(OdbcCommand* dbCommand)
 {
 	// Avoid allocating stack space for these.
 	// This method will only ever run in the same thread.
 	static int nRandom = 0;
 	static double dbSpeed = 0;
-	static CNpcTable * pNpcTable = nullptr;
+	static CNpcTable* pNpcTable = nullptr;
 	static CRoomEvent* pRoom = nullptr;
 	static char szPath[500];
 	static float fRandom_X = 0.0f, fRandom_Z = 0.0f;
-	static uint8_t rand = myrand(1,4);
+	static uint8_t rand = myrand(1, 4);
 	// Unfortunately we cannot simply read what we need directly
 	// into the CNpc instance. We have to resort to creating
 	// copies of the data to allow for the way they handle multiple spawns...
 	// Best we can do, I think, is to avoid allocating it on the stack.
 	static uint8_t	bNumNpc, bZoneID, bActType, bRegenType, bDungeonFamily, bSpecialType,
-		bTrapNumber, bDirection, bDotCnt;	
+		bTrapNumber, bDirection, bDotCnt;
 	static uint16_t	sSid, sRegTime;
 	static uint32_t	nServerNum;
 	static int32_t	iLeftX, iTopZ, iRightX, iBottomZ,
@@ -254,175 +253,175 @@ bool CServerDlg::LoadSpawnCallback(OdbcCommand *dbCommand)
 
 
 	uint8_t bPathSerial = 1;
-	if(bTrapNumber==0 || bTrapNumber==rand 
-		|| bZoneID == ZONE_DESPERATION_ABYSS 
-		|| bZoneID == ZONE_HELL_ABYSS 
-		|| bZoneID == ZONE_DRAGON_CAVE 
+	if (bTrapNumber == 0 || bTrapNumber == rand
+		|| bZoneID == ZONE_DESPERATION_ABYSS
+		|| bZoneID == ZONE_HELL_ABYSS
+		|| bZoneID == ZONE_DRAGON_CAVE
 		|| bZoneID == ZONE_BATTLE4)
-	for (uint8_t j = 0; j < bNumNpc; j++)
-	{
-		CNpc * pNpc = new CNpc();
-
-		pNpc->m_byMoveType = bActType;
-		pNpc->m_byInitMoveType = bActType;
-
-		bool bMonster = (bActType < 100);
-		if (bMonster)
+		for (uint8_t j = 0; j < bNumNpc; j++)
 		{
-			pNpcTable = m_arMonTable.GetData(sSid);
-		}
-		else 
-		{
-			pNpc->m_byMoveType = bActType - 100;
-			pNpcTable = m_arNpcTable.GetData(sSid);
-		}
+			CNpc* pNpc = new CNpc();
 
-		if (pNpcTable == nullptr)
-		{
-			printf("NPC %d not found in %s table.\n", sSid, bMonster ? "K_MONSTER" : "K_NPC");
-			delete pNpc;
-			return false;
-		}
+			pNpc->m_byMoveType = bActType;
+			pNpc->m_byInitMoveType = bActType;
 
-		pNpc->Load(++m_TotalNPC, pNpcTable, bMonster);
-		pNpc->m_byBattlePos = 0;
-
-		if (pNpc->m_byMoveType >= 2)
-		{
-			pNpc->m_byBattlePos = myrand(1, 3);
-			pNpc->m_byPathCount = bPathSerial++;
-		}
-
-		pNpc->InitPos();
-
-		pNpc->m_bZone = bZoneID;
-
-		nRandom = abs(iLeftX - iRightX);
-		if (nRandom <= 1)
-			fRandom_X = (float)iLeftX;
-		else
-		{
-			if (iLeftX < iRightX)
-				fRandom_X = (float)myrand(iLeftX, iRightX);
-			else
-				fRandom_X = (float)myrand(iRightX, iLeftX);
-		}
-
-		nRandom = abs(iTopZ - iBottomZ);
-		if (nRandom <= 1)
-			fRandom_Z = (float)iTopZ;
-		else
-		{
-			if (iTopZ < iBottomZ)
-				fRandom_Z = (float)myrand(iTopZ, iBottomZ);
-			else
-				fRandom_Z = (float)myrand(iBottomZ, iTopZ);
-		}
-
-		pNpc->SetPosition(fRandom_X, 0.0f, fRandom_Z);
-
-		pNpc->m_sRegenTime		= sRegTime * SECOND;
-		pNpc->m_byDirection		= bDirection;
-		pNpc->m_sMaxPathCount	= bDotCnt;
-
-		if ((pNpc->m_byMoveType == 2 || pNpc->m_byMoveType == 3) && bDotCnt == 0)
-		{
-			pNpc->m_byMoveType = 1;
-			TRACE("##### ServerDlg:CreateNpcThread - Path type Error :  nid=%d, sid=%d, name=%s, acttype=%d, path=%d #####\n", 
-				pNpc->GetID(), pNpc->GetProtoID(), pNpc->GetName().c_str(), pNpc->m_byMoveType, pNpc->m_sMaxPathCount);
-		}
-
-		if (bDotCnt > 0)
-		{
-			int index = 0;
-			for (int l = 0; l < bDotCnt; l++)
+			bool bMonster = (bActType < 100);
+			if (bMonster)
 			{
-				static char szX[5], szZ[5];
-
-				memset(szX, 0, sizeof(szX));
-				memset(szZ, 0, sizeof(szZ));
-
-				memcpy(szX, szPath + index, 4);
-				index += 4;
-
-				memcpy(szZ, szPath + index, 4);
-				index += 4;
-
-				pNpc->m_PathList.pPattenPos[l].x = atoi(szX);
-				pNpc->m_PathList.pPattenPos[l].z = atoi(szZ);
+				pNpcTable = m_arMonTable.GetData(sSid);
 			}
-		}
-
-		pNpc->m_nInitMinX = pNpc->m_nLimitMinX		= iLeftX;
-		pNpc->m_nInitMinY = pNpc->m_nLimitMinZ		= iTopZ;
-		pNpc->m_nInitMaxX = pNpc->m_nLimitMaxX		= iRightX;
-		pNpc->m_nInitMaxY = pNpc->m_nLimitMaxZ		= iBottomZ;
-
-		// dungeon work
-		pNpc->m_byDungeonFamily	= bDungeonFamily;
-		pNpc->m_bySpecialType	= (NpcSpecialType) bSpecialType;
-		pNpc->m_byRegenType		= bRegenType;
-		pNpc->m_byTrapNumber    = bTrapNumber;
-
-		pNpc->m_oSocketID = -1;
-		pNpc->m_bEventRoom = 0;
-
-		if (pNpc->m_byDungeonFamily > 0)
-		{
-			pNpc->m_nLimitMinX = iLimitMinX;
-			pNpc->m_nLimitMinZ = iLimitMinZ;
-			pNpc->m_nLimitMaxX = iLimitMaxX;
-			pNpc->m_nLimitMaxZ = iLimitMaxZ;
-		}	
-
-		pNpc->m_pMap = GetZoneByID(pNpc->GetZoneID());
-		if (pNpc->GetMap() == nullptr)
-		{
-			printf(_T("ERROR: NPC %d in zone %d that does not exist."), sSid, bZoneID);
-			delete pNpc;
-			return false;
-		}
-
-		if (!m_arNpc.PutData(pNpc->GetID(), pNpc))
-		{
-			--m_TotalNPC;
-			TRACE("Npc PutData Fail - %d\n", pNpc->GetID());
-			delete pNpc;
-			continue;
-		}
-
-		if (pNpc->GetMap()->m_byRoomEvent > 0 && pNpc->m_byDungeonFamily > 0)
-		{
-			pRoom = pNpc->GetMap()->m_arRoomEventArray.GetData(pNpc->m_byDungeonFamily);
-			if (pRoom == nullptr)
+			else
 			{
-				printf("ERROR: Map Room Npc Fail!!\n");
+				pNpc->m_byMoveType = bActType - 100;
+				pNpcTable = m_arNpcTable.GetData(sSid);
+			}
+
+			if (pNpcTable == nullptr)
+			{
+				printf("NPC %d not found in %s table.\n", sSid, bMonster ? "K_MONSTER" : "K_NPC");
 				delete pNpc;
 				return false;
 			}
 
-			// this is why their CSTLMap class sucks.
-			int *pInt = new int;
-			*pInt = pNpc->GetID();
-			if (!pRoom->m_mapRoomNpcArray.PutData(*pInt, pInt))
+			pNpc->Load(++m_TotalNPC, pNpcTable, bMonster);
+			pNpc->m_byBattlePos = 0;
+
+			if (pNpc->m_byMoveType >= 2)
 			{
-				delete pInt;
-				TRACE("### Map - Room Array MonsterNid Fail : nid=%d, sid=%d ###\n", 
-					pNpc->GetID(), pNpc->GetProtoID());
+				pNpc->m_byBattlePos = myrand(1, 3);
+				pNpc->m_byPathCount = bPathSerial++;
+			}
+
+			pNpc->InitPos();
+
+			pNpc->m_bZone = bZoneID;
+
+			nRandom = abs(iLeftX - iRightX);
+			if (nRandom <= 1)
+				fRandom_X = (float)iLeftX;
+			else
+			{
+				if (iLeftX < iRightX)
+					fRandom_X = (float)myrand(iLeftX, iRightX);
+				else
+					fRandom_X = (float)myrand(iRightX, iLeftX);
+			}
+
+			nRandom = abs(iTopZ - iBottomZ);
+			if (nRandom <= 1)
+				fRandom_Z = (float)iTopZ;
+			else
+			{
+				if (iTopZ < iBottomZ)
+					fRandom_Z = (float)myrand(iTopZ, iBottomZ);
+				else
+					fRandom_Z = (float)myrand(iBottomZ, iTopZ);
+			}
+
+			pNpc->SetPosition(fRandom_X, 0.0f, fRandom_Z);
+
+			pNpc->m_sRegenTime = sRegTime * SECOND;
+			pNpc->m_byDirection = bDirection;
+			pNpc->m_sMaxPathCount = bDotCnt;
+
+			if ((pNpc->m_byMoveType == 2 || pNpc->m_byMoveType == 3) && bDotCnt == 0)
+			{
+				pNpc->m_byMoveType = 1;
+				TRACE("##### ServerDlg:CreateNpcThread - Path type Error :  nid=%d, sid=%d, name=%s, acttype=%d, path=%d #####\n",
+					pNpc->GetID(), pNpc->GetProtoID(), pNpc->GetName().c_str(), pNpc->m_byMoveType, pNpc->m_sMaxPathCount);
+			}
+
+			if (bDotCnt > 0)
+			{
+				int index = 0;
+				for (int l = 0; l < bDotCnt; l++)
+				{
+					static char szX[5], szZ[5];
+
+					memset(szX, 0, sizeof(szX));
+					memset(szZ, 0, sizeof(szZ));
+
+					memcpy(szX, szPath + index, 4);
+					index += 4;
+
+					memcpy(szZ, szPath + index, 4);
+					index += 4;
+
+					pNpc->m_PathList.pPattenPos[l].x = atoi(szX);
+					pNpc->m_PathList.pPattenPos[l].z = atoi(szZ);
+				}
+			}
+
+			pNpc->m_nInitMinX = pNpc->m_nLimitMinX = iLeftX;
+			pNpc->m_nInitMinY = pNpc->m_nLimitMinZ = iTopZ;
+			pNpc->m_nInitMaxX = pNpc->m_nLimitMaxX = iRightX;
+			pNpc->m_nInitMaxY = pNpc->m_nLimitMaxZ = iBottomZ;
+
+			// dungeon work
+			pNpc->m_byDungeonFamily = bDungeonFamily;
+			pNpc->m_bySpecialType = (NpcSpecialType)bSpecialType;
+			pNpc->m_byRegenType = bRegenType;
+			pNpc->m_byTrapNumber = bTrapNumber;
+
+			pNpc->m_oSocketID = -1;
+			pNpc->m_bEventRoom = 0;
+
+			if (pNpc->m_byDungeonFamily > 0)
+			{
+				pNpc->m_nLimitMinX = iLimitMinX;
+				pNpc->m_nLimitMinZ = iLimitMinZ;
+				pNpc->m_nLimitMaxX = iLimitMaxX;
+				pNpc->m_nLimitMaxZ = iLimitMaxZ;
+			}
+
+			pNpc->m_pMap = GetZoneByID(pNpc->GetZoneID());
+			if (pNpc->GetMap() == nullptr)
+			{
+				printf(_T("ERROR: NPC %d in zone %d that does not exist."), sSid, bZoneID);
+				delete pNpc;
+				return false;
+			}
+
+			if (!m_arNpc.PutData(pNpc->GetID(), pNpc))
+			{
+				--m_TotalNPC;
+				TRACE("Npc PutData Fail - %d\n", pNpc->GetID());
+				delete pNpc;
+				continue;
+			}
+
+			if (pNpc->GetMap()->m_byRoomEvent > 0 && pNpc->m_byDungeonFamily > 0)
+			{
+				pRoom = pNpc->GetMap()->m_arRoomEventArray.GetData(pNpc->m_byDungeonFamily);
+				if (pRoom == nullptr)
+				{
+					printf("ERROR: Map Room Npc Fail!!\n");
+					delete pNpc;
+					return false;
+				}
+
+				// this is why their CSTLMap class sucks.
+				int* pInt = new int;
+				*pInt = pNpc->GetID();
+				if (!pRoom->m_mapRoomNpcArray.PutData(*pInt, pInt))
+				{
+					delete pInt;
+					TRACE("### Map - Room Array MonsterNid Fail : nid=%d, sid=%d ###\n",
+						pNpc->GetID(), pNpc->GetProtoID());
+				}
 			}
 		}
-	}
 	return true;
 }
 
 void CServerDlg::ResumeAI()
 {
 	Guard lock(m_npcThreadLock);
-	foreach (itr, m_arNpcThread)
+	foreach(itr, m_arNpcThread)
 		itr->second->m_thread.start(NpcThreadProc, itr->second);
 
 	Guard lock2(m_eventThreadLock);
-	foreach (itr, m_arEventNpcThread)
+	foreach(itr, m_arEventNpcThread)
 		itr->second->m_thread.start(NpcThreadProc, itr->second);
 
 	m_zoneEventThread.start(ZoneEventThreadProc, this);
@@ -433,13 +432,13 @@ bool CServerDlg::MapFileLoad()
 	ZoneInfoMap zoneMap;
 
 	m_sTotalMap = 0;
-	LOAD_TABLE_ERROR_ONLY(CZoneInfoSet, &m_GameDB, &zoneMap, false, false); 
+	LOAD_TABLE_ERROR_ONLY(CZoneInfoSet, &m_GameDB, &zoneMap, false, false);
 
-	foreach (itr, zoneMap)
+	foreach(itr, zoneMap)
 	{
-		_ZONE_INFO *pZone = itr->second;
+		_ZONE_INFO* pZone = itr->second;
 
-		MAP *pMap = new MAP();
+		MAP* pMap = new MAP();
 		if (!pMap->Initialize(pZone))
 		{
 			printf("ERROR: Unable to load SMD - %s\n", pZone->m_MapName.c_str());
@@ -464,9 +463,9 @@ bool CServerDlg::MapFileLoad()
 * @param	nResourceID	Identifier for the resource.
 * @param	result	   	The string to store the formatted result in.
 */
-void CServerDlg::GetServerResource(int nResourceID, string * result, ...)
+void CServerDlg::GetServerResource(int nResourceID, string* result, ...)
 {
-	_SERVER_RESOURCE *pResource = m_ServerResourceArray.GetData(nResourceID);
+	_SERVER_RESOURCE* pResource = m_ServerResourceArray.GetData(nResourceID);
 	if (pResource == nullptr)
 	{
 		*result = nResourceID;
@@ -484,7 +483,7 @@ void CServerDlg::AllNpcInfo()
 {
 	Packet result;
 	result.SByte();
-	foreach_stlmap (itr, g_arZone)
+	foreach_stlmap(itr, g_arZone)
 	{
 		uint32_t nZone = itr->first;
 		uint8_t bCount = 0;
@@ -493,11 +492,11 @@ void CServerDlg::AllNpcInfo()
 		size_t wpos = result.wpos();
 		result << bCount;
 
-		foreach_stlmap (itr, m_arNpc)
+		foreach_stlmap(itr, m_arNpc)
 		{
-			CNpc *pNpc = itr->second;
+			CNpc* pNpc = itr->second;
 			if (pNpc == nullptr
-				|| pNpc->GetZoneID() != nZone)	
+				|| pNpc->GetZoneID() != nZone)
 				continue;
 
 			pNpc->FillNpcInfo(result);
@@ -511,7 +510,7 @@ void CServerDlg::AllNpcInfo()
 				result.Initialize(NPC_INFO_ALL);
 				result << bCount;
 			}
-		}	
+		}
 
 		if (bCount != 0 && bCount < NPC_NUM)
 		{
@@ -525,7 +524,7 @@ void CServerDlg::AllNpcInfo()
 	}
 }
 
-Unit * CServerDlg::GetUnitPtr(uint16_t id)
+Unit* CServerDlg::GetUnitPtr(uint16_t id)
 {
 	if (id < NPC_BAND)
 		return GetUserPtr(id);
@@ -533,7 +532,7 @@ Unit * CServerDlg::GetUnitPtr(uint16_t id)
 	return GetNpcPtr(id);
 }
 
-CNpc * CServerDlg::GetNpcPtr(uint16_t npcId)
+CNpc* CServerDlg::GetNpcPtr(uint16_t npcId)
 {
 	return m_arNpc.GetData(npcId);
 }
@@ -548,7 +547,7 @@ CUser* CServerDlg::GetUserPtr(uint16_t sessionId)
 	return itr->second;
 }
 
-bool CServerDlg::SetUserPtr(uint16_t sessionId, CUser * pUser)
+bool CServerDlg::SetUserPtr(uint16_t sessionId, CUser* pUser)
 {
 	if (sessionId >= MAX_USER)
 		return false;
@@ -558,7 +557,7 @@ bool CServerDlg::SetUserPtr(uint16_t sessionId, CUser * pUser)
 	if (itr != m_pUser.end())
 	{
 		TRACE("Warning: User %u has not been removed from the session map.\n", sessionId);
-		return false; 
+		return false;
 	}
 
 	m_pUser[sessionId] = pUser;
@@ -581,7 +580,7 @@ void CServerDlg::CheckAliveTest()
 	Packet result(AG_CHECK_ALIVE_REQ);
 	SessionMap sessMap = m_socketMgr.GetActiveSessionMap();
 	uint32_t count = 0, sessCount = sessMap.size();
-	foreach (itr, sessMap)
+	foreach(itr, sessMap)
 	{
 		if (itr->second->Send(&result))
 			count++;
@@ -591,7 +590,7 @@ void CServerDlg::CheckAliveTest()
 		DeleteAllUserList();
 }
 
-uint32_t THREADCALL CServerDlg::Timer_CheckAliveTest(void * lpParam)
+uint32_t THREADCALL CServerDlg::Timer_CheckAliveTest(void* lpParam)
 {
 	while (g_bRunning)
 	{
@@ -601,7 +600,7 @@ uint32_t THREADCALL CServerDlg::Timer_CheckAliveTest(void * lpParam)
 	return 0;
 }
 
-uint32_t THREADCALL CServerDlg::Timer_CheckLiveTimes(void * lpParam)
+uint32_t THREADCALL CServerDlg::Timer_CheckLiveTimes(void* lpParam)
 {
 	while (g_bRunning)
 	{
@@ -615,11 +614,11 @@ void CServerDlg::CheckLiveTimes()
 {
 	std::vector<uint16_t> deleted;
 
-	foreach_stlmap_nolock (itr, m_NpcLiveTimeArray)
+	foreach_stlmap_nolock(itr, m_NpcLiveTimeArray)
 	{
 		if (int32_t(UNIXTIME) - itr->second->SpawnedTime > itr->second->Duration)
 		{
-			CNpc *pNpc = GetNpcPtr(itr->second->Nid);
+			CNpc* pNpc = GetNpcPtr(itr->second->Nid);
 
 			if (pNpc)
 				pNpc->Dead();
@@ -628,11 +627,11 @@ void CServerDlg::CheckLiveTimes()
 		}
 	}
 
-	foreach (itr, deleted)
+	foreach(itr, deleted)
 		m_NpcLiveTimeArray.DeleteData(*itr);
 }
 
-void CServerDlg::DeleteAllUserList(CGameSocket *pSock)
+void CServerDlg::DeleteAllUserList(CGameSocket* pSock)
 {
 	// If a server disconnected, show it...
 	if (pSock != nullptr)
@@ -647,10 +646,10 @@ void CServerDlg::DeleteAllUserList(CGameSocket *pSock)
 
 	// If there's no servers even connected, cleanup.
 	TRACE("*** DeleteAllUserList - Start *** \n");
-	foreach_stlmap (itr, g_arZone)
+	foreach_stlmap(itr, g_arZone)
 	{
-		MAP * pMap = itr->second;
-		if (pMap == nullptr)	
+		MAP* pMap = itr->second;
+		if (pMap == nullptr)
 			continue;
 		for (int i = 0; i < pMap->GetXRegionMax(); i++)
 		{
@@ -660,9 +659,9 @@ void CServerDlg::DeleteAllUserList(CGameSocket *pSock)
 	}
 
 	Guard lock(m_userLock);
-	foreach (itr, m_pUser)
+	foreach(itr, m_pUser)
 	{
-		if (itr->second == nullptr)  
+		if (itr->second == nullptr)
 			continue;
 
 		delete itr->second;
@@ -678,7 +677,7 @@ void CServerDlg::DeleteAllUserList(CGameSocket *pSock)
 	printf("Delete All User List\n");
 }
 
-void CServerDlg::Send(Packet * pkt)
+void CServerDlg::Send(Packet* pkt)
 {
 	m_socketMgr.SendAll(pkt);
 }
@@ -688,29 +687,29 @@ void CServerDlg::GameServerAcceptThread()
 	m_socketMgr.RunServer();
 }
 
-bool CServerDlg::AddObjectEventNpc(_OBJECT_EVENT* pEvent, MAP * pMap)
+bool CServerDlg::AddObjectEventNpc(_OBJECT_EVENT* pEvent, MAP* pMap)
 {
 	int sSid = 0;
 
-	if (pEvent->sType == OBJECT_GATE 
+	if (pEvent->sType == OBJECT_GATE
 		|| pEvent->sType == OBJECT_GATE2
 		|| pEvent->sType == OBJECT_GATE_LEVER
-		|| pEvent->sType == OBJECT_ANVIL 
+		|| pEvent->sType == OBJECT_ANVIL
 		|| pEvent->sType == OBJECT_ARTIFACT)
 		sSid = pEvent->sIndex;
-	else 
-		sSid =pEvent->sControlNpcID;
+	else
+		sSid = pEvent->sControlNpcID;
 
 	if (sSid <= 0)
 		return false;
 
-	CNpcTable * pNpcTable = m_arNpcTable.GetData(sSid);
-	if(pNpcTable == nullptr)	{
+	CNpcTable* pNpcTable = m_arNpcTable.GetData(sSid);
+	if (pNpcTable == nullptr) {
 		// TRACE("#### AddObjectEventNpc Fail : [sid = %d], zone=%d #####\n", pEvent->sIndex, zone_number);
 		return false;
 	}
 
-	CNpc *pNpc = new CNpc();
+	CNpc* pNpc = new CNpc();
 
 	pNpc->m_byMoveType = 0;
 	pNpc->m_byInitMoveType = 0;
@@ -718,16 +717,16 @@ bool CServerDlg::AddObjectEventNpc(_OBJECT_EVENT* pEvent, MAP * pMap)
 	pNpc->m_byBattlePos = 0;
 
 	pNpc->m_byObjectType = SPECIAL_OBJECT;
-	pNpc->m_byGateOpen	= (pEvent->sStatus == 1);
+	pNpc->m_byGateOpen = (pEvent->sStatus == 1);
 
-	pNpc->m_bZone	= pMap->m_nZoneNumber;
+	pNpc->m_bZone = pMap->m_nZoneNumber;
 	pNpc->SetPosition(pEvent->fPosX, pEvent->fPosY, pEvent->fPosZ);
 
-	pNpc->m_nInitMinX	= (int)pEvent->fPosX-1;
-	pNpc->m_nInitMinY	= (int)pEvent->fPosZ-1;
-	pNpc->m_nInitMaxX	= (int)pEvent->fPosX+1;
-	pNpc->m_nInitMaxY	= (int)pEvent->fPosZ+1;	
-	
+	pNpc->m_nInitMinX = (int)pEvent->fPosX - 1;
+	pNpc->m_nInitMinY = (int)pEvent->fPosZ - 1;
+	pNpc->m_nInitMaxX = (int)pEvent->fPosX + 1;
+	pNpc->m_nInitMaxY = (int)pEvent->fPosZ + 1;
+
 	pNpc->Load(m_sMapEventNpc++, pNpcTable, false);
 	pNpc->m_pMap = pMap;
 
@@ -744,10 +743,10 @@ bool CServerDlg::AddObjectEventNpc(_OBJECT_EVENT* pEvent, MAP * pMap)
 	return true;
 }
 
-CNpc * CServerDlg::SpawnEventNpc(uint16_t sSid, bool bIsMonster, uint8_t byZone, float fX, float fY, float fZ, uint16_t sDuration, uint8_t nation, int16_t socketID, uint16_t nEventRoom)
+CNpc* CServerDlg::SpawnEventNpc(uint16_t sSid, bool bIsMonster, uint8_t byZone, float fX, float fY, float fZ, uint16_t sDuration, uint8_t nation, int16_t socketID, uint16_t nEventRoom)
 {
-	CNpcTable * proto = nullptr;
-	MAP * pZone = GetZoneByID(byZone);
+	CNpcTable* proto = nullptr;
+	MAP* pZone = GetZoneByID(byZone);
 
 	if (pZone == nullptr)
 		return nullptr;
@@ -765,7 +764,7 @@ CNpc * CServerDlg::SpawnEventNpc(uint16_t sSid, bool bIsMonster, uint8_t byZone,
 	if (itr == m_arEventNpcThread.end())
 		return false;
 
-	CNpc * pNpc = new CNpc();
+	CNpc* pNpc = new CNpc();
 
 	pNpc->m_bIsEventNpc = true;
 	pNpc->m_byMoveType = (bIsMonster ? 1 : 0);
@@ -777,7 +776,7 @@ CNpc * CServerDlg::SpawnEventNpc(uint16_t sSid, bool bIsMonster, uint8_t byZone,
 	pNpc->m_pMap = pZone;
 	pNpc->m_oSocketID = socketID;
 	pNpc->m_bEventRoom = nEventRoom;
-
+	
 	pNpc->Load(++m_TotalNPC, proto, bIsMonster, nation);
 	pNpc->InitPos();
 
@@ -786,20 +785,95 @@ CNpc * CServerDlg::SpawnEventNpc(uint16_t sSid, bool bIsMonster, uint8_t byZone,
 
 	if (sDuration > 0) // Duration npc or monsters
 	{
-		_NPC_LIVE_TIME * pData = new _NPC_LIVE_TIME();
+		_NPC_LIVE_TIME* pData = new _NPC_LIVE_TIME();
 		pData->nIndex = m_NpcLiveTimeArray.GetSize() + 1;
 		pData->SocketID = socketID;
 		pData->Nid = pNpc->m_sNid;
 		pData->Duration = sDuration;
 		pData->SpawnedTime = int32_t(UNIXTIME);
-		if (!m_NpcLiveTimeArray.PutData(pData->nIndex,pData))
+		if (!m_NpcLiveTimeArray.PutData(pData->nIndex, pData))
 			delete pData;
 	}
 
 	return pNpc;
 }
 
-void CServerDlg::RemoveEventNPC(CNpc * pNpc)
+_NpcGiveItem* CServerDlg::DropResultEventNpc(uint16_t sSid)
+{
+	CNpcTable* proto = m_arMonTable.GetData(sSid);
+
+	if (proto == nullptr)
+		return nullptr;
+
+	int iPer = 0, iMakeItemCode = 0, iMoney = 0, iRandom, nCount = 0;
+
+	iRandom = myrand(70, 100);
+	iMoney = proto->m_iMoney * iRandom / 100;
+
+	_NpcGiveItem m_GiveItemList[NPC_HAVE_ITEM_LIST];
+	memset(m_GiveItemList, 0, sizeof(m_GiveItemList));
+	if (iMoney > 0)
+	{
+		if (iMoney >= SHRT_MAX)
+			iMoney = 32000;
+
+		m_GiveItemList[nCount].sSid = TYPE_MONEY_SID;
+		m_GiveItemList[nCount++].count = iMoney;
+	}
+
+	_K_MONSTER_ITEM* pItem = g_pMain->m_NpcItemArray.GetData(proto->m_iItem);
+	if (pItem != nullptr)
+	{
+		// j = iItem
+		for (int j = 0; j < 5; j++)
+		{
+			if (pItem->iItem[j] == 0
+				|| pItem->sPercent[j] == 0)
+				continue;
+
+			iRandom = myrand(1, 10000);
+			iPer = pItem->sPercent[j];
+			if (iRandom > iPer)
+				continue;
+
+			if (j < 2)
+			{
+				if (pItem->iItem[j] < 100)
+				{
+					continue;
+				}
+				else
+				{
+					_MAKE_ITEM_GROUP* pGroup = g_pMain->m_MakeItemGroupArray.GetData(pItem->iItem[j]);
+					if (pGroup == nullptr
+						|| pGroup->iItems.size() != 30)
+						continue;
+
+					iMakeItemCode = pGroup->iItems[myrand(1, 30) - 1];
+				}
+
+				if (iMakeItemCode == 0)
+					continue;
+
+				m_GiveItemList[nCount].sSid = iMakeItemCode;
+				m_GiveItemList[nCount].count = 1;
+			}
+			else
+			{
+				m_GiveItemList[nCount].sSid = pItem->iItem[j];
+				if (COMPARE(m_GiveItemList[nCount].sSid, ARROW_MIN, ARROW_MAX))
+					m_GiveItemList[nCount].count = 20;
+				else
+					m_GiveItemList[nCount].count = 1;
+			}
+			nCount++;
+		}
+	}
+
+	return m_GiveItemList;
+}
+
+void CServerDlg::RemoveEventNPC(CNpc* pNpc)
 {
 	Guard lock(m_eventThreadLock);
 	auto itr = m_arEventNpcThread.find(pNpc->GetZoneID());
@@ -811,7 +885,7 @@ void CServerDlg::RemoveEventNPC(CNpc * pNpc)
 
 void CServerDlg::NpcUpdate(uint16_t sSid, bool bIsMonster, uint8_t byGroup, uint16_t sPid)
 {
-	CNpcTable * proto = nullptr;
+	CNpcTable* proto = nullptr;
 
 	if (bIsMonster)
 		proto = m_arMonTable.GetData(sSid);
@@ -828,7 +902,7 @@ void CServerDlg::NpcUpdate(uint16_t sSid, bool bIsMonster, uint8_t byGroup, uint
 		proto->m_sPid = sPid;
 }
 
-MAP * CServerDlg::GetZoneByID(int zonenumber)
+MAP* CServerDlg::GetZoneByID(int zonenumber)
 {
 	return g_arZone.GetData(zonenumber);
 }
@@ -840,10 +914,10 @@ void CServerDlg::GetServerInfoIni()
 	ini.GetString("ODBC", "GAME_UID", "", m_strGameUID, false);
 	ini.GetString("ODBC", "GAME_PWD", "", m_strGamePWD, false);
 
-	m_AIServerPort = ini.GetInt("SETTINGS","PORT", 10020);
+	m_AIServerPort = ini.GetInt("SETTINGS", "PORT", 10020);
 }
 
-void CServerDlg::SendSystemMsg(std::string & pMsg, int type)
+void CServerDlg::SendSystemMsg(std::string& pMsg, int type)
 {
 	Packet result(AG_SYSTEM_MSG);
 	result << uint8_t(type) << pMsg;
@@ -853,10 +927,10 @@ void CServerDlg::SendSystemMsg(std::string & pMsg, int type)
 void CServerDlg::ResetBattleZone()
 {
 	TRACE("ServerDlg - ResetBattleZone() : start \n");
-	foreach_stlmap (itr, g_arZone)
+	foreach_stlmap(itr, g_arZone)
 	{
-		MAP *pMap = itr->second;
-		if (pMap == nullptr || pMap->m_byRoomEvent == 0) 
+		MAP* pMap = itr->second;
+		if (pMap == nullptr || pMap->m_byRoomEvent == 0)
 			continue;
 		//if( pMap->IsRoomStatusCheck() == true )	continue;	// 전체방이 클리어 되었다면
 		pMap->InitializeRoom();
@@ -864,25 +938,25 @@ void CServerDlg::ResetBattleZone()
 	TRACE("ServerDlg - ResetBattleZone() : end \n");
 }
 
-CServerDlg::~CServerDlg() 
+CServerDlg::~CServerDlg()
 {
 	g_bNpcExit = true;
 
 	printf("Waiting for NPC threads to exit...");
 
 	Guard lock(m_npcThreadLock);
-	foreach (itr, m_arNpcThread)
+	foreach(itr, m_arNpcThread)
 	{
-		CNpcThread * pThread = itr->second;
+		CNpcThread* pThread = itr->second;
 		pThread->m_thread.waitForExit();
 		delete pThread;
 	}
 	m_arNpcThread.clear();
 
 	Guard lock2(m_eventThreadLock);
-	foreach (itr, m_arEventNpcThread)
+	foreach(itr, m_arEventNpcThread)
 	{
-		CNpcThread * pThread = itr->second;
+		CNpcThread* pThread = itr->second;
 		pThread->m_thread.waitForExit();
 		delete pThread;
 	}
@@ -895,7 +969,7 @@ CServerDlg::~CServerDlg()
 	printf(" exited.\n");
 
 	printf("Waiting for timer threads to exit...");
-	foreach (itr, g_timerThreads)
+	foreach(itr, g_timerThreads)
 	{
 		(*itr)->waitForExit();
 		delete (*itr);

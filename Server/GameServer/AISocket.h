@@ -39,6 +39,7 @@ public:
 	void RecvNpcHpChange(Packet & pkt);
 	void RecvNpcSpawnRequest(Packet & pkt);
 	void RegionPacketAdd(Packet & pkt);
+	void RecvNpcDropTest(Packet& pkt);
 
 	virtual void OnDisconnect();
 	virtual ~CAISocket() {}

@@ -77,6 +77,9 @@ bool CAISocket::HandlePacket(Packet & pkt)
 	case AG_NPC_HP_CHANGE:
 		RecvNpcHpChange(pkt);
 		break;
+	case AG_NPC_DROP_TEST_REQ:
+		RecvNpcDropTest(pkt);
+		break;
 	}
 
 	return true;
@@ -726,4 +729,32 @@ void CAISocket::RecvNpcHpChange(Packet & pkt)
 
 	pAttacker = g_pMain->GetUnitPtr(sAttackerID);
 	pNpc->HpChange(nAmount, pAttacker, false); 
+}
+
+void CAISocket::RecvNpcDropTest(Packet& pkt)
+{
+	uint16_t userId;
+
+	pkt >> userId;
+
+	CUser* user = g_pMain->GetUserPtr(userId);
+	if (user == nullptr)
+		return;
+
+	Packet res(WIZ_NPC_DROP_TEST);
+	uint16_t count;
+	size_t differentItemCount;
+	std::string mobName;
+	pkt >> mobName >> count >> differentItemCount;
+
+	res << mobName << count << differentItemCount;
+
+	for (size_t i = 0; i < differentItemCount; i++)
+	{
+		int itemId, count;
+		pkt >> itemId >> count;	
+		res << g_pMain->m_ItemtableArray.GetData(itemId)->m_sName << count;
+	}
+
+	user->Send(&res);
 }

@@ -25,9 +25,6 @@ enum
 #define LONG_ATTACK_RANGE		30				// 장거리 공격 유효거리
 #define SHORT_ATTACK_RANGE		3				// 직접공격 유효거리
 
-#define ARROW_MIN				391010000
-#define ARROW_MAX				392010000
-
 #define FAINTING_TIME			2 // in seconds
 
 bool CNpc::RegisterRegion(float x, float z)
@@ -3423,7 +3420,6 @@ void CNpc::GiveNpcHaveItem()
 
 	g_pMain->Send(&result);
 }
-
 
 void CNpc::Yaw2D(float fDirX, float fDirZ, float& fYawResult)
 {

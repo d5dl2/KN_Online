@@ -2,6 +2,7 @@
 
 #include "NpcTable.h"
 #include "NpcMagicProcess.h"
+#include "PathFind.h"
 
 #define MAX_PATH_SIZE		100
 

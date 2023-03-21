@@ -147,6 +147,7 @@
 #define WIZ_DEATH_LIST			0x90
 #define WIZ_CLANPOINTS_BATTLE	0x91 // not sure
 
+#define WIZ_NPC_DROP_TEST		0x92 // receives result of drop test chat command
 // NOTE(srmeier): testing this debug string functionality
 #define WIZ_DEBUG_STRING_PACKET 0xFE
 
@@ -750,6 +751,7 @@ const uint8_t AG_NPC_SPAWN_REQ	= 14;	// spawns an NPC/monster at the desired loc
 const uint8_t AG_NPC_REGION_UPDATE	= 15;
 const uint8_t AG_NPC_UPDATE	= 16;
 const uint8_t AG_NPC_KILL_REQ	= 17;
+const uint8_t AG_NPC_DROP_TEST_REQ = 18; 
 
 // ---------------------------------------------------------------------
 // AI Server와 게임서버간의 User, Npc 공통 관련된 패킷은 50번~100번 

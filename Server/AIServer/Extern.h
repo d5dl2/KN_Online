@@ -1,5 +1,8 @@
 #pragma once
 
+#define ARROW_MIN				391010000
+#define ARROW_MAX				392010000
+
 extern bool	g_bNpcExit;
 
 struct _MAKE_WEAPON

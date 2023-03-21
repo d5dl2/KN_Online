@@ -1073,6 +1073,30 @@ bool CGameProcMain::ProcessPacket(Packet& pkt)
 		this->MsgRecv_Anvil(pkt);
 		return true;
 		break;
+	case WIZ_NPC_DROP_TEST:
+	{
+		std::string mobName;		
+		pkt.readString(mobName, pkt.read<uint16_t>());
+		uint16_t count = pkt.read< uint16_t>();
+		size_t differentItemCount = pkt.read<size_t>();
+		std::ostringstream os;
+		os << "Drops of " << count << " " << mobName << std::endl;
+
+		this->MsgOutput(os.str(), D3DCOLOR_ARGB(255, 255, 159, 31));
+		os.str("");
+		os.clear();
+		for (size_t i = 0; i < differentItemCount; i++)
+		{
+			std::string itemName;
+			pkt.readString(itemName, pkt.read<uint16_t>());
+			int count = pkt.read<int>();
+
+			os << itemName << " : " << count << std::endl;
+		}
+
+		this->MsgOutput(os.str(), D3DCOLOR_ARGB(255, 191, 123, 255));
+		return true;
+	}
 	}
 
 #ifdef _DEBUG
