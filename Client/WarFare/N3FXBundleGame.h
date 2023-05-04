@@ -10,6 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #include "N3FXBundle.h"
+#include "../Client/N3Base/N3Chr.h"
 
 class CN3FXBundleGame : public CN3FXBundle
 {
@@ -24,8 +25,10 @@ public:
 	
 public:
 	void	SetPreBundlePos(int iSourceID, int iJoint);
+	void	SetPreBundlePos(CN3Chr* source, int iJoint);
 	void	Trigger(int iSourceID=0, int iTargetID = 0, int iTargetJoint = 0, int iSndID = -1);
 	void	Trigger(int iSourceID, __Vector3 TargetPos, int iSndID = -1);
+	void	Trigger(CN3Chr* source, __Vector3 TargetPos, int iSndID);
 	bool	Tick();
 	
 	void	Duplicate(CN3FXBundleGame* pDestBundle);

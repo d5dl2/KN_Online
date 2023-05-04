@@ -152,8 +152,9 @@ void CGameProcLogIn::Init()
 		this->MessageBoxPost("No server list", "LogIn Server fail", MB_OK, BEHAVIOR_EXIT); // 끝낸다.
 	}
 
-	// 게임 계정으로 들어 왔으면..
+#ifndef _DEBUG
 	if(LIC_KNIGHTONLINE != s_eLogInClassification)
+#endif
 	{
 		this->MsgSend_AccountLogIn(s_eLogInClassification); // 로그인..
 	}
