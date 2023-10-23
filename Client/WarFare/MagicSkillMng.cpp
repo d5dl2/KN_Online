@@ -587,8 +587,8 @@ bool CMagicSkillMng::CheckValidCondition(int iTargetID, __TABLE_UPC_SKILL* pSkil
 			{
 				std::string buff;
 				::_LoadStringFromResource(IDS_SKILL_FAIL_LACK_SP, buff);
-				m_pGameProcMain->MsgOutput(buff, 0xffffff00);
-				return false;
+				m_pGameProcMain->MsgOutput(buff + " KONTROL ET", 0xffffff00);
+				// return false;
 			}
 		}
 	}

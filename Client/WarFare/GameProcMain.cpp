@@ -1221,8 +1221,9 @@ void CGameProcMain::ProcessLocalInput(uint32_t dwMouseFlags)
 	else if (s_pLocalInput->IsKeyPress(KM_HOTKEY6)) iHotKey = 5;
 	else if (s_pLocalInput->IsKeyPress(KM_HOTKEY7)) iHotKey = 6;
 	else if (s_pLocalInput->IsKeyPress(KM_HOTKEY8)) iHotKey = 7;
+	else if (s_pLocalInput->IsKeyPress(KM_HOTKEY9)) iHotKey = 8;
 
-	if ((iHotKey >= 0 && iHotKey < 8) &&
+	if ((iHotKey >= 0 && iHotKey < 9) &&
 		CN3UIBase::GetFocusedEdit() == NULL &&
 		m_pSubProcPerTrade->m_ePerTradeState == PER_TRADE_STATE_NONE)
 	{
@@ -3209,7 +3210,7 @@ bool CGameProcMain::MsgRecv_Attack(Packet& pkt)
 		pAttacker->m_iIDTarget = iIDTarget; // 타겟 ID 설정..
 		if (0x01 == iType) pAttacker->Action(PSA_ATTACK, false, pTarget); // 물리적인 직접 공격..
 		else if (0x02 == iType) pAttacker->Action(PSA_SPELLMAGIC, false, pTarget); // 마법 공격..
-		//		else if(0x03 == iType) pAttacker->Action(PSA_SPELLMAGIC, false, pTarget); // 지속 마법 공격..
+		else if(0x03 == iType) pAttacker->Action(PSA_SPELLMAGIC, false, pTarget); // 지속 마법 공격..
 	}
 
 	pTarget->m_bGuardSuccess = false; // 방어에 성공했는지에 대한 플래그..
@@ -3738,6 +3739,7 @@ void CGameProcMain::MsgRecv_MyInfo_PointChange(Packet& pkt)
 	s_pPlayer->m_InfoExt.iMSPMax = pkt.read<int16_t>();
 	s_pPlayer->m_InfoExt.iAttack = pkt.read<int16_t>();
 	s_pPlayer->m_InfoExt.iWeightMax = pkt.read<int16_t>();
+	int iDelta = pkt.read<uint16_t>();
 
 	m_pUIVar->m_pPageState->UpdateHP(s_pPlayer->m_InfoBase.iHP, s_pPlayer->m_InfoBase.iHPMax);
 	m_pUIStateBarAndMiniMap->UpdateHP(s_pPlayer->m_InfoBase.iHP, s_pPlayer->m_InfoBase.iHPMax, false);
@@ -3780,7 +3782,7 @@ void CGameProcMain::MsgRecv_MyInfo_PointChange(Packet& pkt)
 
 	if (iType >= 1 && iType <= 5)
 	{
-		s_pPlayer->m_InfoExt.iBonusPointRemain--;
+		s_pPlayer->m_InfoExt.iBonusPointRemain -= iDelta;
 		m_pUIVar->m_pPageState->UpdateBonusPointAndButtons(s_pPlayer->m_InfoExt.iBonusPointRemain); // 보너스 포인트 적용이 가능한가??
 	}
 }

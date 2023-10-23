@@ -198,7 +198,7 @@ void CPlayerMySelf::Tick()
 				(m_pItemPlugBasics[PLUG_POS_LEFTHAND] && ITEM_CLASS_BOW_LONG == m_pItemPlugBasics[PLUG_POS_LEFTHAND]->byClass ) || 
 				(m_pItemPlugBasics[PLUG_POS_RIGHTHAND] && ITEM_CLASS_BOW_CROSS == m_pItemPlugBasics[PLUG_POS_RIGHTHAND]->byClass) )
 			{
-				__TABLE_UPC_SKILL* pSkill = s_pTbl_Skill.Find(102003); // ╫╨еЁ евюл╨М©║╪╜ ╠Б╨╩ х╟ ╫╨еЁю╩ цё╟М
+				__TABLE_UPC_SKILL* pSkill = s_pTbl_Skill.Find(102003); // OKгU R щLE ARCHERY ATIYOR
 				if(pSkill)
 				{
 					if(pTarget->IsAlive())//юс╫ц ю╞юЗ╟║ ╩Л╬ф юж╢б ╩Себ©║╪╜╦╦...

@@ -1921,19 +1921,33 @@ void CUser::LevelChange(uint8_t level, bool bLevelUp /*= true*/)
 void CUser::PointChange(Packet & pkt)
 {
 	uint8_t type = pkt.read<uint8_t>();
-	StatType statType = (StatType)(type - 1);
+	uint16_t delta = pkt.read<uint16_t>();
+	uint16_t actual = delta;
+
+	if (m_sPoints < delta)
+		actual = m_sPoints;
+
+	StatType statType = (StatType)(type - 1);	
 
 	if (statType < STAT_STR || statType >= STAT_COUNT 
 		|| m_sPoints < 1
 		|| GetStat(statType) >= STAT_MAX) 
 		return;
 
+	auto availableLeft = STAT_MAX - GetStat(statType);
+
+	if (availableLeft < actual)
+		actual = availableLeft;
+
 	Packet result(WIZ_POINT_CHANGE);
 
-	m_sPoints--; // remove a free point
-	result << type << uint16_t(++m_bStats[statType]); // assign the free point to a stat
+	m_sPoints -= actual; // remove a free point
+	m_bStats[statType] += actual;
+	result << type << uint16_t(m_bStats[statType]); // assign the free point to a stat
 	SetUserAbility();
 	result << m_iMaxHp << m_iMaxMp << m_sTotalHit << MaxWeight(m_sMaxWeight);
+	result << actual;
+
 	Send(&result);
 	SendItemMove(1);
 }

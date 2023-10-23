@@ -485,16 +485,21 @@ bool CUIState::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 {
 	if (dwMsg == UIMSG_BUTTON_CLICK)					
 	{
+		auto add = 1;
+
+		if (_IsKeyDown(VK_LCONTROL))
+			add = 10;
+
 		if(pSender == m_pBtn_Strength) // 경험치 체인지..
-			this->MsgSendAblityPointChange(0x01, +1);
+			this->MsgSendAblityPointChange(0x01, add);
 		else if(pSender == m_pBtn_Stamina)
-			this->MsgSendAblityPointChange(0x02, +1);
+			this->MsgSendAblityPointChange(0x02, add);
 		else if(pSender == m_pBtn_Dexterity)
-			this->MsgSendAblityPointChange(0x03, +1);
+			this->MsgSendAblityPointChange(0x03, add);
 		else if(pSender == m_pBtn_Intelligence)
-			this->MsgSendAblityPointChange(0x04, +1);
+			this->MsgSendAblityPointChange(0x04, add);
 		else if(pSender == m_pBtn_MagicAttak)
-			this->MsgSendAblityPointChange(0x05, +1);
+			this->MsgSendAblityPointChange(0x05, add);
 	}
 
 	return true;

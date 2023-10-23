@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "N3UIBase.h"
+#include <functional>
 
 struct __GameServerInfo : public std::binary_function<__GameServerInfo, __GameServerInfo, bool>
 {
