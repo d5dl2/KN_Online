@@ -1,1 +1,2 @@
 C:\Users\HMT\source\repos\KnightOnline\Client\N3Base\Tool_Release\N3Base_tool.lib
+C:\Users\HMT\source\repos\KN_Online\Client\N3Base\Tool_Release\N3Base_tool.lib

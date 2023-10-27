@@ -1365,7 +1365,11 @@ void CGameProcMain::ProcessLocalInput(uint32_t dwMouseFlags)
 	// ..... 나머지 키보드 처리..
 #if _DEBUG
 	if (s_pLocalInput->IsKeyPress(DIK_F12)) // 디버깅 테스트..
+	{
+		CGameProcedure::ProcActiveSet((CGameProcedure*)CGameProcedure::s_pProcFxEditor);
+
 		s_pEng->Lightning(); // 번개 치기..
+	}
 #endif
 }
 

@@ -97,10 +97,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\HMT\source\repos\KnightOnline\Client\N3Base;C:\Users\HMT\source\repos\KnightOnline\Client\WarFare;C:\Users\HMT\source\repos\KnightOnline\Server;$(IncludePath)</IncludePath>
+    <IncludePath>..\Client\N3Base;..\Client\WarFare;..\Server;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugFxEditor|Win32'">
-    <IncludePath>C:\Users\HMT\source\repos\KnightOnline\Client\N3Base;C:\Users\HMT\source\repos\KnightOnline\Client\WarFare;C:\Users\HMT\source\repos\KnightOnline\Server;$(IncludePath)</IncludePath>
+    <IncludePath>..\Client\N3Base;..\Client\WarFare;..\Server;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -115,7 +115,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\Client\data;..\Server\shared\$(Configuration);..\Client\WarFare\$(Configuration);..\Client\N3Base\$(Configuration);$(DXSDK_DIR)lib\x86\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies); winmm.lib;d3d9.lib;d3dx9.lib;</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);winmm.lib;d3d9.lib;d3dx9.lib;N3Base.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugFxEditor|Win32'">
@@ -130,8 +130,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\Client\data;..\Server\shared\$(Configuration);..\Client\WarFare\$(Configuration);..\Client\N3Base\$(Configuration);$(DXSDK_DIR)lib\x86\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies); winmm.lib;d3d9.lib;d3dx9.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Server\shared\$(Configuration);..\Client\WarFare\$(Configuration);..\Client\N3Base\$(Configuration);$(DXSDK_DIR)lib\x86\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);winmm.lib;d3d9.lib;d3dx9.lib;N3Base.lib;KnightOnLine.lib;shared.lib;dsound.lib;dxguid.lib;wsock32.lib;DInput8.lib;ws2_32.lib;imm32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

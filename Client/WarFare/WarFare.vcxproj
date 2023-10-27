@@ -254,6 +254,7 @@
     <ClCompile Include="GameProcCharacterCreate.cpp" />
     <ClCompile Include="GameProcCharacterSelect.cpp" />
     <ClCompile Include="GameProcedure.cpp" />
+    <ClCompile Include="GameProcFxEditor.cpp" />
     <ClCompile Include="GameProcLogIn.cpp" />
     <ClCompile Include="GameProcMain.cpp" />
     <ClCompile Include="GameProcNationSelect.cpp" />
@@ -322,6 +323,7 @@
     <ClCompile Include="UISkillTreeDlg.cpp" />
     <ClCompile Include="UIStateBar.cpp" />
     <ClCompile Include="UITargetBar.cpp" />
+    <ClCompile Include="UITemp.cpp" />
     <ClCompile Include="UITradeBBSEditDlg.cpp" />
     <ClCompile Include="UITradeBBSSelector.cpp" />
     <ClCompile Include="UITradeEditDlg.cpp" />
@@ -352,6 +354,7 @@
     <ClInclude Include="GameProcCharacterCreate.h" />
     <ClInclude Include="GameProcCharacterSelect.h" />
     <ClInclude Include="GameProcedure.h" />
+    <ClInclude Include="GameProcFxEditor.h" />
     <ClInclude Include="GameProcLogIn.h" />
     <ClInclude Include="GameProcMain.h" />
     <ClInclude Include="GameProcNationSelect.h" />
@@ -438,6 +441,7 @@
     <ClInclude Include="UISkillTreeDlg.h" />
     <ClInclude Include="UIStateBar.h" />
     <ClInclude Include="UITargetBar.h" />
+    <ClInclude Include="UITemp.h" />
     <ClInclude Include="UITradeBBSEditDlg.h" />
     <ClInclude Include="UITradeBBSSelector.h" />
     <ClInclude Include="UITradeEditDlg.h" />

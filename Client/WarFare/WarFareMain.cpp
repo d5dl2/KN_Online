@@ -12,6 +12,7 @@
 #include "shared/APISocket.h"
 #include "PlayerMySelf.h"
 #include "GameProcMain.h"
+#include "GameProcFxEditor.h"
 #include "N3WorldManager.h"
 #include "../Server/shared/Ini.h"
 #include "UIManager.h"
@@ -139,7 +140,7 @@ LRESULT CALLBACK WndProcMain(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
 	case WM_MOUSEWHEEL: {
-		if (CGameProcedure::s_pProcActive == CGameProcedure::s_pProcMain) {
+		if (CGameProcedure::s_pProcActive == CGameProcedure::s_pProcMain || CGameProcedure::s_pProcActive == CGameProcedure::s_pProcFxEditor) {
 			float fDelta = ((int16_t)HIWORD(wParam)) * 0.05f;
 
 			CN3UIBase* focused = CGameProcedure::s_pUIMgr->GetFocusedUI();

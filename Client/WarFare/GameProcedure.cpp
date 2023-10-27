@@ -24,6 +24,7 @@
 #include "GameProcCharacterSelect.h"
 #include "GameProcMain.h"
 #include "GameProcOption.h"
+#include "GameProcFxEditor.h"
 
 #include "UILoading.h"
 #include "UINotice.h"
@@ -71,6 +72,7 @@ CUIMessageBoxManager*	CGameProcedure::s_pMsgBoxMgr = NULL;		// MessageBox Manage
 CGameProcedure*				CGameProcedure::s_pProcPrev = NULL;
 CGameProcedure*				CGameProcedure::s_pProcActive = NULL;
 
+CGameProcFxEditor*			CGameProcedure::s_pProcFxEditor = NULL;
 CGameProcLogIn*				CGameProcedure::s_pProcLogIn = NULL;
 CGameProcNationSelect*		CGameProcedure::s_pProcNationSelect = NULL;
 CGameProcCharacterCreate*	CGameProcedure::s_pProcCharacterCreate = NULL;
@@ -199,6 +201,7 @@ void CGameProcedure::StaticMemberInit(HINSTANCE hInstance, HWND hWndMain, HWND h
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// °¢ ÇÁ·Î½ÃÀúµé »ý¼º
+	s_pProcFxEditor			= new CGameProcFxEditor();
 	s_pProcLogIn			= new CGameProcLogIn();				// ·Î±×ÀÎ ÇÁ·Î½ÃÁ®
 	s_pProcNationSelect		= new CGameProcNationSelect();		// ³ª¶ó ¼±ÅÃ
 	s_pProcCharacterSelect	= new CGameProcCharacterSelect();	// Ä³¸¯ÅÍ ¼±ÅÃ
@@ -280,6 +283,7 @@ void CGameProcedure::StaticMemberRelease()
 	}
 
 	// °¢ ÇÁ·Î½ÃÀúµé
+	delete s_pProcFxEditor; s_pProcFxEditor = NULL;
 	delete s_pProcLogIn; s_pProcLogIn = NULL; 						// ·Î±×ÀÎ ÇÁ·Î½ÃÁ®
 	delete s_pProcNationSelect; s_pProcNationSelect = NULL; 		// ³ª¶ó ¼±ÅÃ
 	delete s_pProcCharacterSelect; s_pProcCharacterSelect = NULL; 	// Ä³¸¯ÅÍ ¼±ÅÃ

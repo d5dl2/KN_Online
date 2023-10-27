@@ -62,6 +62,7 @@ public:
 	static class CUILoading*		s_pUILoading;				// ·Îµù¹Ù..
 	static class CUIMessageBoxManager*	s_pMsgBoxMgr;			// MessageBox Manager
 
+	static class CGameProcFxEditor*			s_pProcFxEditor;
 	static class CGameProcLogIn*			s_pProcLogIn;
 	static class CGameProcNationSelect*		s_pProcNationSelect;
 	static class CGameProcCharacterCreate*	s_pProcCharacterCreate;
