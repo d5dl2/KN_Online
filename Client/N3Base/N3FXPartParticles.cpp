@@ -10,7 +10,7 @@
 
 #ifdef _DEBUG
 #undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
+static char THIS_FILE[] = __FILE__;
 #endif
 
 
@@ -22,28 +22,28 @@ CN3FXPartParticles::CN3FXPartParticles()
 {
 	m_iVersion = 5;	//3이하는 다 무시해버려..
 
-	m_iNumParticle		= 0;
-	m_iNumLodParticle	= 0;
+	m_iNumParticle = 0;
+	m_iNumLodParticle = 0;
 	m_pair_fParticleSize.first = 0.0f;
 	m_pair_fParticleSize.second = 0.0f;
 	m_pair_fParticleLife.first = 0.0f;
 	m_pair_fParticleLife.second = 0.0f;
-	
+
 	m_pVBList_Alive.clear();
 	m_pVBList_Dead.clear();
 
 	m_CurrCreateDelay = 0.0f;
 	m_fCreateDelay = 0.01f;
-	
+
 	m_iNumCreate = 1;
 
-	m_MinCreateRange.Set(0,0,0);
-	m_MaxCreateRange.Set(0,0,0);
-	
+	m_MinCreateRange.Set(0, 0, 0);
+	m_MaxCreateRange.Set(0, 0, 0);
+
 	//m_vUnit[0].Set(-0.5f, 1.5f, 0.0f, 0xffffffff, 0.0f, -1.0f);
 	//m_vUnit[1].Set(1.5f, -0.5f, 0.0f, 0xffffffff, 2.0f, 1.0f);
 	//m_vUnit[2].Set(-0.5f, -0.5f, 0.0f, 0xffffffff, 0.0f, 1.0f);
-	
+
 	m_vUnit[0].Set(-0.5f, 0.5f, 0.0f, 0xffffffff, 0.0f, 0.0f);
 	m_vUnit[1].Set(0.5f, 0.5f, 0.0f, 0xffffffff, 1.0f, 0.0f);
 	m_vUnit[2].Set(0.5f, -0.5f, 0.0f, 0xffffffff, 1.0f, 1.0f);
@@ -51,17 +51,17 @@ CN3FXPartParticles::CN3FXPartParticles()
 
 	//m_wUnitIB[0] = 0;	m_wUnitIB[1] = 1;	m_wUnitIB[2] = 3;
 	//m_wUnitIB[3] = 3;	m_wUnitIB[4] = 1;	m_wUnitIB[5] = 2;
-	
+
 	//emitter...
 	m_dwEmitType = FX_PART_PARTICLE_EMIT_TYPE_NORMAL;
 	ZeroMemory(&m_uEmitCon, sizeof(m_uEmitCon));
-	
+
 	//particle..
 	m_vPtEmitDir.Set(0.0f, 0.0f, -1.0f);
 	m_fPtVelocity = m_fPtAccel = m_fPtRotVelocity = m_fPtGravity = 0.0f;
 
 	int i;
-	for(i=0;i<NUM_KEY_COLOR;i++) m_dwChangeColor[i] = 0xffffffff;
+	for (i = 0; i < NUM_KEY_COLOR; i++) m_dwChangeColor[i] = 0xffffffff;
 	m_bChangeColor = false;
 
 	m_pRefShape = m_pShape = NULL;
@@ -78,7 +78,7 @@ CN3FXPartParticles::CN3FXPartParticles()
 	m_fScaleVelX = m_fScaleVelY = 0.0f;
 
 #ifdef _N3TOOL
-	for(i=0;i<NUM_KEY_COLOR;i++)
+	for (i = 0; i < NUM_KEY_COLOR; i++)
 	{
 		m_bChangeColorKey[i] = false;
 		m_bChangeAlphaKey[i] = false;
@@ -105,16 +105,16 @@ CN3FXPartParticles::~CN3FXPartParticles()
 		if (pParticle) delete pParticle;
 	}
 	m_pVBList_Dead.clear();
-	
+
 	CN3Base::s_MngFXShape.Delete(&m_pRefShape);
-	if(m_pShape)
+	if (m_pShape)
 	{
 		m_pShape->Release();
 		delete m_pShape;
 		m_pShape = NULL;
 	}
 
-	if(m_pVB) 
+	if (m_pVB)
 	{
 		delete[] m_pVB;
 		m_pVB = NULL;
@@ -133,23 +133,23 @@ CN3FXPartParticles::~CN3FXPartParticles()
 #ifdef _N3TOOL
 bool CN3FXPartParticles::ParseScript(char* szCommand, char* szBuff0, char* szBuff1, char* szBuff2, char* szBuff3)
 {
-	if(CN3FXPartBase::ParseScript(szCommand, szBuff0, szBuff1, szBuff2, szBuff3)) return true;
+	if (CN3FXPartBase::ParseScript(szCommand, szBuff0, szBuff1, szBuff2, szBuff3)) return true;
 
 	//	파티클 수.
-	if(lstrcmpi(szCommand, "<particle_count>")==0)
+	if (lstrcmpi(szCommand, "<particle_count>") == 0)
 	{
 		m_iNumParticle = atoi(szBuff0);
-		if(m_iNumParticle>0) InitVB();
+		if (m_iNumParticle > 0) InitVB();
 		return true;
 	}
 
 	//	파티클 크기.
-	if(lstrcmpi(szCommand, "<particle_size>")==0)
+	if (lstrcmpi(szCommand, "<particle_size>") == 0)
 	{
 		m_pair_fParticleSize.first = m_pair_fParticleSize.second = atof(szBuff0);
 		return true;
 	}
-	if(lstrcmpi(szCommand, "<particle_size_range>")==0)
+	if (lstrcmpi(szCommand, "<particle_size_range>") == 0)
 	{
 		m_pair_fParticleSize.first = atof(szBuff0);
 		m_pair_fParticleSize.second = atof(szBuff1);
@@ -157,7 +157,7 @@ bool CN3FXPartParticles::ParseScript(char* szCommand, char* szBuff0, char* szBuf
 	}
 
 	//	파티클 생명.
-	if(lstrcmpi(szCommand, "<particle_life>")==0)
+	if (lstrcmpi(szCommand, "<particle_life>") == 0)
 	{
 		m_pair_fParticleLife.first = atof(szBuff0);
 		m_pair_fParticleLife.second = atof(szBuff1);
@@ -165,42 +165,42 @@ bool CN3FXPartParticles::ParseScript(char* szCommand, char* szBuff0, char* szBuf
 	}
 
 	//	파티클 시작오차..min
-	if(lstrcmpi(szCommand, "<start_range_min>")==0)
+	if (lstrcmpi(szCommand, "<start_range_min>") == 0)
 	{
 		m_MinCreateRange.Set(atof(szBuff0), atof(szBuff1), atof(szBuff2));
 		return true;
 	}
 
 	//	파티클 시작오차..max
-	if(lstrcmpi(szCommand, "<start_range_max>")==0)
+	if (lstrcmpi(szCommand, "<start_range_max>") == 0)
 	{
 		m_MaxCreateRange.Set(atof(szBuff0), atof(szBuff1), atof(szBuff2));
 		return true;
 	}
 
 	//	파티클 한번에 생성 갯수
-	if(lstrcmpi(szCommand, "<create_count>")==0)
+	if (lstrcmpi(szCommand, "<create_count>") == 0)
 	{
 		m_iNumCreate = atoi(szBuff0);
 		return true;
 	}
 
 	//	파티클 한번에 생성 시간 범위
-	if(lstrcmpi(szCommand, "<create_delay>")==0)
+	if (lstrcmpi(szCommand, "<create_delay>") == 0)
 	{
 		m_CurrCreateDelay = m_fCreateDelay = atof(szBuff0);
 		return true;
 	}
 
 	//	시작하는 방법.
-	if(lstrcmpi(szCommand, "<emit_type>")==0)
+	if (lstrcmpi(szCommand, "<emit_type>") == 0)
 	{
-		if(lstrcmpi(szBuff0, "spread")==0)
+		if (lstrcmpi(szBuff0, "spread") == 0)
 		{
 			m_dwEmitType = FX_PART_PARTICLE_EMIT_TYPE_SPREAD;
 			m_uEmitCon.fEmitAngle = atof(szBuff1);
 		}
-		else if(lstrcmpi(szBuff0, "gather")==0)
+		else if (lstrcmpi(szBuff0, "gather") == 0)
 		{
 			m_dwEmitType = FX_PART_PARTICLE_EMIT_TYPE_GATHER;
 			m_uEmitCon.vGatherPoint.x = atof(szBuff1);
@@ -210,67 +210,67 @@ bool CN3FXPartParticles::ParseScript(char* szCommand, char* szBuff0, char* szBuf
 		return true;
 	}
 
-	if(lstrcmpi(szCommand, "<particle_direction>")==0)
+	if (lstrcmpi(szCommand, "<particle_direction>") == 0)
 	{
 		m_vPtEmitDir.Set(atof(szBuff0), atof(szBuff1), atof(szBuff2));
 		return true;
 	}
 
-	if(lstrcmpi(szCommand, "<particle_velocity>")==0)
+	if (lstrcmpi(szCommand, "<particle_velocity>") == 0)
 	{
 		m_fPtVelocity = atof(szBuff0);
 		return true;
 	}
 
-	if(lstrcmpi(szCommand, "<particle_acceleration>")==0)
+	if (lstrcmpi(szCommand, "<particle_acceleration>") == 0)
 	{
 		m_fPtAccel = atof(szBuff0);
 		return true;
 	}
 
-	if(lstrcmpi(szCommand, "<particle_rotation_velocity>")==0)
+	if (lstrcmpi(szCommand, "<particle_rotation_velocity>") == 0)
 	{
-		float Degree = atof(szBuff0);			
+		float Degree = atof(szBuff0);
 		m_fPtRotVelocity = D3DXToRadian(Degree);
 		return true;
 	}
 
-	if(lstrcmpi(szCommand, "<particle_gravity>")==0)
+	if (lstrcmpi(szCommand, "<particle_gravity>") == 0)
 	{
 		m_fPtGravity = atof(szBuff0);
 		return true;
 	}
-	
-	if(lstrcmpi(szCommand, "<particle_color>")==0)
+
+	if (lstrcmpi(szCommand, "<particle_color>") == 0)
 	{
 		int seq = atoi(szBuff0);
 		uint32_t color = atoi(szBuff1);
-		if(seq>=0 && seq<NUM_KEY_COLOR) m_dwChangeColor[seq] = color;
+		if (seq >= 0 && seq < NUM_KEY_COLOR) m_dwChangeColor[seq] = color;
 		return true;
 	}
 
-	if(lstrcmpi(szCommand, "<change_color>")==0)
+	if (lstrcmpi(szCommand, "<change_color>") == 0)
 	{
-		if(lstrcmpi(szBuff0, "true")==0) m_bChangeColor = true;
-		if(lstrcmpi(szBuff0, "false")==0) m_bChangeColor = false;
+		if (lstrcmpi(szBuff0, "true") == 0) m_bChangeColor = true;
+		if (lstrcmpi(szBuff0, "false") == 0) m_bChangeColor = false;
 		return true;
 	}
 
-	if(lstrcmpi(szCommand, "<color_key>")==0)
+	if (lstrcmpi(szCommand, "<color_key>") == 0)
 	{
 		int seq = atoi(szBuff0);
-		if(seq>=0 && seq<NUM_KEY_COLOR) m_bChangeColorKey[seq] = true;
+		if (seq >= 0 && seq < NUM_KEY_COLOR) m_bChangeColorKey[seq] = true;
 		return true;
 	}
-	if(lstrcmpi(szCommand, "<alpha_key>")==0)
+	if (lstrcmpi(szCommand, "<alpha_key>") == 0)
 	{
 		int seq = atoi(szBuff0);
-		if(seq>=0 && seq<NUM_KEY_COLOR) m_bChangeAlphaKey[seq] = true;
+		if (seq >= 0 && seq < NUM_KEY_COLOR) m_bChangeAlphaKey[seq] = true;
 		return true;
 	}
-	if(lstrcmpi(szCommand, "<shape_name>")==0 && lstrcmpi(szBuff0, "")!=0)
+	if (lstrcmpi(szCommand, "<shape_name>") == 0 && lstrcmpi(szBuff0, "") != 0)
 	{
-		char szPath[MAX_PATH];				
+		char szPath[MAX_PATH];
 		sprintf(szPath, szBuff0);
 		m_pShape = new CN3FXShape;
 
@@ -279,23 +279,23 @@ bool CN3FXPartParticles::ParseScript(char* szCommand, char* szBuff0, char* szBuf
 		m_vCurrPos = m_pShape->CenterPos();
 		return true;
 	}
-	if(lstrcmpi(szCommand, "<shape_fps>")==0)
+	if (lstrcmpi(szCommand, "<shape_fps>") == 0)
 	{
 		m_fMeshFPS = atof(szBuff0);
 		return true;
 	}
-	if(lstrcmpi(szCommand, "<shape_apply>")==0)
+	if (lstrcmpi(szCommand, "<shape_apply>") == 0)
 	{
-		if(lstrcmpi(szBuff0, "true")==0) m_bAnimKey = true;
-		if(lstrcmpi(szBuff0, "false")==0) m_bAnimKey = false;
+		if (lstrcmpi(szBuff0, "true") == 0) m_bAnimKey = true;
+		if (lstrcmpi(szBuff0, "false") == 0) m_bAnimKey = false;
 		return true;
 	}
-	if(lstrcmpi(szCommand, "<texture_rotation_speed>")==0)
+	if (lstrcmpi(szCommand, "<texture_rotation_speed>") == 0)
 	{
 		m_fTexRotateVelocity = atof(szBuff0);
 		return true;
 	}
-	if(lstrcmpi(szCommand, "<particle_scale_velocity>")==0)
+	if (lstrcmpi(szCommand, "<particle_scale_velocity>") == 0)
 	{
 		m_fScaleVelX = atof(szBuff0);
 		m_fScaleVelY = atof(szBuff1);
@@ -312,14 +312,14 @@ bool CN3FXPartParticles::ParseScript(char* szCommand, char* szBuff0, char* szBuf
 void CN3FXPartParticles::Init()
 {
 	CN3FXPartBase::Init();
-	if(m_pShape)
+	if (m_pShape)
 	{
 		m_vShapePos = m_vPos;
 		m_vPrevShapePos = m_vCurrPos = m_vShapePos + m_pShape->CenterPos();
 	}
-	else m_vCurrPos = m_vPos; 
+	else m_vCurrPos = m_vPos;
 
-	if(m_iVersion<3 && m_pShape)
+	if (m_iVersion < 3 && m_pShape)
 	{
 		m_bAnimKey = true;
 	}
@@ -341,8 +341,8 @@ void CN3FXPartParticles::Init()
 		pParticle->m_fCurrLife = 0.0f;
 		pParticle->m_fDropVel = 0.0f;
 		pParticle->m_fDropY = 0.0f;
-		pParticle->m_fLife = m_pair_fParticleLife.first + ((m_pair_fParticleLife.second - m_pair_fParticleLife.first) * (float)(rand()%100) / 100.0f);
-		pParticle->m_fSize = m_pair_fParticleSize.first + ((m_pair_fParticleSize.second - m_pair_fParticleSize.first) * (float)(rand()%100) / 100.0f);
+		pParticle->m_fLife = m_pair_fParticleLife.first + ((m_pair_fParticleLife.second - m_pair_fParticleLife.first) * (float)(rand() % 100) / 100.0f);
+		pParticle->m_fSize = m_pair_fParticleSize.first + ((m_pair_fParticleSize.second - m_pair_fParticleSize.first) * (float)(rand() % 100) / 100.0f);
 		pParticle->m_iNumTex = m_iNumTex;
 		pParticle->m_pRefParent = this;
 		pParticle->m_iTexIdx = 0;
@@ -355,14 +355,14 @@ void CN3FXPartParticles::Init()
 //
 bool CN3FXPartParticles::Load(HANDLE hFile)
 {
-	if(!CN3FXPartBase::Load(hFile)) return false;
-	if(m_iVersion<3) return false;
+	if (!CN3FXPartBase::Load(hFile)) return false;
+	if (m_iVersion < 3) return false;
 
 	DWORD dwRWC = 0;
 	ReadFile(hFile, &m_iNumParticle, sizeof(int), &dwRWC, NULL);
-	if(m_iNumParticle>0) InitVB();
+	if (m_iNumParticle > 0) InitVB();
 
-	if(m_iVersion<4)
+	if (m_iVersion < 4)
 	{
 		float ParticleSize;
 		ReadFile(hFile, &ParticleSize, sizeof(float), &dwRWC, NULL);
@@ -385,11 +385,11 @@ bool CN3FXPartParticles::Load(HANDLE hFile)
 
 	ReadFile(hFile, &m_dwEmitType, sizeof(uint32_t), &dwRWC, NULL);
 
-	if(	m_dwEmitType == FX_PART_PARTICLE_EMIT_TYPE_SPREAD )
+	if (m_dwEmitType == FX_PART_PARTICLE_EMIT_TYPE_SPREAD)
 	{
 		ReadFile(hFile, &(m_uEmitCon.fEmitAngle), sizeof(float), &dwRWC, NULL);
 	}
-	else if( m_dwEmitType == FX_PART_PARTICLE_EMIT_TYPE_GATHER )
+	else if (m_dwEmitType == FX_PART_PARTICLE_EMIT_TYPE_GATHER)
 	{
 		ReadFile(hFile, &(m_uEmitCon.vGatherPoint.x), sizeof(float), &dwRWC, NULL);
 		ReadFile(hFile, &(m_uEmitCon.vGatherPoint.y), sizeof(float), &dwRWC, NULL);
@@ -403,22 +403,22 @@ bool CN3FXPartParticles::Load(HANDLE hFile)
 	ReadFile(hFile, &m_fPtGravity, sizeof(float), &dwRWC, NULL);
 
 	ReadFile(hFile, &m_bChangeColor, sizeof(bool), &dwRWC, NULL);
-	if(m_bChangeColor)
+	if (m_bChangeColor)
 	{
 		int iNumKeyColor = 0;
 		ReadFile(hFile, &iNumKeyColor, sizeof(int), &dwRWC, NULL);
-		ReadFile(hFile, &m_dwChangeColor, sizeof(uint32_t)*iNumKeyColor, &dwRWC, NULL);
+		ReadFile(hFile, &m_dwChangeColor, sizeof(uint32_t) * iNumKeyColor, &dwRWC, NULL);
 	}
 
 	ReadFile(hFile, &m_bAnimKey, sizeof(bool), &dwRWC, NULL);
-	if(m_bAnimKey)
+	if (m_bAnimKey)
 	{
 		ReadFile(hFile, &m_fMeshFPS, sizeof(float), &dwRWC, NULL);
 
 		char szShapeFileName[_MAX_PATH];
 		ReadFile(hFile, szShapeFileName, _MAX_PATH, &dwRWC, NULL);
 
-		if(m_pShape)
+		if (m_pShape)
 		{
 			delete m_pShape;
 			m_pShape = NULL;
@@ -430,7 +430,7 @@ bool CN3FXPartParticles::Load(HANDLE hFile)
 		m_pShape->Duplicate(m_pRefShape);
 	}
 
-	if(m_iVersion>=5)
+	if (m_iVersion >= 5)
 	{
 		ReadFile(hFile, &m_fTexRotateVelocity, sizeof(float), &dwRWC, NULL);
 		ReadFile(hFile, &m_fScaleVelX, sizeof(float), &dwRWC, NULL);
@@ -456,7 +456,7 @@ bool CN3FXPartParticles::Load(HANDLE hFile)
 		ReadFile(hFile, &bIDK1, sizeof(bool), &dwRWC, NULL);
 		if (bIDK1) {
 			char pIDK3[72];
-			ReadFile(hFile, pIDK3, sizeof(char)*72, &dwRWC, NULL);
+			ReadFile(hFile, pIDK3, sizeof(char) * 72, &dwRWC, NULL);
 		}
 	}
 
@@ -471,7 +471,7 @@ bool CN3FXPartParticles::Load(HANDLE hFile)
 //
 bool CN3FXPartParticles::Save(HANDLE hFile)
 {
-	if(!CN3FXPartBase::Save(hFile)) return false;
+	if (!CN3FXPartBase::Save(hFile)) return false;
 
 	DWORD dwRWC = 0;
 	WriteFile(hFile, &m_iNumParticle, sizeof(int), &dwRWC, NULL);
@@ -490,11 +490,11 @@ bool CN3FXPartParticles::Save(HANDLE hFile)
 
 	WriteFile(hFile, &m_dwEmitType, sizeof(uint32_t), &dwRWC, NULL);
 
-	if(	m_dwEmitType == FX_PART_PARTICLE_EMIT_TYPE_SPREAD )
+	if (m_dwEmitType == FX_PART_PARTICLE_EMIT_TYPE_SPREAD)
 	{
 		WriteFile(hFile, &(m_uEmitCon.fEmitAngle), sizeof(float), &dwRWC, NULL);
 	}
-	else if( m_dwEmitType == FX_PART_PARTICLE_EMIT_TYPE_GATHER )
+	else if (m_dwEmitType == FX_PART_PARTICLE_EMIT_TYPE_GATHER)
 	{
 		WriteFile(hFile, &(m_uEmitCon.vGatherPoint.x), sizeof(float), &dwRWC, NULL);
 		WriteFile(hFile, &(m_uEmitCon.vGatherPoint.y), sizeof(float), &dwRWC, NULL);
@@ -508,15 +508,15 @@ bool CN3FXPartParticles::Save(HANDLE hFile)
 	WriteFile(hFile, &m_fPtGravity, sizeof(float), &dwRWC, NULL);
 
 	WriteFile(hFile, &m_bChangeColor, sizeof(bool), &dwRWC, NULL);
-	if(m_bChangeColor)
+	if (m_bChangeColor)
 	{
 		int iNumKeyColor = NUM_KEY_COLOR;
 		WriteFile(hFile, &iNumKeyColor, sizeof(int), &dwRWC, NULL);
-		WriteFile(hFile, &m_dwChangeColor, sizeof(uint32_t)*NUM_KEY_COLOR, &dwRWC, NULL);
+		WriteFile(hFile, &m_dwChangeColor, sizeof(uint32_t) * NUM_KEY_COLOR, &dwRWC, NULL);
 	}
 
 	WriteFile(hFile, &m_bAnimKey, sizeof(bool), &dwRWC, NULL);
-	if(m_bAnimKey)
+	if (m_bAnimKey)
 	{
 		WriteFile(hFile, &m_fMeshFPS, sizeof(float), &dwRWC, NULL);
 
@@ -558,12 +558,12 @@ void CN3FXPartParticles::Stop()
 //
 bool CN3FXPartParticles::Tick()
 {
-	if(!CN3FXPartBase::Tick()) return false;
+	if (!CN3FXPartBase::Tick()) return false;
 
 #ifndef _N3TOOL
 	float fDist = (s_CameraData.vEye - m_pRefBundle->m_vPos).Magnitude();
 
-	if(fDist > 30.0f)
+	if (fDist > 30.0f)
 		m_iNumLodParticle = (int)(m_iNumParticle / 3.0f);
 	else
 	{
@@ -574,11 +574,11 @@ bool CN3FXPartParticles::Tick()
 #endif
 
 	m_mtxVI = s_CameraData.mtxViewInverse;
-	m_mtxVI.PosSet(0,0,0);
+	m_mtxVI.PosSet(0, 0, 0);
 
 	m_CurrCreateDelay += CN3Base::s_fSecPerFrm;
 
-	if(m_bAnimKey && m_pShape)
+	if (m_bAnimKey && m_pShape)
 	{
 		//frm 계산..
 		float fFrm = m_fCurrLife * m_fMeshFPS;
@@ -589,11 +589,11 @@ bool CN3FXPartParticles::Tick()
 		//TRACE("Frm: %3.2f life: %3.2f\n", fFrm, m_fCurrLife);
 
 		m_pShape->m_mtxParent.Identity();
-		Rotate();		
+		Rotate();
 		Scaling();
 		Move();
 		m_pShape->Tick();
-		
+
 		m_vCurrPos = m_pShape->CenterPos();
 		m_vEmitterDir = m_vCurrPos - m_vPrevShapePos;
 		m_vEmitterDir.Normalize();
@@ -604,28 +604,28 @@ bool CN3FXPartParticles::Tick()
 		// tick emitter...
 		m_vCurrVelocity += m_vAcceleration * CN3Base::s_fSecPerFrm;
 		m_vCurrPos += m_vCurrVelocity * CN3Base::s_fSecPerFrm;
-		if(m_vCurrVelocity.Magnitude()!=0.0f)
+		if (m_vCurrVelocity.Magnitude() != 0.0f)
 		{
 			m_vEmitterDir = m_vCurrVelocity;
 			m_vEmitterDir.Normalize();
 		}
-		else m_vEmitterDir.Set(0,0,1);
-		
+		else m_vEmitterDir.Set(0, 0, 1);
+
 	}
-	
+
 	// make particles...
-	if(m_CurrCreateDelay >= m_fCreateDelay && m_dwState==FX_PART_STATE_LIVE)	//파티클 생성...
+	if (m_CurrCreateDelay >= m_fCreateDelay && m_dwState == FX_PART_STATE_LIVE)	//파티클 생성...
 	{
 		m_CurrCreateDelay = 0.0f;
-		CreateParticles();		
+		CreateParticles();
 	}
 
 	std::list<CN3FXParticle*>::iterator it;
 	it = m_pVBList_Alive.begin();
-	while(it!=m_pVBList_Alive.end())
+	while (it != m_pVBList_Alive.end())
 	{
 		CN3FXParticle* pParticle = (*it);
-		if(pParticle && pParticle->Tick()==false)
+		if (pParticle && pParticle->Tick() == false)
 		{
 			it = DestroyParticle(it);
 		}
@@ -640,7 +640,7 @@ bool CN3FXPartParticles::Tick()
 //
 void CN3FXPartParticles::Rotate()
 {
-	m_pShape->m_mtxParent.Rotation(m_fCurrLife*m_vRotVelocity);
+	m_pShape->m_mtxParent.Rotation(m_fCurrLife * m_vRotVelocity);
 }
 
 
@@ -650,8 +650,8 @@ void CN3FXPartParticles::Rotate()
 void CN3FXPartParticles::Move()
 {
 	__Vector3 v;
-	m_vCurrVelocity += m_vAcceleration*CN3Base::s_fSecPerFrm;
-	m_vShapePos += m_vCurrVelocity*CN3Base::s_fSecPerFrm;
+	m_vCurrVelocity += m_vAcceleration * CN3Base::s_fSecPerFrm;
+	m_vShapePos += m_vCurrVelocity * CN3Base::s_fSecPerFrm;
 	m_pShape->m_mtxParent.PosSet(m_vShapePos);
 }
 
@@ -663,15 +663,15 @@ void CN3FXPartParticles::Scaling()
 {
 	__Vector3 vScale;
 	vScale.Set(1.0f, 1.0f, 1.0f);
-	
-	if(m_pRefBundle->m_bDependScale) vScale *= m_pRefBundle->m_fTargetScale;
 
-	if(vScale.x < 0) vScale.x = 0;
-	if(vScale.y < 0) vScale.y = 0;
-	if(vScale.z < 0) vScale.z = 0;
+	if (m_pRefBundle->m_bDependScale) vScale *= m_pRefBundle->m_fTargetScale;
+
+	if (vScale.x < 0) vScale.x = 0;
+	if (vScale.y < 0) vScale.y = 0;
+	if (vScale.z < 0) vScale.z = 0;
 
 	__Matrix44 mtx;
-	mtx.Scale(vScale);	
+	mtx.Scale(vScale);
 	m_pShape->m_mtxParent *= mtx;
 }
 
@@ -683,52 +683,52 @@ void CN3FXPartParticles::Scaling()
 //
 void CN3FXPartParticles::Render()
 {
-	if(m_pVBList_Alive.size()==0) return;
+	if (m_pVBList_Alive.size() == 0) return;
 
-	if(m_bAlpha) // Alpha 사용
+	if (m_bAlpha) // Alpha 사용
 	{
 		std::list<CN3FXParticle*>::iterator it;
 		it = m_pVBList_Alive.begin();
-		for(;it!=m_pVBList_Alive.end();it++)
+		for (; it != m_pVBList_Alive.end(); it++)
 		{
 			CN3FXParticle* pParticle = (*it);
-			if(pParticle->m_iTexIdx>=m_iNumTex) continue;
+			if (pParticle->m_iTexIdx >= m_iNumTex) continue;
 
 			__AlphaPrimitive* pAP = s_AlphaMgr.Add();
-			if(pAP)
+			if (pAP)
 			{
 				//for(int i=0;i<6;i++) m_pIB[i] = m_wUnitIB[i];
 
-				pAP->bUseVB				= FALSE;
-				pAP->dwBlendDest		= m_dwDestBlend;
-				pAP->dwBlendSrc			= m_dwSrcBlend;
-				pAP->dwFVF				= FVF_XYZCOLORT1;
-				pAP->dwPrimitiveSize	= sizeof(__VertexXyzColorT1);
-				pAP->fCameraDistance	= CameraDist(pParticle->m_pVB[0], pParticle->m_pVB[1], pParticle->m_pVB[2]);
+				pAP->bUseVB = FALSE;
+				pAP->dwBlendDest = m_dwDestBlend;
+				pAP->dwBlendSrc = m_dwSrcBlend;
+				pAP->dwFVF = FVF_XYZCOLORT1;
+				pAP->dwPrimitiveSize = sizeof(__VertexXyzColorT1);
+				pAP->fCameraDistance = CameraDist(pParticle->m_pVB[0], pParticle->m_pVB[1], pParticle->m_pVB[2]);
 
-				if(m_ppRefTex[pParticle->m_iTexIdx]) pAP->lpTex = m_ppRefTex[pParticle->m_iTexIdx]->Get();
+				if (m_ppRefTex[pParticle->m_iTexIdx]) pAP->lpTex = m_ppRefTex[pParticle->m_iTexIdx]->Get();
 				else pAP->lpTex = NULL;
 
 				__Matrix44 mtxWorld;
 				mtxWorld.Identity();
 				pAP->MtxWorld = mtxWorld;
 				pAP->nRenderFlags = m_dwRenderFlag;// | RF_UV_CLAMP;
-				pAP->ePrimitiveType		= D3DPT_TRIANGLEFAN;
-				pAP->nPrimitiveCount	= 2;
-				pAP->nVertexCount		= NUM_VERTEX_PARTICLE;
-				pAP->pVertices			= pParticle->m_pVB;
-				pAP->pwIndices			= NULL;
+				pAP->ePrimitiveType = D3DPT_TRIANGLEFAN;
+				pAP->nPrimitiveCount = 2;
+				pAP->nVertexCount = NUM_VERTEX_PARTICLE;
+				pAP->pVertices = pParticle->m_pVB;
+				pAP->pwIndices = NULL;
 			}
-		}		
+		}
 
 		return; // 렌더링 안하지롱.
 	}
-		
+
 	CN3Base::s_lpD3DDev->SetFVF(FVF_XYZCOLORT1);
 
 	//s_lpD3DDev->SetRenderState( D3DRS_ALPHABLENDENABLE, m_bAlpha );
 	//s_lpD3DDev->SetRenderState( D3DRS_SRCBLEND, m_dwSrcBlend );
-    //s_lpD3DDev->SetRenderState( D3DRS_DESTBLEND, m_dwDestBlend );
+	//s_lpD3DDev->SetRenderState( D3DRS_DESTBLEND, m_dwDestBlend );
 
 	//uint32_t dwTAddrU, dwTAddrV;
 	//s_lpD3DDev->GetTextureStageState( 0, D3DTSS_ADDRESSU, &dwTAddrU );
@@ -736,57 +736,57 @@ void CN3FXPartParticles::Render()
 
 	//s_lpD3DDev->SetTextureStageState( 0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMP );
 	//s_lpD3DDev->SetTextureStageState( 0, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMP );
-	
-	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
-	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );		
-	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
 
-	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_MODULATE );
-	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );		
-	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
+	s_lpD3DDev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+	s_lpD3DDev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	s_lpD3DDev->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
 
-	s_lpD3DDev->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_DISABLE );
-	s_lpD3DDev->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_DISABLE );
+	s_lpD3DDev->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+	s_lpD3DDev->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	s_lpD3DDev->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+
+	s_lpD3DDev->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
+	s_lpD3DDev->SetTextureStageState(1, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
 
 	DWORD dwCullMode, dwZWriteEnable, dwZBufferEnable, dwLight, dwAlpha;
-	s_lpD3DDev->GetRenderState( D3DRS_ALPHABLENDENABLE, &dwAlpha);
-	s_lpD3DDev->GetRenderState( D3DRS_ZWRITEENABLE, &dwZWriteEnable);
-	s_lpD3DDev->GetRenderState( D3DRS_ZENABLE, &dwZBufferEnable );
-	s_lpD3DDev->GetRenderState( D3DRS_CULLMODE, &dwCullMode );
-	s_lpD3DDev->GetRenderState( D3DRS_LIGHTING, &dwLight );
+	s_lpD3DDev->GetRenderState(D3DRS_ALPHABLENDENABLE, &dwAlpha);
+	s_lpD3DDev->GetRenderState(D3DRS_ZWRITEENABLE, &dwZWriteEnable);
+	s_lpD3DDev->GetRenderState(D3DRS_ZENABLE, &dwZBufferEnable);
+	s_lpD3DDev->GetRenderState(D3DRS_CULLMODE, &dwCullMode);
+	s_lpD3DDev->GetRenderState(D3DRS_LIGHTING, &dwLight);
 
-	if(m_bAlpha != dwAlpha)
+	if (m_bAlpha != dwAlpha)
 	{
-		s_lpD3DDev->SetRenderState( D3DRS_ALPHABLENDENABLE, m_bAlpha);
-		s_lpD3DDev->SetRenderState( D3DRS_SRCBLEND, m_dwSrcBlend );
-		s_lpD3DDev->SetRenderState( D3DRS_DESTBLEND, m_dwDestBlend );
+		s_lpD3DDev->SetRenderState(D3DRS_ALPHABLENDENABLE, m_bAlpha);
+		s_lpD3DDev->SetRenderState(D3DRS_SRCBLEND, m_dwSrcBlend);
+		s_lpD3DDev->SetRenderState(D3DRS_DESTBLEND, m_dwDestBlend);
 	}
-	if(m_dwZEnable != dwZBufferEnable) s_lpD3DDev->SetRenderState(D3DRS_ZENABLE, m_dwZEnable);
-	if(m_dwZWrite != dwZWriteEnable) s_lpD3DDev->SetRenderState(D3DRS_ZWRITEENABLE, m_dwZWrite);
-	if(m_dwLight != dwLight) s_lpD3DDev->SetRenderState(D3DRS_LIGHTING, m_dwLight);
-	if(m_dwDoubleSide != dwCullMode) s_lpD3DDev->SetRenderState(D3DRS_CULLMODE, m_dwDoubleSide);
+	if (m_dwZEnable != dwZBufferEnable) s_lpD3DDev->SetRenderState(D3DRS_ZENABLE, m_dwZEnable);
+	if (m_dwZWrite != dwZWriteEnable) s_lpD3DDev->SetRenderState(D3DRS_ZWRITEENABLE, m_dwZWrite);
+	if (m_dwLight != dwLight) s_lpD3DDev->SetRenderState(D3DRS_LIGHTING, m_dwLight);
+	if (m_dwDoubleSide != dwCullMode) s_lpD3DDev->SetRenderState(D3DRS_CULLMODE, m_dwDoubleSide);
 
 	std::list<CN3FXParticle*>::iterator it;
 	it = m_pVBList_Alive.begin();
-	for(;it!=m_pVBList_Alive.end();it++)
+	for (; it != m_pVBList_Alive.end(); it++)
 	{
 		CN3FXParticle* pParticle = (*it);
-		if(pParticle->m_iTexIdx<m_iNumTex) 
+		if (pParticle->m_iTexIdx < m_iNumTex)
 			CN3Base::s_lpD3DDev->SetTexture(0, m_ppRefTex[pParticle->m_iTexIdx]->Get());
 		else continue;
 
 		//for(int i=0;i<6;i++) m_pIB[i] = pParticle->m_iID + m_wUnitIB[i];
 
 		HRESULT hr;
-		hr = CN3Base::s_lpD3DDev->DrawPrimitiveUP( D3DPT_TRIANGLEFAN, 2, pParticle->m_pVB, sizeof(__VertexXyzColorT1));
+		hr = CN3Base::s_lpD3DDev->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, pParticle->m_pVB, sizeof(__VertexXyzColorT1));
 		//hr = CN3Base::s_lpD3DDev->DrawIndexedPrimitiveUP(D3DPT_TRIANGLELIST, 0, 4, 2, m_pIB, D3DFMT_INDEX16, m_pVB, sizeof(__VertexXyzColorT1));
 	}
 
-	if(m_bAlpha != dwAlpha) s_lpD3DDev->SetRenderState(D3DRS_ALPHABLENDENABLE, dwAlpha);
-	if(m_dwZEnable != dwZBufferEnable) s_lpD3DDev->SetRenderState(D3DRS_ZENABLE, dwZBufferEnable);
-	if(m_dwZWrite != dwZWriteEnable) s_lpD3DDev->SetRenderState(D3DRS_ZWRITEENABLE, dwZWriteEnable);
-	if(m_dwLight != dwLight) s_lpD3DDev->SetRenderState(D3DRS_LIGHTING, dwLight);
-	if(m_dwDoubleSide != dwCullMode) s_lpD3DDev->SetRenderState(D3DRS_CULLMODE, dwCullMode);
+	if (m_bAlpha != dwAlpha) s_lpD3DDev->SetRenderState(D3DRS_ALPHABLENDENABLE, dwAlpha);
+	if (m_dwZEnable != dwZBufferEnable) s_lpD3DDev->SetRenderState(D3DRS_ZENABLE, dwZBufferEnable);
+	if (m_dwZWrite != dwZWriteEnable) s_lpD3DDev->SetRenderState(D3DRS_ZWRITEENABLE, dwZWriteEnable);
+	if (m_dwLight != dwLight) s_lpD3DDev->SetRenderState(D3DRS_LIGHTING, dwLight);
+	if (m_dwDoubleSide != dwCullMode) s_lpD3DDev->SetRenderState(D3DRS_CULLMODE, dwCullMode);
 
 	//CN3Base::s_lpD3DDev->SetTextureStageState( 0, D3DTSS_ADDRESSU, dwTAddrU );
 	//CN3Base::s_lpD3DDev->SetTextureStageState( 0, D3DTSS_ADDRESSV, dwTAddrV );
@@ -800,9 +800,9 @@ float CN3FXPartParticles::CameraDist(__Vector3 v1, __Vector3 v2, __Vector3 v3)
 	vN.Cross(vA, vB);
 	vN.Normalize();
 
-	float D = -(vN.x*v1.x + vN.y*v1.y + vN.z*v1.z);
+	float D = -(vN.x * v1.x + vN.y * v1.y + vN.z * v1.z);
 
-	return (vN.x*s_CameraData.vEye.x + vN.y*s_CameraData.vEye.y + vN.z*s_CameraData.vEye.z + D);
+	return (vN.x * s_CameraData.vEye.x + vN.y * s_CameraData.vEye.y + vN.z * s_CameraData.vEye.z + D);
 }
 
 /*
@@ -821,7 +821,7 @@ void CN3FXPartParticles::Render()
 
 	s_lpD3DDev->SetRenderState( D3DRS_ALPHABLENDENABLE, m_bAlpha );
 	s_lpD3DDev->SetRenderState( D3DRS_SRCBLEND, m_dwSrcBlend );
-    s_lpD3DDev->SetRenderState( D3DRS_DESTBLEND, m_dwDestBlend );
+	s_lpD3DDev->SetRenderState( D3DRS_DESTBLEND, m_dwDestBlend );
 
 	uint32_t dwTAddrU, dwTAddrV;
 	s_lpD3DDev->GetTextureStageState( 0, D3DTSS_ADDRESSU, &dwTAddrU );
@@ -829,13 +829,13 @@ void CN3FXPartParticles::Render()
 
 	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMP );
 	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMP );
-	
+
 	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
-	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );		
+	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
 	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
 
 	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_MODULATE );
-	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );		
+	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
 	s_lpD3DDev->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
 
 	s_lpD3DDev->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_DISABLE );
@@ -846,7 +846,7 @@ void CN3FXPartParticles::Render()
 		m_pNumTex = new int[m_iNumTex];
 		for(int i=0;i<m_iNumTex;i++) m_pNumTex[i] = 0;
 	}
-	
+
 	//
 	////////////////////////////////////////////////////////////////////////////////////
 	//ParticleGreater pg;
@@ -869,8 +869,8 @@ void CN3FXPartParticles::Render()
 		m_pVB[VBIdx+1].color = pParticle->m_dwColor;
 		m_pVB[VBIdx+2] = ((m_vUnit[2] * pParticle->m_fSize) * m_mtxVI) + pParticle->m_vWdPos;
 		m_pVB[VBIdx+2].color = pParticle->m_dwColor;
-				
-		m_pNumTex[pParticle->m_iTexIdx]++;		
+
+		m_pNumTex[pParticle->m_iTexIdx]++;
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -903,22 +903,22 @@ void CN3FXPartParticles::Render()
 void CN3FXPartParticles::InitVB()
 {
 	for (auto itr = m_pVBList_Alive.begin(); itr != m_pVBList_Alive.end(); ++itr)
-		delete *itr;
+		delete* itr;
 	m_pVBList_Alive.clear();
 
 	for (auto itr = m_pVBList_Dead.begin(); itr != m_pVBList_Dead.end(); ++itr)
-		delete *itr;
+		delete* itr;
 	m_pVBList_Dead.clear();
 
-	for(int i=0;i<m_iNumParticle;i++)
+	for (int i = 0; i < m_iNumParticle; i++)
 	{
 		CN3FXParticle* pParticle = new CN3FXParticle;
 		pParticle->m_iID = i * NUM_VERTEX_PARTICLE;
 		m_pVBList_Dead.push_back(pParticle);
 	}
 
-	if(m_pVB) delete[] m_pVB;
-	m_pVB = new __VertexXyzColorT1[m_iNumParticle*NUM_VERTEX_PARTICLE];
+	if (m_pVB) delete[] m_pVB;
+	m_pVB = new __VertexXyzColorT1[m_iNumParticle * NUM_VERTEX_PARTICLE];
 
 	//if(m_pIB) delete[] m_pIB;
 	//m_pIB = new uint16_t[m_iNumParticle*6];
@@ -939,8 +939,8 @@ std::list<CN3FXParticle*>::iterator CN3FXPartParticles::DestroyParticle(std::lis
 	pParticle->m_fCurrLife = 0.0f;
 	pParticle->m_fDropVel = 0.0f;
 	pParticle->m_fDropY = 0.0f;
-	pParticle->m_fLife = m_pair_fParticleLife.first + ((m_pair_fParticleLife.second - m_pair_fParticleLife.first) * (float)(rand()%100) / 100.0f);
-	pParticle->m_fSize = m_pair_fParticleSize.first + ((m_pair_fParticleSize.second - m_pair_fParticleSize.first) * (float)(rand()%100) / 100.0f);
+	pParticle->m_fLife = m_pair_fParticleLife.first + ((m_pair_fParticleLife.second - m_pair_fParticleLife.first) * (float)(rand() % 100) / 100.0f);
+	pParticle->m_fSize = m_pair_fParticleSize.first + ((m_pair_fParticleSize.second - m_pair_fParticleSize.first) * (float)(rand() % 100) / 100.0f);
 	pParticle->m_iNumTex = m_iNumTex;
 	pParticle->m_iTexIdx = 0;
 	pParticle->m_vLcPos.Set(0.0f, 0.0f, 0.0f);
@@ -955,10 +955,10 @@ void CN3FXPartParticles::CreateParticles_Spread()
 {
 	std::list<CN3FXParticle*>::iterator it;
 
-	for(int i=0; i<m_iNumCreate; i++)
+	for (int i = 0; i < m_iNumCreate; i++)
 	{
 		it = m_pVBList_Dead.begin();
-		if(it==m_pVBList_Dead.end()) break;
+		if (it == m_pVBList_Dead.end()) break;
 
 		CN3FXParticle* pParticle = (*it);
 
@@ -966,13 +966,13 @@ void CN3FXPartParticles::CreateParticles_Spread()
 		__Matrix44 RotMtx;
 
 		float fUnitAngleXZ;
-		if(m_uEmitCon.fEmitAngle!=0) fUnitAngleXZ = (float)(rand()%(int)m_uEmitCon.fEmitAngle) - (m_uEmitCon.fEmitAngle/2.0f);
+		if (m_uEmitCon.fEmitAngle != 0) fUnitAngleXZ = (float)(rand() % (int)m_uEmitCon.fEmitAngle) - (m_uEmitCon.fEmitAngle / 2.0f);
 		else fUnitAngleXZ = 0.0f;
 
-		float fUnitAxisZ = (float)(rand()%360);
+		float fUnitAxisZ = (float)(rand() % 360);
 
 		vDir.Set(sin(D3DXToRadian(fUnitAngleXZ)), 0, cos(D3DXToRadian(fUnitAngleXZ)));
-		
+
 		RotMtx.RotationZ(fUnitAxisZ);
 		vDir *= RotMtx;
 		vDir.Normalize();
@@ -985,16 +985,16 @@ void CN3FXPartParticles::CreateParticles_Spread()
 		__Quaternion Qt;
 
 		//bundle의 방향 적용..
-		if(m_pRefBundle)
-		{			
-			if(RotateQuaternion(v, m_pRefBundle->m_vDir, &Qt))
+		if (m_pRefBundle)
+		{
+			if (RotateQuaternion(v, m_pRefBundle->m_vDir, &Qt))
 			{
 				RotMtx = Qt;
 				//vDir *= RotMtx;
 				vDirPart *= RotMtx;
 				//vDirEmit *=  RotMtx;
 			}
-			else if(Qt.w!=1.0f)
+			else if (Qt.w != 1.0f)
 			{
 				//vDir *= -1.0f;
 				vDirPart *= -1.0f;
@@ -1004,17 +1004,17 @@ void CN3FXPartParticles::CreateParticles_Spread()
 
 		//part(emiiter)의 방향 적용
 		//if(m_vEmitterDir.Magnitude()!=0)
-		if(vDirPart.Magnitude()!=0)
+		if (vDirPart.Magnitude() != 0)
 		{
 			//if(RotateQuaternion(v, m_vEmitterDir, &Qt))
-			if(RotateQuaternion(v, vDirPart, &Qt))
+			if (RotateQuaternion(v, vDirPart, &Qt))
 			{
 				RotMtx = Qt;
 				//vDir *= RotMtx;
 				//vDirPart *= RotMtx;
-				vDirEmit *=  RotMtx;
+				vDirEmit *= RotMtx;
 			}
-			else if(Qt.w!=1.0f)
+			else if (Qt.w != 1.0f)
 			{
 				//vDir *= -1.0f;
 				//vDirPart *= -1.0f;
@@ -1024,34 +1024,34 @@ void CN3FXPartParticles::CreateParticles_Spread()
 
 		//뿌려지는 방향 적용..
 		//if(RotateQuaternion(v, m_vPtEmitDir, &Qt))
-		if(RotateQuaternion(v, vDirEmit, &Qt))
+		if (RotateQuaternion(v, vDirEmit, &Qt))
 		{
 			RotMtx = Qt;
 			vDir *= RotMtx;
 			//vDirPart *= RotMtx;
 			//vDirEmit *=  RotMtx;
 		}
-		else if(Qt.w!=1.0f)
+		else if (Qt.w != 1.0f)
 		{
 			vDir *= -1.0f;
 			//vDirPart *= -1.0f;
 			//vDirEmit *= -1.0f;
 		}
 
-		pParticle->m_vAxis = vDirEmit;		
+		pParticle->m_vAxis = vDirEmit;
 		pParticle->m_vVelocity = vDir * m_fPtVelocity;
 
-		if(m_pRefBundle && m_pRefBundle->m_bDependScale)
+		if (m_pRefBundle && m_pRefBundle->m_bDependScale)
 		{
 			pParticle->m_fSize *= m_pRefBundle->m_fTargetScale;
-					
+
 			//pParticle->m_vVelocity.x *= m_pRefBundle->m_vTargetScale.x;
 			//pParticle->m_vVelocity.y *= m_pRefBundle->m_vTargetScale.y;
 			//pParticle->m_vVelocity.z *= m_pRefBundle->m_vTargetScale.z;
 			pParticle->m_vVelocity *= m_pRefBundle->m_fTargetScale;
 
 			__Vector3 MaxCreate, MinCreate;
-			if(m_bAnimKey && m_pShape)
+			if (m_bAnimKey && m_pShape)
 			{
 				__Vector3 Scale = m_pShape->Scale();
 				MaxCreate.x = m_MaxCreateRange.x * Scale.x;
@@ -1074,31 +1074,31 @@ void CN3FXPartParticles::CreateParticles_Spread()
 				//MinCreate.z = m_MinCreateRange.z * m_pRefBundle->m_vTargetScale.z;
 				MinCreate = m_MinCreateRange * m_pRefBundle->m_fTargetScale;
 			}
-			
-			__Vector3 vCreatePos;
-			vCreatePos.Set( MinCreate.x + ((MaxCreate.x - MinCreate.x) * ((float)(rand()%100) / 100.0f)),
-							MinCreate.y + ((MaxCreate.y - MinCreate.y) * ((float)(rand()%100) / 100.0f)),
-							MinCreate.z + ((MaxCreate.z - MinCreate.z) * ((float)(rand()%100) / 100.0f)));
 
-			if(RotateQuaternion(__Vector3(0.0f, 0.0f, 1.0f), pParticle->m_vAxis, &Qt))
+			__Vector3 vCreatePos;
+			vCreatePos.Set(MinCreate.x + ((MaxCreate.x - MinCreate.x) * ((float)(rand() % 100) / 100.0f)),
+				MinCreate.y + ((MaxCreate.y - MinCreate.y) * ((float)(rand() % 100) / 100.0f)),
+				MinCreate.z + ((MaxCreate.z - MinCreate.z) * ((float)(rand() % 100) / 100.0f)));
+
+			if (RotateQuaternion(__Vector3(0.0f, 0.0f, 1.0f), pParticle->m_vAxis, &Qt))
 			{
 				RotMtx = Qt;
 				vCreatePos *= RotMtx;
 			}
-			else if(Qt.w!=1.0f)
+			else if (Qt.w != 1.0f)
 			{
 				vCreatePos *= -1.0f;
 			}
 
 			pParticle->m_vCreatePoint = m_pRefBundle->m_vPos + m_vCurrPos;
-			pParticle->m_vLcPos = vCreatePos;			
+			pParticle->m_vLcPos = vCreatePos;
 		}
 		else
 		{
 			__Vector3 MaxCreate, MinCreate;
 			MaxCreate = m_MaxCreateRange;
 			MinCreate = m_MinCreateRange;
-			if(m_bAnimKey && m_pShape)
+			if (m_bAnimKey && m_pShape)
 			{
 				__Vector3 Scale = m_pShape->Scale();
 				MaxCreate.x *= Scale.x;
@@ -1111,16 +1111,16 @@ void CN3FXPartParticles::CreateParticles_Spread()
 			}
 
 			__Vector3 vCreatePos;
-			vCreatePos.Set( MinCreate.x + ((MaxCreate.x - MinCreate.x) * ((float)(rand()%100) / 100.0f)),
-							MinCreate.y + ((MaxCreate.y - MinCreate.y) * ((float)(rand()%100) / 100.0f)),
-							MinCreate.z + ((MaxCreate.z - MinCreate.z) * ((float)(rand()%100) / 100.0f)));
+			vCreatePos.Set(MinCreate.x + ((MaxCreate.x - MinCreate.x) * ((float)(rand() % 100) / 100.0f)),
+				MinCreate.y + ((MaxCreate.y - MinCreate.y) * ((float)(rand() % 100) / 100.0f)),
+				MinCreate.z + ((MaxCreate.z - MinCreate.z) * ((float)(rand() % 100) / 100.0f)));
 
-			if(RotateQuaternion(__Vector3(0.0f, 0.0f, 1.0f), pParticle->m_vAxis, &Qt))
+			if (RotateQuaternion(__Vector3(0.0f, 0.0f, 1.0f), pParticle->m_vAxis, &Qt))
 			{
 				RotMtx = Qt;
 				vCreatePos *= RotMtx;
 			}
-			else if(Qt.w!=1.0f)
+			else if (Qt.w != 1.0f)
 			{
 				vCreatePos *= -1.0f;
 			}
@@ -1130,7 +1130,7 @@ void CN3FXPartParticles::CreateParticles_Spread()
 		}
 
 		m_pVBList_Alive.push_back((*it));
-		m_pVBList_Dead.erase(it);					
+		m_pVBList_Dead.erase(it);
 	}
 }
 
@@ -1142,19 +1142,19 @@ void CN3FXPartParticles::CreateParticles_Gather()
 {
 	std::list<CN3FXParticle*>::iterator it;
 
-	for(int i=0; i<m_iNumCreate; i++)
+	for (int i = 0; i < m_iNumCreate; i++)
 	{
 		it = m_pVBList_Dead.begin();
-		if(it==m_pVBList_Dead.end()) break;
+		if (it == m_pVBList_Dead.end()) break;
 
 		CN3FXParticle* pParticle = (*it);
 
 		__Vector3 vDir;
 		__Matrix44 RotMtx;
-		
-		vDir.Set(m_uEmitCon.vGatherPoint.x, m_uEmitCon.vGatherPoint.y, m_uEmitCon.vGatherPoint.z); 
+
+		vDir.Set(m_uEmitCon.vGatherPoint.x, m_uEmitCon.vGatherPoint.y, m_uEmitCon.vGatherPoint.z);
 		//	vDir.Normalize();
-		
+
 		__Vector3 vDirPart, vDirEmit;
 		__Vector3 v(0.0f, 0.0f, 1.0f);
 		vDirPart = m_vEmitterDir;
@@ -1163,16 +1163,16 @@ void CN3FXPartParticles::CreateParticles_Gather()
 		__Quaternion Qt;
 
 		//bundle의 방향 적용..
-		if(m_pRefBundle)
-		{			
-			if(RotateQuaternion(v, m_pRefBundle->m_vDir, &Qt))
+		if (m_pRefBundle)
+		{
+			if (RotateQuaternion(v, m_pRefBundle->m_vDir, &Qt))
 			{
 				RotMtx = Qt;
 				//vDir *= RotMtx;
 				vDirPart *= RotMtx;
 				//vDirEmit *=  RotMtx;
 			}
-			else if(Qt.w!=1.0f)
+			else if (Qt.w != 1.0f)
 			{
 				//vDir *= -1.0f;
 				vDirPart *= -1.0f;
@@ -1181,16 +1181,16 @@ void CN3FXPartParticles::CreateParticles_Gather()
 		}
 
 		//part(emiiter)의 방향 적용
-		if(vDirPart.Magnitude()!=0)
+		if (vDirPart.Magnitude() != 0)
 		{
-			if(RotateQuaternion(v, vDirPart, &Qt))
+			if (RotateQuaternion(v, vDirPart, &Qt))
 			{
 				RotMtx = Qt;
 				//vDir *= RotMtx;
 				//vDirPart *= RotMtx;
-				vDirEmit *=  RotMtx;
+				vDirEmit *= RotMtx;
 			}
-			else if(Qt.w!=1.0f)
+			else if (Qt.w != 1.0f)
 			{
 				//vDir *= -1.0f;
 				//vDirPart *= -1.0f;
@@ -1199,34 +1199,34 @@ void CN3FXPartParticles::CreateParticles_Gather()
 		}
 		//뿌려지는 방향 적용..
 		//if(RotateQuaternion(v, m_vPtEmitDir, &Qt))
-		if(RotateQuaternion(v, vDirEmit, &Qt))
+		if (RotateQuaternion(v, vDirEmit, &Qt))
 		{
 			RotMtx = Qt;
 			vDir *= RotMtx;
 			//vDirPart *= RotMtx;
 			//vDirEmit *=  RotMtx;
 		}
-		else if(Qt.w!=1.0f)
+		else if (Qt.w != 1.0f)
 		{
 			vDir *= -1.0f;
 			//vDirPart *= -1.0f;
 			//vDirEmit *= -1.0f;
 		}
 
-		pParticle->m_vAxis = vDirEmit;		
-		
-		if(m_pRefBundle && m_pRefBundle->m_bDependScale)
+		pParticle->m_vAxis = vDirEmit;
+
+		if (m_pRefBundle && m_pRefBundle->m_bDependScale)
 		{
 			//pParticle->m_fSize *= m_pRefBundle->m_vTargetScale.x;
 			pParticle->m_fSize *= m_pRefBundle->m_fTargetScale;
-					
+
 			//pParticle->m_vVelocity.x *= m_pRefBundle->m_vTargetScale.x;
 			//pParticle->m_vVelocity.y *= m_pRefBundle->m_vTargetScale.y;
 			//pParticle->m_vVelocity.z *= m_pRefBundle->m_vTargetScale.z;
 			pParticle->m_vVelocity *= m_pRefBundle->m_fTargetScale;
 
 			__Vector3 MaxCreate, MinCreate;
-			if(m_bAnimKey && m_pShape)
+			if (m_bAnimKey && m_pShape)
 			{
 				__Vector3 Scale = m_pShape->Scale();
 				MaxCreate.x = m_MaxCreateRange.x * Scale.x;
@@ -1251,16 +1251,16 @@ void CN3FXPartParticles::CreateParticles_Gather()
 			}
 
 			__Vector3 vCreatePos;
-			vCreatePos.Set( MinCreate.x + ((MaxCreate.x - MinCreate.x) * ((float)(rand()%100) / 100.0f)),
-							MinCreate.y + ((MaxCreate.y - MinCreate.y) * ((float)(rand()%100) / 100.0f)),
-							MinCreate.z + ((MaxCreate.z - MinCreate.z) * ((float)(rand()%100) / 100.0f)));
+			vCreatePos.Set(MinCreate.x + ((MaxCreate.x - MinCreate.x) * ((float)(rand() % 100) / 100.0f)),
+				MinCreate.y + ((MaxCreate.y - MinCreate.y) * ((float)(rand() % 100) / 100.0f)),
+				MinCreate.z + ((MaxCreate.z - MinCreate.z) * ((float)(rand() % 100) / 100.0f)));
 
-			if(RotateQuaternion(__Vector3(0.0f, 0.0f, 1.0f), pParticle->m_vAxis, &Qt))
+			if (RotateQuaternion(__Vector3(0.0f, 0.0f, 1.0f), pParticle->m_vAxis, &Qt))
 			{
 				RotMtx = Qt;
 				vCreatePos *= RotMtx;
 			}
-			else if(Qt.w!=1.0f)
+			else if (Qt.w != 1.0f)
 			{
 				vCreatePos *= -1.0f;
 			}
@@ -1276,7 +1276,7 @@ void CN3FXPartParticles::CreateParticles_Gather()
 			__Vector3 MaxCreate, MinCreate;
 			MaxCreate = m_MaxCreateRange;
 			MinCreate = m_MinCreateRange;
-			if(m_bAnimKey && m_pShape)
+			if (m_bAnimKey && m_pShape)
 			{
 				__Vector3 Scale = m_pShape->Scale();
 				MaxCreate.x *= Scale.x;
@@ -1289,16 +1289,16 @@ void CN3FXPartParticles::CreateParticles_Gather()
 			}
 
 			__Vector3 vCreatePos;
-			vCreatePos.Set( MinCreate.x + ((MaxCreate.x - MinCreate.x) * ((float)(rand()%100) / 100.0f)),
-							MinCreate.y + ((MaxCreate.y - MinCreate.y) * ((float)(rand()%100) / 100.0f)),
-							MinCreate.z + ((MaxCreate.z - MinCreate.z) * ((float)(rand()%100) / 100.0f)));
+			vCreatePos.Set(MinCreate.x + ((MaxCreate.x - MinCreate.x) * ((float)(rand() % 100) / 100.0f)),
+				MinCreate.y + ((MaxCreate.y - MinCreate.y) * ((float)(rand() % 100) / 100.0f)),
+				MinCreate.z + ((MaxCreate.z - MinCreate.z) * ((float)(rand() % 100) / 100.0f)));
 
-			if(RotateQuaternion(__Vector3(0.0f, 0.0f, 1.0f), pParticle->m_vAxis, &Qt))
+			if (RotateQuaternion(__Vector3(0.0f, 0.0f, 1.0f), pParticle->m_vAxis, &Qt))
 			{
 				RotMtx = Qt;
 				vCreatePos *= RotMtx;
 			}
-			else if(Qt.w!=1.0f)
+			else if (Qt.w != 1.0f)
 			{
 				vCreatePos *= -1.0f;
 			}
@@ -1311,7 +1311,7 @@ void CN3FXPartParticles::CreateParticles_Gather()
 		}
 
 		m_pVBList_Alive.push_back((*it));
-		m_pVBList_Dead.erase(it);					
+		m_pVBList_Dead.erase(it);
 	}
 }
 
@@ -1322,10 +1322,10 @@ void CN3FXPartParticles::CreateParticles_Gather()
 void CN3FXPartParticles::CreateParticles()
 {
 	int iNumLiveParticle = m_pVBList_Alive.size();
-	if( iNumLiveParticle > m_iNumLodParticle )
+	if (iNumLiveParticle > m_iNumLodParticle)
 		return;
-	if(m_dwEmitType==FX_PART_PARTICLE_EMIT_TYPE_SPREAD) CreateParticles_Spread();
-	else if(m_dwEmitType==FX_PART_PARTICLE_EMIT_TYPE_GATHER) CreateParticles_Gather();
+	if (m_dwEmitType == FX_PART_PARTICLE_EMIT_TYPE_SPREAD) CreateParticles_Spread();
+	else if (m_dwEmitType == FX_PART_PARTICLE_EMIT_TYPE_GATHER) CreateParticles_Gather();
 }
 
 //
@@ -1333,19 +1333,19 @@ void CN3FXPartParticles::CreateParticles()
 //
 bool CN3FXPartParticles::IsDead()
 {
-	if(m_pVBList_Alive.size()==0) return true;
+	if (m_pVBList_Alive.size() == 0) return true;
 
 	return false;
 }
 
 void CN3FXPartParticles::Duplicate(CN3FXPartParticles* pSrc)
 {
-	if(!pSrc) return;
+	if (!pSrc) return;
 
 	CN3FXPartBase::Duplicate(pSrc);
 
 	m_iNumParticle = pSrc->m_iNumParticle;
-	if(m_iNumParticle>0) InitVB();
+	if (m_iNumParticle > 0) InitVB();
 
 	m_pair_fParticleSize.first = pSrc->m_pair_fParticleSize.first;
 	m_pair_fParticleSize.second = pSrc->m_pair_fParticleSize.second;
@@ -1360,11 +1360,11 @@ void CN3FXPartParticles::Duplicate(CN3FXPartParticles* pSrc)
 	m_iNumCreate = pSrc->m_iNumCreate;
 
 	m_dwEmitType = pSrc->m_dwEmitType;
-	if(	m_dwEmitType == FX_PART_PARTICLE_EMIT_TYPE_SPREAD )
+	if (m_dwEmitType == FX_PART_PARTICLE_EMIT_TYPE_SPREAD)
 	{
 		m_uEmitCon.fEmitAngle = pSrc->m_uEmitCon.fEmitAngle;
 	}
-	else if( m_dwEmitType == FX_PART_PARTICLE_EMIT_TYPE_GATHER )
+	else if (m_dwEmitType == FX_PART_PARTICLE_EMIT_TYPE_GATHER)
 	{
 		m_uEmitCon.vGatherPoint = m_uEmitCon.vGatherPoint;
 	}
@@ -1376,17 +1376,17 @@ void CN3FXPartParticles::Duplicate(CN3FXPartParticles* pSrc)
 	m_fPtGravity = pSrc->m_fPtGravity;
 
 	m_bChangeColor = pSrc->m_bChangeColor;
-	if(m_bChangeColor)
+	if (m_bChangeColor)
 	{
-		memcpy((char*)&(m_dwChangeColor[0]), (char*)pSrc->m_dwChangeColor, sizeof(uint32_t)*NUM_KEY_COLOR);
+		memcpy((char*)&(m_dwChangeColor[0]), (char*)pSrc->m_dwChangeColor, sizeof(uint32_t) * NUM_KEY_COLOR);
 	}
 
 	m_bAnimKey = pSrc->m_bAnimKey;
-	if(m_bAnimKey)
+	if (m_bAnimKey)
 	{
 		m_fMeshFPS = pSrc->m_fMeshFPS;
 
-		if(m_pShape)
+		if (m_pShape)
 		{
 			delete m_pShape;
 			m_pShape = NULL;
@@ -1404,7 +1404,7 @@ void CN3FXPartParticles::Duplicate(CN3FXPartParticles* pSrc)
 
 	Init();
 
-	return;	
+	return;
 }
 
 
@@ -1413,8 +1413,8 @@ void CN3FXPartParticles::Duplicate(CN3FXPartParticles* pSrc)
 //
 bool CN3FXPartParticles::GetColor(int key, uint32_t& color)
 {
-	if(key<0 || key>=NUM_KEY_COLOR) return false;
-	
+	if (key < 0 || key >= NUM_KEY_COLOR) return false;
+
 	color = m_dwChangeColor[key];
 	return true;
 }
@@ -1429,7 +1429,7 @@ bool CN3FXPartParticles::RotateQuaternion(__Vector3 vSrcDir, __Vector3 vDestDir,
 	vDestDir.Normalize();
 
 	__Vector3 vDirAxis;
-	float fDirAng; 
+	float fDirAng;
 
 	vDirAxis.Cross(vSrcDir, vDestDir);
 
@@ -1437,8 +1437,8 @@ bool CN3FXPartParticles::RotateQuaternion(__Vector3 vSrcDir, __Vector3 vDestDir,
 
 	pQt->RotationAxis(vDirAxis, fDirAng);
 
-	if(vDirAxis.x==0.0f && vDirAxis.y==0.0f && vDirAxis.z==0.0f) return false;
-	
+	if (vDirAxis.x == 0.0f && vDirAxis.y == 0.0f && vDirAxis.z == 0.0f) return false;
+
 	return true;
 }
 
@@ -1492,13 +1492,13 @@ void CN3FXPartParticles::PMerge(std::list<CN3FXParticle*>& l1, std::list<CN3FXPa
 				_F2 = _Mid2;
 			}
 			else ++_F1;
-			if (_F2 != _L2) l1.splice(_L1, l2, _F2, _L2);			
+		if (_F2 != _L2) l1.splice(_L1, l2, _F2, _L2);
 	}
 }
 
 bool CN3FXPartParticles::PComp(CN3FXParticle* pP1, CN3FXParticle* pP2)
 {
-	if(pP1->m_iTexIdx < pP2->m_iTexIdx) return true;
+	if (pP1->m_iTexIdx < pP2->m_iTexIdx) return true;
 	return false;
 }
 
