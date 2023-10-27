@@ -1899,7 +1899,7 @@ void CMagicSkillMng::ProcessCasting()
 			{
 				CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
 				SuccessCast(pSkill, pTarget);
-				////s_pPlayer->Action(PSA_BASIC, false, NULL, true);  d5
+				s_pPlayer->Action(PSA_BASIC, false, NULL, true); 
 				bSuccess = true;
 			}
 
