@@ -20,6 +20,8 @@ const float PACKET_INTERVAL_REQUEST_TARGET_HP = 2.0f;
 #define N3_FORMAT_VER_1068 0x00000001
 #define N3_FORMAT_VER_1298 0x00000002
 
+#define TRACE FormattedDebugString
+
 enum ZoneFlags
 {
 	ZF_TRADE_OTHER_NATION = (1 << 0),

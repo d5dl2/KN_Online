@@ -174,12 +174,21 @@ CMagicSkillMng::~CMagicSkillMng()
 //
 bool CMagicSkillMng::IsCasting()
 {
-	if (s_pPlayer->State() == PSA_SPELLMAGIC ||
+	bool result = s_pPlayer->State() == PSA_SPELLMAGIC ||
 		m_iCurrStep != 0 ||
 		s_pPlayer->m_dwMagicID != 0xffffffff ||
 		s_pPlayer->m_bStun == true ||
-		m_fDelay > 0.0f) return true;
-	return false;
+		m_fDelay > 0.0f;
+
+
+	TRACE("Result: %d, State : %d, CurrStep : %d, MagicId : %d, Stun : %d, Delay : %.4f",
+		result,
+		s_pPlayer->State(),
+		m_iCurrStep,
+		s_pPlayer->m_dwMagicID,
+		s_pPlayer->m_bStun,
+		m_fDelay);
+	return result;
 }
 
 bool CMagicSkillMng::CheckValidSkillMagic(__TABLE_UPC_SKILL* pSkill)
@@ -1106,7 +1115,7 @@ bool CMagicSkillMng::CheckValidCondition(int iTargetID, __TABLE_UPC_SKILL* pSkil
 //
 bool CMagicSkillMng::MsgSend_MagicProcess(int iTargetID, __TABLE_UPC_SKILL* pSkill)
 {
-	//if(m_fRecastTime > 0.0f) return;//recast time이 아직 안되었네..^^
+	if (!pSkill) return false;
 	if (s_pPlayer->IsDead()) return false; // 죽어 있네.. ^^
 
 	///////////////////////////////////////////////////////////////////////////////////
@@ -1127,12 +1136,9 @@ bool CMagicSkillMng::MsgSend_MagicProcess(int iTargetID, __TABLE_UPC_SKILL* pSki
 		m_iNonActionMagicTarget = -1;
 	}
 
-	if (!pSkill) return false;
+
 	if (!CheckValidCondition(iTargetID, pSkill)) return false;
 
-	//TRACE("마법성공 state : %d time %.2f\n", s_pPlayer->State(), CN3Base::TimeGet());
-	// 스킬 쓸 조건이 되는지 검사 끝...
-	///////////////////////////////////////////////////////////////////////////////////
 	__InfoPlayerBase* pInfoBase = &(s_pPlayer->m_InfoBase);
 	__InfoPlayerMySelf* pInfoExt = &(s_pPlayer->m_InfoExt);
 	CPlayerBase* pTarget = m_pGameProcMain->CharacterGetByID(iTargetID, false);
@@ -1456,6 +1462,10 @@ void CMagicSkillMng::StartSkillMagicAtTargetPacket(__TABLE_UPC_SKILL* pSkill, in
 		}
 		return;
 	}
+	else if (pSkill->iCastTime <= 0 && pSkill->iReCastTime > 0)
+	{
+		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
+	}
 
 	m_pGameProcMain->CommandSitDown(false, false); // 혹시라도 앉아있음 일으켜 세운다..
 
@@ -1692,7 +1702,7 @@ void CMagicSkillMng::SuccessCast(__TABLE_UPC_SKILL* pSkill, CPlayerBase* pTarget
 {
 
 	if (pSkill->iReCastTime != 0) {
-		//CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
+		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
 	}
 	s_pPlayer->m_dwMagicID = 0xffffffff;
 	s_pPlayer->m_fCastingTime = 0.0f;
@@ -1771,7 +1781,7 @@ void CMagicSkillMng::SuccessCast(__TABLE_UPC_SKILL* pSkill, CPlayerBase* pTarget
 		::_LoadStringFromResource(IDS_SKILL_USE, szFmt);
 		sprintf(szBuff, szFmt.c_str(), pSkill->szName.c_str());
 		m_pGameProcMain->MsgOutput(szBuff, 0xffffff00);
-		m_fRecastTime = PLAYER_SKILL_REQUEST_INTERVAL_UI;//(float)pSkill->iReCastTime / 10.0f;
+		m_fRecastTime = (float)pSkill->iReCastTime / 10.0f;
 		m_fDelay = 0.3f;
 		s_pPlayer->m_iSkillStep = 0;
 
@@ -1897,9 +1907,8 @@ void CMagicSkillMng::ProcessCasting()
 			bool bSuccess = false;
 			if (s_pPlayer->m_fCastingTime >= fCastingTime && s_pPlayer->State() == PSA_SPELLMAGIC && s_pPlayer->StateMove() == PSM_STOP)
 			{
-				CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
 				SuccessCast(pSkill, pTarget);
-				s_pPlayer->Action(PSA_BASIC, false, NULL, true); 
+				s_pPlayer->Action(PSA_BASIC, false, NULL, true);
 				bSuccess = true;
 			}
 
@@ -1916,12 +1925,12 @@ void CMagicSkillMng::ProcessCasting()
 void CMagicSkillMng::ProcessCombo()
 {
 	//만약 콤보동작중 하나의 동작이 끝났다면...=^^=
-	if (m_fComboTime > (s_pPlayer->m_fAttackDelta * 1.2f)) //s_pPlayer->IsAnimationChange())
+	if (m_fComboTime > (s_pPlayer->m_fAttackDelta * .7f)) //s_pPlayer->IsAnimationChange())
 	{
 		if (m_iCurrStep == m_iNumStep)//콤보공격 끝났다..
 		{
 			__TABLE_UPC_SKILL* pSkill = s_pTbl_Skill.Find(m_iComboSkillID);
-			if (pSkill) m_fRecastTime = PLAYER_SKILL_REQUEST_INTERVAL_UI;// (float)pSkill->iReCastTime / 10.0f;
+			if (pSkill) m_fRecastTime = (float)pSkill->iReCastTime / 10.0f;
 			m_iCurrStep = -1;
 			s_pPlayer->m_iSkillStep = -1;
 			m_iNumStep = 0;
@@ -2083,9 +2092,6 @@ void CMagicSkillMng::MsgRecv_Flying(Packet& pkt)
 	//
 	////common.....//////////////////////////////////////////////////////////////
 
-	if (pSkill->iReCastTime != 0) {
-		//CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
-	}
 	//TRACE("recv flying : %.4f\n", CN3Base::TimeGet());
 
 	if (pPlayer && pPlayer->State() == PSA_SPELLMAGIC)
@@ -2156,10 +2162,6 @@ void CMagicSkillMng::MsgRecv_Effecting(Packet& pkt)
 	//
 	////common.....//////////////////////////////////////////////////////////////
 
-	if (pSkill->iReCastTime != 0) {
-		//CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
-	}
-
 	if (pPlayer && iSourceID != s_pPlayer->IDNumber() && pPlayer->State() == PSA_SPELLMAGIC)
 	{
 		pPlayer->m_iMagicAni = pSkill->iSelfAnimID2;	//화살놓는 동작...
@@ -2205,6 +2207,8 @@ void CMagicSkillMng::MsgRecv_Fail(Packet& pkt)
 	uint32_t dwMagicID = pkt.read<uint32_t>();
 	int	iSourceID = pkt.read<int16_t>();
 	int	iTargetID = pkt.read<int16_t>();
+
+	CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.erase(dwMagicID);
 
 	int16_t Data[6];
 	for (int i = 0; i < 6; i++)
@@ -2364,9 +2368,6 @@ void CMagicSkillMng::MsgRecv_BuffType(Packet& pkt)
 	if (it != m_ListBuffTypeID.end())
 	{
 		__TABLE_UPC_SKILL* pSkill = s_pTbl_Skill.Find(it->second);
-		if (pSkill->iReCastTime != 0) {
-			//CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
-		}
 		m_pGameProcMain->m_pUIStateBarAndMiniMap->DelMagic(pSkill);
 		m_ListBuffTypeID.erase(it);
 	}
