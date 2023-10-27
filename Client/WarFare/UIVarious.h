@@ -13,6 +13,7 @@
 #include "N3UIBase.h"
 #include <string>
 #include <list>
+#include <functional>
 
 class CUIState : public CN3UIBase  
 {
