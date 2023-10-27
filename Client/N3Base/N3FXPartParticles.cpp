@@ -582,7 +582,7 @@ bool CN3FXPartParticles::Tick()
 	{
 		//frm °è»ê..
 		float fFrm = m_fCurrLife * m_fMeshFPS;
-		float share = fFrm / m_pShape->GetWholeFrm();
+		int share = fFrm / m_pShape->GetWholeFrm();
 		//if(fFrm > m_pShape->GetWholeFrm()-1.0f) fFrm = m_pShape->GetWholeFrm()-1.0f;
 		fFrm -= (share * m_pShape->GetWholeFrm());
 		m_pShape->SetCurrFrm(fFrm);
