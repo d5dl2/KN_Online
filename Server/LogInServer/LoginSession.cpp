@@ -132,6 +132,11 @@ void LoginSession::HandleLogin(Packet & pkt)
 	}
 	else if (resultCode == AUTH_IN_GAME)
 	{
+		// DC ETMEK ÝSTÝYOR MUSUN'U AYARLA
+	}
+	else if (resultCode == AUTH_INVALID)
+	{
+		// invalid PASSWORD
 	}
 	else if (resultCode == AUTH_AGREEMENT)
 	{

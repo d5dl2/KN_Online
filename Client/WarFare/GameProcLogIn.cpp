@@ -379,7 +379,7 @@ void CGameProcLogIn::MsgRecv_AccountLogIn(int iCmd, Packet& pkt)
 	{
 		std::string szMsg;
 		std::string szTmp;
-		::_LoadStringFromResource(IDS_SERVER_CONNECT_FAIL, szMsg);
+		::_LoadStringFromResource(IDS_ACCOUNT_BLOCKED, szMsg);
 		::_LoadStringFromResource(IDS_CONNECT_FAIL, szTmp);
 		this->MessageBoxPost(szMsg, szTmp, MB_OK); // MGame ID 로 접속할거냐고 물어본다.
 	}

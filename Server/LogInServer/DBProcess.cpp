@@ -106,7 +106,16 @@ uint16_t CDBProcess::AccountLogin(string & strAccountID, string & strPasswd)
 		if (dbCommand->hasData()) result = 0x05; // in game
 
 		result = 0x01; // seccussful login
-	} else {
+	}
+	else if (result == 104)
+	{
+		result = 0x03; // invalid password
+	}
+	else if (result == 4)
+	{
+		result = 0x04; // banned
+	}	
+	else {
 		// NOTE: else the user doesn't have an account or they are banned or they have
 		// a nation other than the ones we are looking for
 		result = 0x02; // non found
