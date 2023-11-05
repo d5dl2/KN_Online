@@ -1122,9 +1122,7 @@ bool CMagicSkillMng::MsgSend_MagicProcess(int iTargetID, __TABLE_UPC_SKILL* pSki
 	// 스킬 쓸 조건이 되는지 검사...
 	if (pSkill->iSelfAnimID1 >= 0)
 	{
-		if (
-			IsCasting() ||
-			m_fRecastTime > 0.0f) return false;
+		if (IsCasting()) return false;
 	}
 	else //캐스팅동작없는 마법..
 	{
@@ -1925,7 +1923,7 @@ void CMagicSkillMng::ProcessCasting()
 void CMagicSkillMng::ProcessCombo()
 {
 	//만약 콤보동작중 하나의 동작이 끝났다면...=^^=
-	if (m_fComboTime > (s_pPlayer->m_fAttackDelta * .7f)) //s_pPlayer->IsAnimationChange())
+	if (m_fComboTime > (s_pPlayer->m_fAttackDelta * .8f)) //s_pPlayer->IsAnimationChange())
 	{
 		if (m_iCurrStep == m_iNumStep)//콤보공격 끝났다..
 		{
