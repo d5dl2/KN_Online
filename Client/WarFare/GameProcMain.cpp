@@ -1108,6 +1108,28 @@ bool CGameProcMain::ProcessPacket(Packet& pkt)
 		s_pPlayer->m_InfoBase.iAuthority = authority;
 		return true;
 	}
+	case WIZ_EFFECT:
+	{
+		uint16_t id = pkt.read<uint16_t>();
+		uint32_t skillId = pkt.read< uint32_t>();
+
+		__TABLE_UPC_SKILL* pSkill = s_pTbl_Skill.Find(skillId);
+		if (pSkill)
+		{
+			CGameProcedure::s_pFX->TriggerBundle(id, 0, pSkill->iTargetFX, id, 0);
+		}
+		else
+		{
+			char szBuffer[128];
+			sprintf(szBuffer, "Unhandled packet. Opcode: 0x%02x", iCmd);
+
+			std::string szMessage = szBuffer;
+			m_pUIChatDlg->AddChatMsg(N3_CHAT_NORMAL, szMessage, 0xffff0000);
+		}
+
+		
+		return true;
+	}
 	}
 
 #ifdef _DEBUG
