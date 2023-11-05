@@ -954,6 +954,7 @@ public:
 	void CastleSiegeWarProcess(CUser * pUser);
 	void SiegeWarFareNpc(Packet & pkt);
 	void LogosShout(Packet & pkt);
+	void HandleToggleGM(Packet& pkt);
 
 	virtual void GetInOut(Packet & result, uint8_t bType);
 	void UserInOut(uint8_t bType);

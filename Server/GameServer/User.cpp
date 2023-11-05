@@ -470,7 +470,10 @@ bool CUser::HandlePacket(Packet & pkt)
 		break;
 	case WIZ_LOGOSSHOUT:
 		LogosShout(pkt);
-
+		break;			
+	case WIZ_TOGGLE_GM:
+		HandleToggleGM(pkt);
+		break;
 	default:
 		TRACE("[SID=%d] Unknown packet %X\n", GetSocketID(), command);
 		return false;
@@ -6115,5 +6118,17 @@ void CUser::LogosShout(Packet & pkt)
 
 	Packet result(WIZ_LOGOSSHOUT);
 	result << opcode << Notice;
+	Send(&result);
+}
+
+void CUser::HandleToggleGM(Packet& pkt)
+{
+	if (m_bAuthority == AUTHORITY_GAME_MASTER)
+		m_bAuthority = AUTHORITY_PLAYER;
+	else
+		m_bAuthority = AUTHORITY_GAME_MASTER;
+
+	Packet result(WIZ_TOGGLE_GM);
+	result << m_bAuthority;
 	Send(&result);
 }

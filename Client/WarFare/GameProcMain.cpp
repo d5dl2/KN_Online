@@ -99,6 +99,7 @@ enum e_ChatCmd
 	CMD_CUTOFF, CMD_VIEW, CMD_UNVIEW, CMD_FORBIDUSER, CMD_SUMMONUSER,
 	CMD_ATTACKDISABLE, CMD_ATTACKENABLE, CMD_PLC,
 
+	CMD_TOGGLE_GM,
 	CMD_COUNT,
 	CMD_UNKNOWN = 0xffffffff
 };
@@ -301,6 +302,8 @@ void CGameProcMain::Init()
 
 	for (uint32_t resource = IDS_CMD_VISIBLE; resource <= IDS_CMD_PLC; resource++)
 		::_LoadStringFromResource(resource, s_szCmdMsg[i++]);
+
+	s_szCmdMsg[i++] = "ToggleGM";
 
 	s_SndMgr.ReleaseStreamObj(&(CGameProcedure::s_pSnd_BGM));
 
@@ -1097,6 +1100,12 @@ bool CGameProcMain::ProcessPacket(Packet& pkt)
 		}
 
 		this->MsgOutput(os.str(), D3DCOLOR_ARGB(255, 191, 123, 255));
+		return true;
+	}
+	case WIZ_TOGGLE_GM:
+	{
+		uint8_t authority = pkt.read<uint8_t>();
+		s_pPlayer->m_InfoBase.iAuthority = authority;
 		return true;
 	}
 	}
@@ -5964,6 +5973,14 @@ void CGameProcMain::ParseChattingCommand(const std::string& szCmd)
 			sprintf(szBuf, szMsg.c_str(), 5);
 			this->MsgOutput(szBuf, 0xffffff00);
 		}
+	}
+	break;
+
+	case CMD_TOGGLE_GM:
+	{
+		int iOffset = 0;
+		CAPISocket::MP_AddByte(byBuff, iOffset, WIZ_TOGGLE_GM);
+		s_pSocket->Send(byBuff, iOffset);
 	}
 	break;
 

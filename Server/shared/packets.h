@@ -147,6 +147,7 @@
 #define WIZ_DEATH_LIST			0x90
 #define WIZ_CLANPOINTS_BATTLE	0x91 // not sure
 
+#define WIZ_TOGGLE_GM			0xE0
 #define WIZ_NPC_DROP_TEST		0x92 // receives result of drop test chat command
 // NOTE(srmeier): testing this debug string functionality
 #define WIZ_DEBUG_STRING_PACKET 0xFE
