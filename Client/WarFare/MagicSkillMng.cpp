@@ -1173,12 +1173,12 @@ bool CMagicSkillMng::MsgSend_MagicProcess(int iTargetID, __TABLE_UPC_SKILL* pSki
 	}
 	case SKILLMAGIC_TARGET_FRIEND_WITHME:
 	{
-		if (!pTarget)
+		if (!pTarget || pTarget->m_InfoBase.eNation != pInfoBase->eNation)
 		{
 			StartSkillMagicAtTargetPacket(pSkill, (int16_t)s_pPlayer->IDNumber());
 			return true;
 		}
-		else if (pTarget->m_InfoBase.eNation == pInfoBase->eNation)
+		else
 		{
 			if (!CheckValidDistance(pSkill, pTarget->Position(), fDist)) return false;
 			StartSkillMagicAtTargetPacket(pSkill, (int16_t)pTarget->IDNumber());
