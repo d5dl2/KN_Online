@@ -735,11 +735,6 @@ void CUIHotKeyDlg::DoOperate(__IconItemSkill*	pUISkill)
 {
 	if(!pUISkill) return;
 
-	//char szBuf[512];
-	// 메시지 박스 출력..	
-	//wsprintf(szBuf, "%s 스킬이 사용되었습니다.", pSkill->pSkill->szName.c_str() );
-	//CGameProcedure::s_pProcMain->MsgOutput(szBuf, 0xffffff00);
-
 	UISkillCooldownList::iterator itr;
 	unsigned long diff = ULONG_MAX;
 	itr = CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.find(pUISkill->pSkill->dwID);
