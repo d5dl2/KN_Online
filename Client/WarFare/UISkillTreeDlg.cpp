@@ -352,6 +352,7 @@ bool CUISkillTreeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 	break;
 
 	case UIMSG_ICON_DOWN_FIRST:
+	{
 		// Get Item..
 		spSkill = GetHighlightIconItem((CN3UIIcon*)pSender);
 
@@ -379,7 +380,7 @@ bool CUISkillTreeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 		CN3UIWndBase::m_sSkillSelectInfo.UIWnd = UIWND_SKILL_TREE;
 		CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = spSkillCopy;
 		break;
-
+	}
 	case UIMSG_ICON_DOWN:
 		if (GetState() == UI_STATE_ICON_MOVING)
 		{
@@ -392,50 +393,31 @@ bool CUISkillTreeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 		break;
 
 	case UIMSG_ICON_UP:
-		// Hot Key 윈도우를 돌아 다니면서 검사..
 	{
-		CUIHotKeyDlg* pDlg = CGameProcedure::s_pProcMain->m_pUIHotKeyDlg;
-		if (!IsIn(ptCur.x, ptCur.y) && pDlg->IsIn(ptCur.x, ptCur.y))
+		spSkillCopy = CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo;
+		if (spSkillCopy)
 		{
-			if (!pDlg->IsSelectedSkillInRealIconArea())
-			{
-				// 리소스 Free..
-				spSkill = CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo;
-				if (spSkill)
-				{
-					// 매니저에서 제거..
-					RemoveChild(spSkill->pUIIcon);
+			CUIHotKeyDlg* pDlg = CGameProcedure::s_pProcMain->m_pUIHotKeyDlg;
 
-					// 리소스 제거..
-					spSkill->pUIIcon->Release();
-					delete spSkill->pUIIcon;
-					spSkill->pUIIcon = NULL;
-					delete spSkill;
-					spSkill = NULL;
-				}
+			if (!IsIn(ptCur.x, ptCur.y) && pDlg->IsIn(ptCur.x, ptCur.y) && pDlg->IsSelectedSkillInRealIconArea() && CheckSkillCanBeUse(spSkillCopy->pSkill))
+			{
+				int iIndex = pDlg->GetAreaiOrder();
+
+				pDlg->SetReceiveSelectedSkill(iIndex);
+
+				CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = NULL;
+				pDlg->CloseIconRegistry();
+			}
+			else
+			{
+				RemoveChild(spSkillCopy->pUIIcon);
+				spSkillCopy->pUIIcon->Release();
+				delete spSkillCopy->pUIIcon;
+				spSkillCopy->pUIIcon = NULL;
+				delete spSkillCopy;
+				spSkillCopy = NULL;
 			}
 		}
-		else
-		{
-			// 리소스 Free..
-			spSkill = CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo;
-			if (spSkill)
-			{
-				// 매니저에서 제거..
-				RemoveChild(spSkill->pUIIcon);
-
-				// 리소스 제거..
-				spSkill->pUIIcon->Release();
-				delete spSkill->pUIIcon;
-				spSkill->pUIIcon = NULL;
-				delete spSkill;
-				spSkill = NULL;
-			}
-		}
-
-		CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = NULL;
-		SetState(UI_STATE_COMMON_NONE);
-		pDlg->CloseIconRegistry();
 	}
 	break;
 
@@ -726,7 +708,7 @@ void CUISkillTreeDlg::CheckButtonTooltipRenderEnable()
 	case NATION_ELMORAD:
 		rect[SKILL_DEF_SPECIAL0] = ((CN3UIButton*)GetChildByID("btn_blade0"))->GetClickRect();
 		rect[SKILL_DEF_SPECIAL1] = ((CN3UIButton*)GetChildByID("btn_blade1"))->GetClickRect();
-		rect[SKILL_DEF_SPECIAL2] = ((CN3UIButton*)GetChildByID("btn_blade2"))->GetClickRect();		
+		rect[SKILL_DEF_SPECIAL2] = ((CN3UIButton*)GetChildByID("btn_blade2"))->GetClickRect();
 		break;
 	case NATION_KARUS:
 		rect[SKILL_DEF_SPECIAL0] = ((CN3UIButton*)GetChildByID("btn_berserker0"))->GetClickRect();
