@@ -229,10 +229,18 @@ void CGameProcedure::StaticMemberRelease()
 	}
 #endif // #ifndef _DEBUG
 
-
-	delete s_pSocket; s_pSocket = NULL; // Åë½Å ²÷±â..
-	delete s_pSocketSub; s_pSocketSub = NULL; // ¼­ºê ¼ÒÄÏ ¾ø¾Ö±â..
-	delete s_pFX; s_pFX = NULL;
+	if (s_pSocket)
+	{
+		delete s_pSocket; s_pSocket = NULL; // Åë½Å ²÷±â..
+	}
+	if (s_pSocketSub)
+	{
+		delete s_pSocketSub; s_pSocketSub = NULL; // ¼­ºê ¼ÒÄÏ ¾ø¾Ö±â..
+	}
+	if (s_pFX)
+	{
+		delete s_pFX; s_pFX = NULL;
+	}
 
 	////////////////////////////////////////////////////////////
 	// ±âº»°ª ¾²±â..
