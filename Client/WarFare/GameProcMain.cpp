@@ -1121,7 +1121,7 @@ bool CGameProcMain::ProcessPacket(Packet& pkt)
 		else
 		{
 			char szBuffer[128];
-			sprintf(szBuffer, "Unhandled packet. Opcode: 0x%02x", iCmd);
+			sprintf(szBuffer, "WIZ_EFFECT packet, skillID not found: %d", skillId);
 
 			std::string szMessage = szBuffer;
 			m_pUIChatDlg->AddChatMsg(N3_CHAT_NORMAL, szMessage, 0xffff0000);
