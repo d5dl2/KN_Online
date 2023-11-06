@@ -1106,6 +1106,8 @@ bool CGameProcMain::ProcessPacket(Packet& pkt)
 	{
 		uint8_t authority = pkt.read<uint8_t>();
 		s_pPlayer->m_InfoBase.iAuthority = authority;
+		if (authority != AUTHORITY_MANAGER)
+			MsgSend_SpeedCheck(true);
 		return true;
 	}
 	case WIZ_EFFECT:

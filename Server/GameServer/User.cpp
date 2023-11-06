@@ -3660,6 +3660,9 @@ void CUser::SpeedHackTime(Packet & pkt)
 	if (!isInGame() || isGM())
 		return;
 
+	uint8_t b_first;
+	pkt >> b_first;
+
 	float nSpeed = 45.0f;
 
 	if (GetFame() == COMMAND_CAPTAIN || isRogue())
@@ -3671,7 +3674,7 @@ void CUser::SpeedHackTime(Packet & pkt)
 
 	float nRange = (pow(GetX() - m_LastX, 2.0f) + pow(GetZ() - m_LastZ, 2.0f)) / 100.0f;
 
-	if (nRange >= nSpeed)
+	if (nRange >= nSpeed && !b_first)
 	{
 		DateTime time;
 		g_pMain->WriteCheatLogFile(string_format("[ SpeedHack - %d:%d:%d ] %s is Warp to Last Position.\n", time.GetHour(),time.GetMinute(),time.GetSecond(),GetName().c_str()));
