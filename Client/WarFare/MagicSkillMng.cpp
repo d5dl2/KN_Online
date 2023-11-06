@@ -22,6 +22,9 @@
 #include "N3SndObjStream.h"
 #include "N3ShapeExtra.h"
 
+
+#define PLAYER_SKILL_REQUEST_INTERVAL	0.7f
+
 //#include "StdAfxBase.h"
 
 #ifdef _DEBUG
@@ -175,20 +178,20 @@ CMagicSkillMng::~CMagicSkillMng()
 bool CMagicSkillMng::IsCasting()
 {
 	bool result = s_pPlayer->State() == PSA_SPELLMAGIC ||
-		m_iCurrStep != 0 ||
+		//m_iCurrStep != 0 ||
 		s_pPlayer->m_dwMagicID != 0xffffffff ||
 		s_pPlayer->m_bStun == true ||
 		m_fDelay > 0.0f;
 
 	if (result)
 	{
-	TRACE("Result: %d, State : %d, CurrStep : %d, MagicId : %d, Stun : %d, Delay : %.4f",
-		result,
-		s_pPlayer->State(),
-		m_iCurrStep,
-		s_pPlayer->m_dwMagicID,
-		s_pPlayer->m_bStun,
-		m_fDelay);
+		TRACE("Result: %d, State : %d, CurrStep : %d, MagicId : %d, Stun : %d, Delay : %.4f",
+			result,
+			s_pPlayer->State(),
+			m_iCurrStep,
+			s_pPlayer->m_dwMagicID,
+			s_pPlayer->m_bStun,
+			m_fDelay);
 	}
 	return result;
 }
@@ -587,25 +590,7 @@ bool CMagicSkillMng::CheckValidCondition(int iTargetID, __TABLE_UPC_SKILL* pSkil
 			m_pGameProcMain->MsgOutput(buff, 0xffffff00);
 			return false;
 		}
-	}
-
-	if (pSkill->dw1stTableType == 1 || pSkill->dw1stTableType == 2)
-	{
-		if (Class == CLASS_REPRESENT_WARRIOR || Class == CLASS_REPRESENT_ROGUE)
-		{
-			int ExhaustSP = pInfoExt->iAttack * pSkill->iExhaustMSP / 100;
-			if (pInfoExt->iMSP < ExhaustSP)
-			{
-				std::string buff;
-				::_LoadStringFromResource(IDS_SKILL_FAIL_LACK_SP, buff);
-				m_pGameProcMain->MsgOutput(buff, 0xffffff00);
-				return false;
-			}
-		}
-	}
-	else if (pInfoExt->iMSP < pSkill->iExhaustMSP)
-	{
-		if (Class == CLASS_REPRESENT_WARRIOR || Class == CLASS_REPRESENT_ROGUE)
+		else
 		{
 			std::string buff;
 			::_LoadStringFromResource(IDS_SKILL_FAIL_LACK_SP, buff);
@@ -966,7 +951,7 @@ bool CMagicSkillMng::CheckValidCondition(int iTargetID, __TABLE_UPC_SKILL* pSkil
 			if (m_fAttackSpeed != 1.0f) return false;
 			break;
 		case BUFFTYPE_SPEED:
-			if (m_fSpeed != 1.0f) return false;
+			//if (m_fSpeed != 1.0f) return false;
 			break;
 		case BUFFTYPE_ABILITY:
 			if (m_iStr != 0 || m_iSta != 0 || m_iDex != 0 || m_iInt != 0 || m_iMAP != 0) return false;
@@ -1462,13 +1447,13 @@ void CMagicSkillMng::StartSkillMagicAtTargetPacket(__TABLE_UPC_SKILL* pSkill, in
 		CGameProcedure::s_pFX->TriggerBundle(SourceID, spart1, pSkill->iSelfFX1, SourceID, spart1, -1);
 		if (spart2 != 0) CGameProcedure::s_pFX->TriggerBundle(SourceID, spart2, pSkill->iSelfFX1, SourceID, spart2, -2);
 		if (pSkill->iReCastTime != 0) {
-			CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
+			CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, CN3Base::TimeGet()));
 		}
 		return;
 	}
 	else if (pSkill->iCastTime <= 0 && pSkill->iReCastTime > 0)
 	{
-		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
+		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, CN3Base::TimeGet()));
 	}
 
 	m_pGameProcMain->CommandSitDown(false, false); // 혹시라도 앉아있음 일으켜 세운다..
@@ -1706,7 +1691,7 @@ void CMagicSkillMng::SuccessCast(__TABLE_UPC_SKILL* pSkill, CPlayerBase* pTarget
 {
 
 	if (pSkill->iReCastTime != 0) {
-		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, timeGetTime()));
+		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, CN3Base::TimeGet()));
 	}
 	s_pPlayer->m_dwMagicID = 0xffffffff;
 	s_pPlayer->m_fCastingTime = 0.0f;
@@ -1929,7 +1914,7 @@ void CMagicSkillMng::ProcessCasting()
 void CMagicSkillMng::ProcessCombo()
 {
 	//만약 콤보동작중 하나의 동작이 끝났다면...=^^=
-	if (m_fComboTime > (s_pPlayer->m_fAttackDelta * .8f)) //s_pPlayer->IsAnimationChange())
+	if (m_fComboTime > (s_pPlayer->m_fAttackDelta * PLAYER_SKILL_REQUEST_INTERVAL)) //s_pPlayer->IsAnimationChange())
 	{
 		if (m_iCurrStep == m_iNumStep)//콤보공격 끝났다..
 		{

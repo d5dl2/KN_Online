@@ -16,7 +16,7 @@
 
 typedef std::map<int, uint32_t>::value_type stlmapVAL_INT_DWORD;
 typedef std::multimap<int, uint32_t>::value_type stlmultimapVAL_INT_DWORD;
-typedef	std::map<uint32_t, unsigned long> UISkillCooldownList;
+typedef	std::map<uint32_t, float> UISkillCooldownList;
 
 class CMagicSkillMng : public CGameBase
 {

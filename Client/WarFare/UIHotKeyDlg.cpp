@@ -319,12 +319,11 @@ void CUIHotKeyDlg::Render()
 			UISkillCooldownList::iterator itr;
 			itr = CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.find(m_pMyHotkey[m_iCurPage][k]->pSkill->dwID);
 			if (itr != CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.end()) {
-				int recasttime = m_pMyHotkey[m_iCurPage][k]->pSkill->iReCastTime * 100;
-				DWORD t = timeGetTime();
-				DWORD diff = t - itr->second;
+				float recasttime = m_pMyHotkey[m_iCurPage][k]->pSkill->iReCastTime / 10;
+				float t = CN3Base::TimeGet();
+				float diff = t - itr->second;
 				if (diff > recasttime) diff = recasttime;
 				cd = (((recasttime - diff) / (float)recasttime) * 100);
-				DWORD a = timeGetTime();
 			}
 			m_pMyHotkey[m_iCurPage][k]->pUIIcon->SetStyleAsCooldown(cd);
 
@@ -736,12 +735,14 @@ void CUIHotKeyDlg::DoOperate(__IconItemSkill*	pUISkill)
 	if(!pUISkill) return;
 
 	UISkillCooldownList::iterator itr;
-	unsigned long diff = ULONG_MAX;
+	bool skillCanBeUse = true;
+	float diff = 1;
 	itr = CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.find(pUISkill->pSkill->dwID);
 	if (itr != CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.end()) {
-		diff = timeGetTime() - itr->second;
+		diff = CN3Base::TimeGet() - itr->second;
+		skillCanBeUse = diff > pUISkill->pSkill->iReCastTime / 10.0;
 	}
-	if (diff > (pUISkill->pSkill->iReCastTime * 100)) {
+	if (skillCanBeUse) {
 		if (pUISkill->pSkill->iReCastTime != 0) {
 			CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.erase(pUISkill->pSkill->dwID);
 		}
