@@ -180,7 +180,8 @@ bool CMagicSkillMng::IsCasting()
 		s_pPlayer->m_bStun == true ||
 		m_fDelay > 0.0f;
 
-
+	if (result)
+	{
 	TRACE("Result: %d, State : %d, CurrStep : %d, MagicId : %d, Stun : %d, Delay : %.4f",
 		result,
 		s_pPlayer->State(),
@@ -188,6 +189,7 @@ bool CMagicSkillMng::IsCasting()
 		s_pPlayer->m_dwMagicID,
 		s_pPlayer->m_bStun,
 		m_fDelay);
+	}
 	return result;
 }
 
@@ -1135,7 +1137,11 @@ bool CMagicSkillMng::MsgSend_MagicProcess(int iTargetID, __TABLE_UPC_SKILL* pSki
 	}
 
 
-	if (!CheckValidCondition(iTargetID, pSkill)) return false;
+	if (!CheckValidCondition(iTargetID, pSkill))
+	{
+		TRACE("Unvalid condition for skill: %s", pSkill->szName.c_str());
+		return false;
+	}
 
 	__InfoPlayerBase* pInfoBase = &(s_pPlayer->m_InfoBase);
 	__InfoPlayerMySelf* pInfoExt = &(s_pPlayer->m_InfoExt);
