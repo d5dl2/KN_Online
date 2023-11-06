@@ -178,6 +178,7 @@
 #define IDS_MSG_FMT_EXP_GET             3007
 #define IDS_MSG_FMT_EXP_LOST            3008
 #define IDS_MSG_FMT_HP_LOST             3009
+#define IDS_MSG_FMT_HP_LOST_FROM_PLAYER	4557
 #define IDS_MSG_FMT_HP_RECOVER          3010
 #define IDS_MSG_FMT_MP_RECOVER          3011
 #define IDS_MSG_FMT_MP_USE              3012

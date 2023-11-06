@@ -3563,14 +3563,25 @@ void CGameProcMain::MsgRecv_MyInfo_HP(Packet& pkt)
 {
 	int iHPMax = pkt.read<int16_t>();
 	int iHP = pkt.read<int16_t>();
-
+	uint16_t attackerId = pkt.read< uint16_t>();
 	int iHPChange = iHP - s_pPlayer->m_InfoBase.iHP;
 	char szBuf[256] = "";
 	if (iHPChange < 0)
 	{
-		std::string szFmt; ::_LoadStringFromResource(IDS_MSG_FMT_HP_LOST, szFmt);
-		sprintf(szBuf, szFmt.c_str(), -iHPChange);
-		MsgOutput(szBuf, 0xffff3b3b);
+		CPlayerBase* pAttacker = CGameProcedure::s_pProcMain->CharacterGetByID(attackerId, false);
+
+		if (pAttacker)
+		{
+			std::string szFmt; ::_LoadStringFromResource(IDS_MSG_FMT_HP_LOST_FROM_PLAYER, szFmt);
+			sprintf(szBuf, szFmt.c_str(), pAttacker->m_InfoBase.szID.c_str(), -iHPChange);
+			MsgOutput(szBuf, 0xffff3b3b);
+		}
+		else
+		{
+			std::string szFmt; ::_LoadStringFromResource(IDS_MSG_FMT_HP_LOST, szFmt);
+			sprintf(szBuf, szFmt.c_str(), -iHPChange);
+			MsgOutput(szBuf, 0xffff3b3b);
+		}		
 	}
 	else if (iHPChange > 0)
 	{
