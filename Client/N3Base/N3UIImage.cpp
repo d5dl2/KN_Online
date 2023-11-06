@@ -38,7 +38,7 @@ CN3UIImage::~CN3UIImage()
 }
 
 D3DVERTEX2* CN3UIImage::v_coordinates = new D3DVERTEX2[17];
-#define COOLDOWN_COLOR_BLACK D3DCOLOR_RGBA(0, 0, 0, 200)
+#define COOLDOWN_COLOR_BLACK D3DCOLOR_RGBA(245, 40, 145, 155)
 
 void CN3UIImage::Release()
 {
@@ -283,8 +283,8 @@ void CN3UIImage::RenderIconWrapperWithCd(float percent)
 			vertexData[vertexCount + 3] = d_nextIndex;
 			vertexData[vertexCount + 2].x += 0.1f;
 		}
-
-		s_lpD3DDev->SetFVF(FVF_TRANSFORMED);
+		s_lpD3DDev->SetTexture(0, NULL);
+		s_lpD3DDev->SetFVF(FVF_TRANSFORMEDCOLOR);
 		s_lpD3DDev->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, vertexCount + 2, vertexData, sizeof(D3DVERTEX2));
 
 

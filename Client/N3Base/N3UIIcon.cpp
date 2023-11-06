@@ -178,10 +178,7 @@ void CN3UIIcon::Render()
 	{
 		CN3UIWndBase::m_pSelectionImage->SetVisible(true);
 		CN3UIWndBase::m_pSelectionImage->SetRegion(GetRegion());
-		m_dc = CN3UIWndBase::m_pSelectionImage->GetColor();
-		CN3UIWndBase::m_pSelectionImage->SetColor(D3DCOLOR_RGBA(200, 20, 20, 100));
 		CN3UIWndBase::m_pSelectionImage->RenderIconWrapperWithCd(cd);
-		CN3UIWndBase::m_pSelectionImage->SetColor(m_dc);
 		CN3UIWndBase::m_pSelectionImage->SetVisible(false);
 	}
 }
