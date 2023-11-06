@@ -286,12 +286,6 @@ bool CUISkillTreeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 		*/
 	}
 
-	// Temp Define
-#define FAIL_CODE {		\
-				SetState(UI_STATE_COMMON_NONE);	\
-				return false;	\
-			}
-
 	__IconItemSkill* spSkill, * spSkillCopy;
 
 	uint32_t dwLBitMask = 0x000f0000;
@@ -394,9 +388,10 @@ bool CUISkillTreeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 
 	case UIMSG_ICON_UP:
 	{
-		spSkillCopy = CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo;
-		if (spSkillCopy)
+		if (CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo)
 		{
+			spSkillCopy = CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo;
+
 			CUIHotKeyDlg* pDlg = CGameProcedure::s_pProcMain->m_pUIHotKeyDlg;
 
 			if (!IsIn(ptCur.x, ptCur.y) && pDlg->IsIn(ptCur.x, ptCur.y) && pDlg->IsSelectedSkillInRealIconArea() && CheckSkillCanBeUse(spSkillCopy->pSkill))
@@ -405,7 +400,7 @@ bool CUISkillTreeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 
 				pDlg->SetReceiveSelectedSkill(iIndex);
 
-				CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = NULL;
+				spSkillCopy = NULL;
 				pDlg->CloseIconRegistry();
 			}
 			else
@@ -418,6 +413,8 @@ bool CUISkillTreeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 				spSkillCopy = NULL;
 			}
 		}
+		CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = NULL;
+		SetState(UI_STATE_COMMON_NONE);
 	}
 	break;
 
