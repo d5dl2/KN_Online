@@ -47,3 +47,4 @@ bin/
 Client/data/Log.txt
 Client/data/*.exe
 *.aps
+*.zip
