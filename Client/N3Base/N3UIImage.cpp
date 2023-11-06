@@ -7,7 +7,7 @@
 
 #ifdef _DEBUG
 #undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
+static char THIS_FILE[] = __FILE__;
 #endif
 
 //////////////////////////////////////////////////////////////////////
@@ -24,7 +24,7 @@ CN3UIImage::CN3UIImage()
 	m_pAnimImagesRef = NULL;
 
 	ZeroMemory(&m_frcUVRect, sizeof(m_frcUVRect));
-	m_Color = D3DCOLOR_ARGB(0xff,0xff,0xff,0xff);
+	m_Color = D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff);
 	m_fAnimFrame = 30.0f;
 	m_iAnimCount = 0;
 	m_fCurAnimFrame = 0.0f;
@@ -32,9 +32,9 @@ CN3UIImage::CN3UIImage()
 
 CN3UIImage::~CN3UIImage()
 {
-	if(m_pVB) {	m_pVB->Release();	m_pVB = NULL;}
+	if (m_pVB) { m_pVB->Release();	m_pVB = NULL; }
 	s_MngTex.Delete(&m_pTexRef);
-	if (m_pAnimImagesRef) {delete [] m_pAnimImagesRef; m_pAnimImagesRef = NULL;}
+	if (m_pAnimImagesRef) { delete[] m_pAnimImagesRef; m_pAnimImagesRef = NULL; }
 }
 
 D3DVERTEX2* CN3UIImage::v_coordinates = new D3DVERTEX2[17];
@@ -43,16 +43,16 @@ D3DVERTEX2* CN3UIImage::v_coordinates = new D3DVERTEX2[17];
 void CN3UIImage::Release()
 {
 	CN3UIBase::Release();
-	if(m_pVB) {	m_pVB->Release();	m_pVB = NULL;}
+	if (m_pVB) { m_pVB->Release();	m_pVB = NULL; }
 	s_MngTex.Delete(&m_pTexRef);
 	m_szTexFN = "";
 
 	ZeroMemory(&m_frcUVRect, sizeof(m_frcUVRect));
-	m_Color = D3DCOLOR_ARGB(0xff,0xff,0xff,0xff);
+	m_Color = D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff);
 	m_fAnimFrame = 30.0f;
 	m_iAnimCount = 0;
 	m_fCurAnimFrame = 0.0f;
-	if (m_pAnimImagesRef) {delete [] m_pAnimImagesRef; m_pAnimImagesRef = NULL;}
+	if (m_pAnimImagesRef) { delete[] m_pAnimImagesRef; m_pAnimImagesRef = NULL; }
 }
 
 void CN3UIImage::Init(CN3UIBase* pParent)
@@ -65,32 +65,32 @@ void CN3UIImage::Init(CN3UIBase* pParent)
 bool CN3UIImage::CreateVB()
 {
 	HRESULT hr;
-	if (m_pVB) {m_pVB->Release(); m_pVB = NULL;}
-	hr = s_lpD3DDev->CreateVertexBuffer( 4*sizeof(__VertexTransformed), 0, FVF_TRANSFORMED, D3DPOOL_MANAGED, &m_pVB , NULL);
+	if (m_pVB) { m_pVB->Release(); m_pVB = NULL; }
+	hr = s_lpD3DDev->CreateVertexBuffer(4 * sizeof(__VertexTransformed), 0, FVF_TRANSFORMED, D3DPOOL_MANAGED, &m_pVB, NULL);
 	return SUCCEEDED(hr);
 }
-	
+
 void CN3UIImage::initCoordinateArray() {
 
 	if (v_coordinates[0].x == 16) return;
 
-		v_coordinates[0].Set(16,16,		0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[1].Set(0,0,		0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[2].Set(16,0,		0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[3].Set(0,16,		0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[4].Set(0,0,		0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[5].Set(0,32,		0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[6].Set(0,16,		0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[7].Set(16,32,		0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[8].Set(0,32,		0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[9].Set(32,32,		0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[10].Set(16,32,	0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[11].Set(32,16,	0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[12].Set(32,32,	0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[13].Set(32,0,		0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[14].Set(32,16,	0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[15].Set(32,0,		0.9f,1.0f, COOLDOWN_COLOR_BLACK);
-		v_coordinates[16].Set(32,0,		0.9f,1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[0].Set(16, 16, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[1].Set(0, 0, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[2].Set(16, 0, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[3].Set(0, 16, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[4].Set(0, 0, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[5].Set(0, 32, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[6].Set(0, 16, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[7].Set(16, 32, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[8].Set(0, 32, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[9].Set(32, 32, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[10].Set(16, 32, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[11].Set(32, 16, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[12].Set(32, 32, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[13].Set(32, 0, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[14].Set(32, 16, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[15].Set(32, 0, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
+	v_coordinates[16].Set(32, 0, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
 
 }
 
@@ -99,23 +99,23 @@ void CN3UIImage::SetVB()
 {
 	if (UISTYLE_IMAGE_ANIMATE & m_dwStyle)	// animate image이면 vertex buffer release하기
 	{
-		if (m_pVB) {m_pVB->Release(); m_pVB = NULL;}
+		if (m_pVB) { m_pVB->Release(); m_pVB = NULL; }
 	}
 	else
 	{
-		if(m_pVB)
+		if (m_pVB)
 		{
 			__VertexTransformed* pVertices;
-			m_pVB->Lock( 0, 0, (void**)&pVertices, 0 );
+			m_pVB->Lock(0, 0, (void**)&pVertices, 0);
 
 			uint32_t dwColor = 0xffffffff;
 			float fRHW = 1.0f;
 			// -0.5f를 해주지 않으면 가끔 이미지가 한 돗트씩 밀리는 경우가 있다.(왜 그런지는 확실하게 모르겠음)
-			pVertices[0].Set((float)m_rcRegion.left-0.5f,	(float)m_rcRegion.top-0.5f,		UI_DEFAULT_Z, fRHW, m_Color, m_frcUVRect.left,		m_frcUVRect.top);
-			pVertices[1].Set((float)m_rcRegion.right-0.5f,	(float)m_rcRegion.top-0.5f,		UI_DEFAULT_Z, fRHW, m_Color, m_frcUVRect.right,	m_frcUVRect.top);
-			pVertices[2].Set((float)m_rcRegion.right-0.5f,	(float)m_rcRegion.bottom-0.5f,	UI_DEFAULT_Z, fRHW, m_Color, m_frcUVRect.right,	m_frcUVRect.bottom);
-			pVertices[3].Set((float)m_rcRegion.left-0.5f,	(float)m_rcRegion.bottom-0.5f,	UI_DEFAULT_Z, fRHW, m_Color, m_frcUVRect.left,		m_frcUVRect.bottom);
-			
+			pVertices[0].Set((float)m_rcRegion.left - 0.5f, (float)m_rcRegion.top - 0.5f, UI_DEFAULT_Z, fRHW, m_Color, m_frcUVRect.left, m_frcUVRect.top);
+			pVertices[1].Set((float)m_rcRegion.right - 0.5f, (float)m_rcRegion.top - 0.5f, UI_DEFAULT_Z, fRHW, m_Color, m_frcUVRect.right, m_frcUVRect.top);
+			pVertices[2].Set((float)m_rcRegion.right - 0.5f, (float)m_rcRegion.bottom - 0.5f, UI_DEFAULT_Z, fRHW, m_Color, m_frcUVRect.right, m_frcUVRect.bottom);
+			pVertices[3].Set((float)m_rcRegion.left - 0.5f, (float)m_rcRegion.bottom - 0.5f, UI_DEFAULT_Z, fRHW, m_Color, m_frcUVRect.left, m_frcUVRect.bottom);
+
 			m_pVB->Unlock();
 		}
 	}
@@ -133,7 +133,7 @@ void CN3UIImage::SetTex(const std::string& szFN)
 void CN3UIImage::SetRegion(const RECT& Rect)
 {
 	CN3UIBase::SetRegion(Rect);
-	for(UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
+	for (UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
 	{
 		(*itor)->SetRegion(Rect);
 	}
@@ -150,7 +150,7 @@ void CN3UIImage::SetUVRect(float left, float top, float right, float bottom)
 void CN3UIImage::Tick()
 {
 	CN3UIBase::Tick();
-	if (m_iAnimCount>0)		// Animate Image일때 현재 frame 계산
+	if (m_iAnimCount > 0)		// Animate Image일때 현재 frame 계산
 	{
 		m_fCurAnimFrame += (s_fSecPerFrm * m_fAnimFrame);
 		while (m_fCurAnimFrame >= (float)m_iAnimCount)
@@ -162,11 +162,11 @@ void CN3UIImage::Tick()
 
 void CN3UIImage::Render()
 {
-	if(!m_bVisible) return;
+	if (!m_bVisible) return;
 
 	if (UISTYLE_IMAGE_ANIMATE & m_dwStyle) // Animate되는 이미지이면
 	{
-		__ASSERT(m_fCurAnimFrame>=0.0f && m_fCurAnimFrame < (float)m_iAnimCount, "animate image 가 이상작동");
+		__ASSERT(m_fCurAnimFrame >= 0.0f && m_fCurAnimFrame < (float)m_iAnimCount, "animate image 가 이상작동");
 		__ASSERT(m_pAnimImagesRef, "초기화 이상");
 		m_pAnimImagesRef[(int)m_fCurAnimFrame]->Render();
 	}
@@ -174,16 +174,16 @@ void CN3UIImage::Render()
 	{
 		if (m_pVB && m_pTexRef)
 		{
-			s_lpD3DDev->SetStreamSource( 0, m_pVB, 0, sizeof(__VertexTransformed) );
+			s_lpD3DDev->SetStreamSource(0, m_pVB, 0, sizeof(__VertexTransformed));
 			s_lpD3DDev->SetFVF(FVF_TRANSFORMED);
 
-			s_lpD3DDev->SetTexture( 0, m_pTexRef->Get());
-			s_lpD3DDev->SetTextureStageState( 0, D3DTSS_COLOROP,    D3DTOP_MODULATE );
-			s_lpD3DDev->SetTextureStageState( 0, D3DTSS_COLORARG1,  D3DTA_TEXTURE );
-			s_lpD3DDev->SetTextureStageState( 0, D3DTSS_COLORARG2,  D3DTA_DIFFUSE );
+			s_lpD3DDev->SetTexture(0, m_pTexRef->Get());
+			s_lpD3DDev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+			s_lpD3DDev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+			s_lpD3DDev->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
 
-			s_lpD3DDev->DrawPrimitive( D3DPT_TRIANGLEFAN, 0, 2);
-		} 
+			s_lpD3DDev->DrawPrimitive(D3DPT_TRIANGLEFAN, 0, 2);
+		}
 
 		CN3UIBase::Render();
 	}
@@ -191,15 +191,15 @@ void CN3UIImage::Render()
 
 void CN3UIImage::RenderIconWrapper()
 {
-	if(!m_bVisible) return;
+	if (!m_bVisible) return;
 
 	if (m_pVB)
 	{
-		s_lpD3DDev->SetStreamSource( 0, m_pVB, 0, sizeof(__VertexTransformed) );
+		s_lpD3DDev->SetStreamSource(0, m_pVB, 0, sizeof(__VertexTransformed));
 		s_lpD3DDev->SetFVF(FVF_TRANSFORMED);
-		s_lpD3DDev->SetTexture( 0, NULL);
+		s_lpD3DDev->SetTexture(0, NULL);
 
-		s_lpD3DDev->DrawPrimitive( D3DPT_TRIANGLEFAN, 0, 2);
+		s_lpD3DDev->DrawPrimitive(D3DPT_TRIANGLEFAN, 0, 2);
 	}
 
 	CN3UIBase::Render();
@@ -212,15 +212,15 @@ void CN3UIImage::RenderIconWrapperWithCd(float percent)
 	if (m_pVB)
 	{
 		int pointCount = (percent) / 12.5;
-		int vertexCount = pointCount *2 +1;
+		int vertexCount = pointCount * 2 + 1;
 		float cx, cy;
-		D3DVERTEX2* vertexData = new D3DVERTEX2[vertexCount+4];
+		D3DVERTEX2* vertexData = new D3DVERTEX2[vertexCount + 4];
 
 		for (int i = 0; i < vertexCount; i++) {
 			vertexData[i] = v_coordinates[i];
 			vertexData[i].x += (float)m_rcRegion.left;
 			vertexData[i].y += (float)m_rcRegion.top;
-		} 
+		}
 
 
 		if (percent <= 87.5 && percent > 62.5) {
@@ -231,9 +231,9 @@ void CN3UIImage::RenderIconWrapperWithCd(float percent)
 			vertexData[vertexCount + 1].y += (float)m_rcRegion.top;
 			D3DVERTEX2 d_nextIndex = { cx + (float)m_rcRegion.left, cy - 0.1f + (float)m_rcRegion.top, UI_DEFAULT_Z,1.0f, COOLDOWN_COLOR_BLACK };
 			vertexData[vertexCount] = d_nextIndex;
-			vertexData[vertexCount+2] = d_nextIndex;
-			vertexData[vertexCount+3] = d_nextIndex;
-			vertexData[vertexCount+2].y += 0.1f;
+			vertexData[vertexCount + 2] = d_nextIndex;
+			vertexData[vertexCount + 3] = d_nextIndex;
+			vertexData[vertexCount + 2].y += 0.1f;
 		}
 		if (percent <= 62.5 && percent > 37.5) {
 			cx = 32 * (1 - (float)((25 - (percent - 37.5)) / 25));
@@ -272,7 +272,7 @@ void CN3UIImage::RenderIconWrapperWithCd(float percent)
 			vertexData[vertexCount + 2].x += 0.1f;
 		}
 		if (percent > 87.5) {
-			cx = 32*(0.5 + (float)((12.5 - (percent - 87.5)) / 25));
+			cx = 32 * (0.5 + (float)((12.5 - (percent - 87.5)) / 25));
 			cy = 0;
 			vertexData[vertexCount + 1] = v_coordinates[vertexCount + 1];
 			vertexData[vertexCount + 1].x += (float)m_rcRegion.left;
@@ -281,11 +281,11 @@ void CN3UIImage::RenderIconWrapperWithCd(float percent)
 			vertexData[vertexCount] = d_nextIndex;
 			vertexData[vertexCount + 2] = d_nextIndex;
 			vertexData[vertexCount + 3] = d_nextIndex;
-			vertexData[vertexCount + 2].x += 0.1f;	
+			vertexData[vertexCount + 2].x += 0.1f;
 		}
 
 		s_lpD3DDev->SetFVF(FVF_TRANSFORMED);
-		s_lpD3DDev->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, vertexCount+2, vertexData, sizeof(D3DVERTEX2));
+		s_lpD3DDev->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, vertexCount + 2, vertexData, sizeof(D3DVERTEX2));
 
 
 		delete[] vertexData;
@@ -309,7 +309,7 @@ void CN3UIImage::SetColor(D3DCOLOR color)
 	if ((UISTYLE_IMAGE_ANIMATE & m_dwStyle) && m_pAnimImagesRef)
 	{
 		int i;
-		for(i=0; i<m_iAnimCount; ++i) m_pAnimImagesRef[i]->SetColor(color);
+		for (i = 0; i < m_iAnimCount; ++i) m_pAnimImagesRef[i]->SetColor(color);
 	}
 	SetVB();
 }
@@ -323,31 +323,31 @@ bool CN3UIImage::Load(HANDLE hFile)
 	int	iStrLen = 0;
 	ReadFile(hFile, &iStrLen, sizeof(iStrLen), &dwNum, NULL);			// 파일 이름 길이
 	char szFName[MAX_PATH] = "";
-	if (iStrLen>0)
+	if (iStrLen > 0)
 	{
 		ReadFile(hFile, szFName, iStrLen, &dwNum, NULL);		// 파일 이름
-		szFName[iStrLen]='\0';
+		szFName[iStrLen] = '\0';
 		this->SetTex(szFName);
-	} 
+	}
 
 	ReadFile(hFile, &m_frcUVRect, sizeof(m_frcUVRect), &dwNum, NULL);	// uv좌표
 	ReadFile(hFile, &m_fAnimFrame, sizeof(m_fAnimFrame), &dwNum, NULL);
 
 	// Animate 되는 image이면 관련된 변수 세팅
 	m_iAnimCount = 0; // animate image 수 정하기
-	for(UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
+	for (UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
 	{
-		if(UI_TYPE_IMAGE == (*itor)->UIType()) m_iAnimCount++;
+		if (UI_TYPE_IMAGE == (*itor)->UIType()) m_iAnimCount++;
 	}
 
 	if ((UISTYLE_IMAGE_ANIMATE & m_dwStyle) && m_iAnimCount > 0)
 	{
-		m_pAnimImagesRef = new CN3UIImage*[m_iAnimCount];
-		ZeroMemory(m_pAnimImagesRef, sizeof(CN3UIImage*)*m_iAnimCount);
-		int i=0;
-		for(UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
+		m_pAnimImagesRef = new CN3UIImage * [m_iAnimCount];
+		ZeroMemory(m_pAnimImagesRef, sizeof(CN3UIImage*) * m_iAnimCount);
+		int i = 0;
+		for (UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
 		{
-			if(UI_TYPE_IMAGE == (*itor)->UIType()) m_pAnimImagesRef[i] = (CN3UIImage*)(*itor);
+			if (UI_TYPE_IMAGE == (*itor)->UIType()) m_pAnimImagesRef[i] = (CN3UIImage*)(*itor);
 			__ASSERT(m_pAnimImagesRef[i]->GetReserved() == (uint32_t)i, "animate Image load fail");	// 제대로 정렬이 되지 않았을경우 실패한다.
 			++i;
 		}
@@ -372,12 +372,12 @@ void CN3UIImage::operator = (const CN3UIImage& other)
 
 	// Animate 되는 image이면 관련된 변수 세팅
 	m_iAnimCount = m_Children.size();	// animate image 수 정하기
-	if ((UISTYLE_IMAGE_ANIMATE & m_dwStyle) && m_iAnimCount>0)
+	if ((UISTYLE_IMAGE_ANIMATE & m_dwStyle) && m_iAnimCount > 0)
 	{
-		m_pAnimImagesRef = new CN3UIImage*[m_iAnimCount];
-		ZeroMemory(m_pAnimImagesRef, sizeof(CN3UIImage*)*m_iAnimCount);
-		int i=0;
-		for(UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
+		m_pAnimImagesRef = new CN3UIImage * [m_iAnimCount];
+		ZeroMemory(m_pAnimImagesRef, sizeof(CN3UIImage*) * m_iAnimCount);
+		int i = 0;
+		for (UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
 		{
 			__ASSERT(UI_TYPE_IMAGE == (*itor)->UIType(), "animate image child의 UI type이 image가 아니다.");
 			m_pAnimImagesRef[i] = (CN3UIImage*)(*itor);
@@ -399,7 +399,7 @@ bool CN3UIImage::Save(HANDLE hFile)
 	if (m_pTexRef) m_szTexFN = m_pTexRef->FileName();
 	int iStrLen = m_szTexFN.size();
 	WriteFile(hFile, &iStrLen, sizeof(iStrLen), &dwNum, NULL);			// 파일 길이
-	if (iStrLen>0)	WriteFile(hFile, m_szTexFN.c_str(), iStrLen, &dwNum, NULL);	// 파일 이름
+	if (iStrLen > 0)	WriteFile(hFile, m_szTexFN.c_str(), iStrLen, &dwNum, NULL);	// 파일 이름
 
 	WriteFile(hFile, &m_frcUVRect, sizeof(m_frcUVRect), &dwNum, NULL);		// uv좌표
 	WriteFile(hFile, &m_fAnimFrame, sizeof(m_fAnimFrame), &dwNum, NULL);	// Animate frame
@@ -413,13 +413,13 @@ void CN3UIImage::ChangeImagePath(const std::string& szPathOld, const std::string
 
 	std::string szOld = szPathOld, szNew = szPathNew;
 
-	if(!szOld.empty()) ::CharLower(&(szOld[0]));
-	if(!szNew.empty()) ::CharLower(&(szNew[0]));
-	if(!m_szTexFN.empty()) ::CharLower(&(m_szTexFN[0]));
+	if (!szOld.empty()) ::CharLower(&(szOld[0]));
+	if (!szNew.empty()) ::CharLower(&(szNew[0]));
+	if (!m_szTexFN.empty()) ::CharLower(&(m_szTexFN[0]));
 
-	if(m_pTexRef) m_szTexFN = m_pTexRef->FileName();
+	if (m_pTexRef) m_szTexFN = m_pTexRef->FileName();
 	int i = m_szTexFN.find(szOld);
-	if(i >= 0) 
+	if (i >= 0)
 	{
 		std::string szF = m_szTexFN.substr(0, i);
 		std::string szL = m_szTexFN.substr(i + szOld.size());
@@ -432,9 +432,9 @@ void CN3UIImage::ChangeImagePath(const std::string& szPathOld, const std::string
 void CN3UIImage::GatherImageFileName(std::set<std::string>& setImgFile)
 {
 	CN3UIBase::GatherImageFileName(setImgFile); // child 정보
-	
+
 	std::string szImgFN = m_szTexFN;
-	if(!szImgFN.empty())
+	if (!szImgFN.empty())
 	{
 		::CharLower(&(szImgFN[0]));
 		setImgFile.insert(szImgFN);
@@ -444,34 +444,34 @@ void CN3UIImage::GatherImageFileName(std::set<std::string>& setImgFile)
 // child의 image가 m_dwReserved에 들어가있는 숫자 순서에 맞게 재배치
 void CN3UIImage::ReorderChildImage()
 {
-	if (m_iAnimCount<=0) return;
-	CN3UIBase** pNewList = new CN3UIBase*[m_iAnimCount];
-	ZeroMemory(pNewList, sizeof(CN3UIBase*)*m_iAnimCount);
+	if (m_iAnimCount <= 0) return;
+	CN3UIBase** pNewList = new CN3UIBase * [m_iAnimCount];
+	ZeroMemory(pNewList, sizeof(CN3UIBase*) * m_iAnimCount);
 
 	int i;
-	for (i=0; i<m_iAnimCount; ++i)
+	for (i = 0; i < m_iAnimCount; ++i)
 	{
 		CN3UIBase* pSelChild = NULL;
-		for(UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
+		for (UIListItor itor = m_Children.begin(); m_Children.end() != itor; ++itor)
 		{
 			CN3UIBase* pChild = (*itor);
 			__ASSERT(UI_TYPE_IMAGE == pChild->UIType(), "image가 아닌 child가 있습니다.");
 			if (NULL == pSelChild) pSelChild = pChild;
 			else if (pSelChild->GetReserved() > pChild->GetReserved()) pSelChild = pChild;
 		}
-		__ASSERT(pSelChild,"제일 작은 m_dwReserved를 가진 child가 없다.");
+		__ASSERT(pSelChild, "제일 작은 m_dwReserved를 가진 child가 없다.");
 		pNewList[i] = pSelChild;
 		RemoveChild(pSelChild);
 	}
-	
-	for (i=0; i<m_iAnimCount; ++i) m_Children.push_back(pNewList[i]);	// 작은 순서대로 넣기
 
-	delete [] pNewList;
+	for (i = 0; i < m_iAnimCount; ++i) m_Children.push_back(pNewList[i]);	// 작은 순서대로 넣기
+
+	delete[] pNewList;
 }
 
 CN3UIImage* CN3UIImage::GetChildImage(int iIndex)
 {
-	if (iIndex>=0 && iIndex < m_iAnimCount)	return m_pAnimImagesRef[iIndex];
+	if (iIndex >= 0 && iIndex < m_iAnimCount)	return m_pAnimImagesRef[iIndex];
 	return NULL;
 }
 
@@ -481,11 +481,11 @@ void CN3UIImage::SetAnimImage(int iAnimCount)
 	int i;
 	if (m_pAnimImagesRef)
 	{
-		for (i=0; i<m_iAnimCount; ++i)
+		for (i = 0; i < m_iAnimCount; ++i)
 		{	// 자식 지우기
-			if (m_pAnimImagesRef[i]) {delete m_pAnimImagesRef[i]; m_pAnimImagesRef[i] = NULL;}
+			if (m_pAnimImagesRef[i]) { delete m_pAnimImagesRef[i]; m_pAnimImagesRef[i] = NULL; }
 		}
-		delete [] m_pAnimImagesRef; m_pAnimImagesRef = NULL;
+		delete[] m_pAnimImagesRef; m_pAnimImagesRef = NULL;
 	}
 	m_iAnimCount = iAnimCount;
 
@@ -502,9 +502,9 @@ void CN3UIImage::SetAnimImage(int iAnimCount)
 		s_MngTex.Delete(&m_pTexRef);
 		SetVB();
 
-		m_pAnimImagesRef = new CN3UIImage*[m_iAnimCount];
-		ZeroMemory(m_pAnimImagesRef, sizeof(CN3UIImage*)*m_iAnimCount);
-		for (i=0; i<m_iAnimCount; ++i)
+		m_pAnimImagesRef = new CN3UIImage * [m_iAnimCount];
+		ZeroMemory(m_pAnimImagesRef, sizeof(CN3UIImage*) * m_iAnimCount);
+		for (i = 0; i < m_iAnimCount; ++i)
 		{
 			m_pAnimImagesRef[i] = new CN3UIImage();
 			m_pAnimImagesRef[i]->Init(this);
@@ -541,7 +541,7 @@ bool CN3UIImage::ReplaceAllTextures(const std::string& strFind, const std::strin
 			}
 			else
 			{	// *.tga ->
-				if (lstrcmpi(szFindExt, szTexExt) != 0 ) break;	// 확장자가 같지 않으므로 그냥 리턴
+				if (lstrcmpi(szFindExt, szTexExt) != 0) break;	// 확장자가 같지 않으므로 그냥 리턴
 
 				if (lstrcmpi(szReplaceFName, "*") == 0)	strNew += szTexFName;
 				else strNew += szReplaceFName;
@@ -551,7 +551,7 @@ bool CN3UIImage::ReplaceAllTextures(const std::string& strFind, const std::strin
 		}
 		else
 		{
-			if (lstrcmpi(szFindFName, szTexFName) != 0 ) break;	// 이름이 같지 않으므로 그냥 리턴
+			if (lstrcmpi(szFindFName, szTexFName) != 0) break;	// 이름이 같지 않으므로 그냥 리턴
 
 			if (lstrcmpi(szFindExt, ".*") == 0)
 			{	// abc.* ->
@@ -562,7 +562,7 @@ bool CN3UIImage::ReplaceAllTextures(const std::string& strFind, const std::strin
 			}
 			else
 			{	// 찾는 파일명과 확장자가 지정되어 있을경우 // abc.tga ->
-				if (lstrcmpi(szFindExt, szTexExt) != 0 ) break;	// 확장자가 같지 않으므로 그냥 리턴
+				if (lstrcmpi(szFindExt, szTexExt) != 0) break;	// 확장자가 같지 않으므로 그냥 리턴
 
 				if (lstrcmpi(szReplaceFName, "*") == 0)	strNew += szFindFName;
 				else strNew += szReplaceFName;
