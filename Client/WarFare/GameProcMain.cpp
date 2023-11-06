@@ -3739,7 +3739,7 @@ void CGameProcMain::MsgRecv_MyInfo_RealmPoint(Packet& pkt)
 		{
 			char szBuf[128]; std::string szFmt; ::_LoadStringFromResource(IDS_LOYALTY_CHANGE_LOST, szFmt);
 			sprintf(szBuf, szFmt.c_str(), -iLoyaltyDelta);
-			MsgOutput(szBuf, 0xffff3b3b);
+			MsgOutput(szBuf, 0xffa2a0c8);
 		}
 
 		s_pPlayer->m_InfoExt.iRealmPoint = iLoyalty;
