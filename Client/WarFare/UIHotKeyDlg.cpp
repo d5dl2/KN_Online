@@ -963,11 +963,9 @@ bool CUIHotKeyDlg::EffectTriggerByMouse()
 	if(m_iSelectIndex < 0 || m_iSelectIndex >= 8) return false;
 	if(m_iSelectPage < 0 || m_iSelectPage >= 8) return false;
 
-	if ( m_pMyHotkey[m_iSelectPage][m_iSelectIndex] )
-	{
-		int iIDTarget = CGameBase::s_pPlayer->m_iIDTarget;
-		return CGameProcedure::s_pProcMain->m_pMagicSkillMng->MsgSend_MagicProcess(iIDTarget, m_pMyHotkey[m_iSelectPage][m_iSelectIndex]->pSkill);
-	}
+	__IconItemSkill* pUISkill = m_pMyHotkey[m_iSelectPage][m_iSelectIndex];
+
+	DoOperate(pUISkill);
 
 	return false;
 }
