@@ -2587,7 +2587,7 @@ bool CGameProcMain::MsgRecv_UserIn(Packet& pkt, bool bWithFX)
 		return false;
 	}
 
-	D3DCOLOR crID = !s_pPlayer->m_InfoBase.IsFriendlyNation(eNation) ? D3DCOLOR_XRGB(255, 96, 96) : D3DCOLOR_XRGB(128, 128, 255); // 국가에 따라 다른색 적용
+	D3DCOLOR crID = (eNation != s_pPlayer->m_InfoBase.eNation) ? D3DCOLOR_XRGB(255, 96, 96) : D3DCOLOR_XRGB(128, 128, 255); // 국가에 따라 다른색 적용
 
 	pUPC = new CPlayerOther();
 	pUPC->IDSet(iID, szName, crID);
@@ -2869,7 +2869,7 @@ bool CGameProcMain::MsgRecv_NPCIn(Packet& pkt)
 		return false;
 	}
 
-	D3DCOLOR crID = !s_pPlayer->m_InfoBase.IsFriendlyNation(eNation) ? D3DCOLOR_XRGB(255, 128, 128) : D3DCOLOR_XRGB(192, 192, 255);
+	D3DCOLOR crID = (eNation != s_pPlayer->m_InfoBase.eNation) ? D3DCOLOR_XRGB(255, 128, 128) : D3DCOLOR_XRGB(192, 192, 255);
 
 	pNPC = new CPlayerNPC();
 	pNPC->IDSet(iID, szName, crID);				// 초기화.. 및 ID 세팅.
@@ -4651,7 +4651,7 @@ void CGameProcMain::CommandEnableAttackContinous(bool bEnable, CPlayerBase* pTar
 		if (s_pPlayer->m_bStun) return; // 기절해 있음 공격 못함..
 		if (NULL == pTarget) return;
 		s_pPlayer->RotateTo(pTarget); // 방향을 돌린다.
-		if (s_pPlayer->m_InfoBase.IsFriendlyNation(pTarget->m_InfoBase.eNation)) return; 
+		if (pTarget->m_InfoBase.eNation == s_pPlayer->m_InfoBase.eNation) return; // 국가가 같으면 넘어간다..
 
 		//-------------------------------------------------------------------------
 		/*
@@ -5494,12 +5494,12 @@ void CGameProcMain::TargetSelect(CPlayerNPC* pTarget)
 			D3DCOLOR crID = 0xffffffff;
 			if (pTarget->PlayerType() == PLAYER_OTHER) // User..
 			{
-				if (!s_pPlayer->m_InfoBase.IsFriendlyNation(pTarget->m_InfoBase.eNation)) crID = 0xffff4040; // 다른 국가이면
+				if (pTarget->m_InfoBase.eNation != s_pPlayer->m_InfoBase.eNation) crID = 0xffff4040; // 다른 국가이면
 				else crID = 0xff6b9fff;
 			}
 			else // NPC
 			{
-				if (!s_pPlayer->m_InfoBase.IsFriendlyNation(pTarget->m_InfoBase.eNation)) crID = 0xffff6060; // 다른 국가이면
+				if (pTarget->m_InfoBase.eNation != s_pPlayer->m_InfoBase.eNation) crID = 0xffff6060; // 다른 국가이면
 				else crID = 0xff1064ff;
 			}
 
@@ -6073,7 +6073,7 @@ void CGameProcMain::UpdateUI_MiniMap()
 	{
 		pNPC = it->second;
 
-		if (!pNPC->m_InfoBase.IsFriendlyNation(eNation)) crType = 0xff800000; // 다른 국가 NPC 혹은 몬스터 주황색
+		if (eNation != pNPC->m_InfoBase.eNation) crType = 0xff800000; // 다른 국가 NPC 혹은 몬스터 주황색
 		else crType = 0xff00a0ff; // 같은 국가 NPC 하늘색
 
 		m_pUIStateBarAndMiniMap->PositionInfoAdd(pNPC->IDNumber(), pNPC->Position(), crType, false);
@@ -6087,7 +6087,7 @@ void CGameProcMain::UpdateUI_MiniMap()
 		pUPC = it2->second;
 
 		bool bDrawTop = false;
-		if (!pUPC->m_InfoBase.IsFriendlyNation(eNation)) // 적국일경우
+		if (eNation != pUPC->m_InfoBase.eNation) // 적국일경우
 		{
 			if (pUPC->State() == PSA_SITDOWN)
 			{

@@ -1201,7 +1201,7 @@ bool CMagicSkillMng::MsgSend_MagicProcess(int iTargetID, __TABLE_UPC_SKILL* pSki
 	}
 	case SKILLMAGIC_TARGET_ENEMY_ONLY:
 	{
-		if (pTarget && !pInfoBase->IsFriendlyNation(pTarget->m_InfoBase.eNation))
+		if (pTarget && pTarget->m_InfoBase.eNation != pInfoBase->eNation)
 		{
 			if (!CheckValidDistance(pSkill, pTarget->Position(), fDist)) return false;
 			StartSkillMagicAtTargetPacket(pSkill, (int16_t)pTarget->IDNumber());
