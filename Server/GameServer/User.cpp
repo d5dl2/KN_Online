@@ -6132,6 +6132,7 @@ void CUser::HandleToggleGM(Packet& pkt)
 		m_bAuthority = AUTHORITY_GAME_MASTER;
 
 	Packet result(WIZ_TOGGLE_GM);
-	result << m_bAuthority;
-	Send(&result);
+	
+	result << m_bAuthority << GetID();
+	SendToRegion(&result);
 }

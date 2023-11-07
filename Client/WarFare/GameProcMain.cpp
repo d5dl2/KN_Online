@@ -1105,9 +1105,22 @@ bool CGameProcMain::ProcessPacket(Packet& pkt)
 	case WIZ_TOGGLE_GM:
 	{
 		uint8_t authority = pkt.read<uint8_t>();
-		s_pPlayer->m_InfoBase.iAuthority = authority;
-		if (authority != AUTHORITY_MANAGER)
-			MsgSend_SpeedCheck(true);
+		uint16_t characterId = pkt.read<uint16_t>();
+		CPlayerBase* target = CharacterGetByID(characterId, false);
+		if (target)
+		{
+			target->m_InfoBase.iAuthority = authority;
+			if (s_pPlayer->IDNumber() == characterId && authority != AUTHORITY_MANAGER)
+				MsgSend_SpeedCheck(true);
+		}
+		else
+		{
+			char szBuffer[128];
+			sprintf(szBuffer, "WIZ_TOGGLE_GM -> Can't find character ID: %d", characterId);
+
+			std::string szMessage = szBuffer;
+			m_pUIChatDlg->AddChatMsg(N3_CHAT_NORMAL, szMessage, 0xffff0000);
+		}
 		return true;
 	}
 	case WIZ_EFFECT:
