@@ -4653,18 +4653,12 @@ void CGameProcMain::CommandEnableAttackContinous(bool bEnable, CPlayerBase* pTar
 		s_pPlayer->RotateTo(pTarget); // 방향을 돌린다.
 		if (pTarget->m_InfoBase.eNation == s_pPlayer->m_InfoBase.eNation) return; // 국가가 같으면 넘어간다..
 
-		//-------------------------------------------------------------------------
-		/*
-		// TODO(srmeier): need to use ZoneAbilityType here
-		// NOTE(srmeier): using zoneability information to determine if target is attackable
 		if (!ACT_WORLD->canAttackSameNation() && (pTarget->m_InfoBase.eNation == s_pPlayer->m_InfoBase.eNation))
 			return;
 		if (!ACT_WORLD->canAttackOtherNation() && (s_pPlayer->m_InfoBase.eNation == NATION_ELMORAD && pTarget->m_InfoBase.eNation == NATION_KARUS))
 			return;
 		if (!ACT_WORLD->canAttackOtherNation() && (s_pPlayer->m_InfoBase.eNation == NATION_KARUS && pTarget->m_InfoBase.eNation == NATION_ELMORAD))
 			return;
-		*/
-		//-------------------------------------------------------------------------
 	}
 	s_pPlayer->m_bAttackContinous = bEnable; // 상태를 기록하고..
 

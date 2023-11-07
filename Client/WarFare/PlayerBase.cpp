@@ -13,6 +13,7 @@
 
 #include "resource.h"
 #include <sstream>
+#include "PlayerMySelf.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -1596,8 +1597,8 @@ e_Ani CPlayerBase::JudgeAnimationBreath()
 	else // 플레이어 일경우..
 	{
 		CPlayerBase* pTarget = TargetPointerCheck(false);
-
-		if(pTarget && pTarget->m_InfoBase.eNation != m_InfoBase.eNation) // 타겟이 있고 국가가 다르면..
+		
+		if(pTarget && CGameProcedure::s_pPlayer->IsAttackableTarget(pTarget)) // 타겟이 있고 국가가 다르면..
 		{
 			e_ItemClass eICR = this->ItemClass_RightHand();
 			e_ItemClass eICL = this->ItemClass_LeftHand();
