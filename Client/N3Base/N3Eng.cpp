@@ -310,7 +310,7 @@ bool CN3Eng::Init(BOOL bWindowed, HWND hWnd, DWORD dwWidth, DWORD dwHeight, DWOR
 #if _DEBUG
 	s_DevParam.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
 #else
-	s_DevParam.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+	s_DevParam.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
 #endif
 
 	D3DFORMAT BBFormat = D3DFMT_UNKNOWN;
