@@ -44,6 +44,16 @@ struct __InfoPlayerBase
 
 	bool		bRenderID;		// 화면에 ID 를 찍는지..
 
+	bool IsFriendlyNation(e_Nation targetNation)
+	{
+		if (eNation == NATION_ENEMY_ALL || targetNation == NATION_ENEMY_ALL)
+			return false;
+		if (eNation == NATION_NOTSELECTED || targetNation == NATION_NOTSELECTED)
+			return true;
+		
+		return eNation == targetNation;
+	}
+
 	void Init()
 	{
 		iID = 0;					// 고유 ID

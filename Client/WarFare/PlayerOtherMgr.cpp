@@ -500,7 +500,7 @@ CPlayerNPC*	CPlayerOtherMgr::CharacterGetByNearstEnemy(e_Nation eNation, const _
 	for(; it != itEnd; it++)
 	{
 		pNPC = it->second;
-		if(eNation == pNPC->m_InfoBase.eNation) continue;
+		if(pNPC->m_InfoBase.IsFriendlyNation(eNation)) continue;
 
 		//-------------------------------------------------------------------------
 		/*
@@ -527,7 +527,7 @@ CPlayerNPC*	CPlayerOtherMgr::CharacterGetByNearstEnemy(e_Nation eNation, const _
 	for(; it2 != itEnd2; it2++)
 	{
 		pNPC = it2->second;
-		if(eNation == pNPC->m_InfoBase.eNation) continue;
+		if(pNPC->m_InfoBase.IsFriendlyNation(eNation)) continue;
 
 		//-------------------------------------------------------------------------
 		/*

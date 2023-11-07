@@ -746,7 +746,7 @@ bool CPlayerMySelf::IsAttackableTarget(CPlayerBase* pTarget, bool bMesureAngle)
 {
 	if(m_fFlickeringFactor != 1.0f) return false;	//부활해서 깜빡이는 경우는 공격할수 없다.
 	if(NULL == pTarget || pTarget->IsDead()) return false;  //죽은 상태의 캐릭은 공격하지 못하게 - 단 죽기 직전의 캐릭은 제외한다..
-	if(pTarget->m_InfoBase.eNation == m_InfoBase.eNation) return false; // 같은 국가이다..
+	if(m_InfoBase.IsFriendlyNation(pTarget->m_InfoBase.eNation)) return false; // 같은 국가이다..
 
 	//-------------------------------------------------------------------------
 	/*
