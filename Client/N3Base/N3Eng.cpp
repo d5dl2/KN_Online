@@ -307,7 +307,11 @@ bool CN3Eng::Init(BOOL bWindowed, HWND hWnd, DWORD dwWidth, DWORD dwHeight, DWOR
 	s_DevParam.EnableAutoDepthStencil = TRUE;
 	s_DevParam.SwapEffect = D3DSWAPEFFECT_DISCARD;
 	s_DevParam.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
+#if _DEBUG
 	s_DevParam.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
+#else
+	s_DevParam.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+#endif
 
 	D3DFORMAT BBFormat = D3DFMT_UNKNOWN;
 	if(TRUE == bWindowed) // 윈도우 모드일 경우
