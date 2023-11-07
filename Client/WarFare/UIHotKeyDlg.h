@@ -75,7 +75,7 @@ public:
 	void				DisableCountStrDisplay();
 	int					 GetTooltipCurPageIndex(__IconItemSkill* pSkill);
 	int					 GetCountCurPageIndex(__IconItemSkill* pSkill);
-
+	void				RemoveIcon(int iOrder);
 //	bool				ReceiveSelectedSkill();
 	bool				IsSelectedSkillInRealIconArea();
 	void				SetReceiveSelectedSkill(int iIndex);

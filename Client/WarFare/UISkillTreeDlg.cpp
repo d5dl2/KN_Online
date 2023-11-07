@@ -54,29 +54,13 @@ CUISkillTreeDlg::CUISkillTreeDlg()
 			for (k = 0; k < MAX_SKILL_IN_PAGE; k++)
 				m_pMySkillTree[i][j][k] = NULL;
 
-	CN3UIWndBase::m_sSkillSelectInfo.UIWnd = UIWND_HOTKEY;
-	CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = NULL;
+	CN3UIWndBase::m_sSkillSelectInfo.Clear();
+	CN3UIWndBase::m_sSkillSelectInfo.UIWnd = UIWND_HOTKEY;	
 }
 
 CUISkillTreeDlg::~CUISkillTreeDlg()
 {
 	Release();
-	/*	int i, j, k;
-
-		for( i = 0; i < MAX_SKILL_KIND_OF; i++ )
-			for( j = 0; j < MAX_SKILL_PAGE_NUM; j++ )
-				for( k = 0; k < MAX_SKILL_IN_PAGE; k++ )
-					if ( m_pMySkillTree[i][j][k] != NULL )
-					{
-						delete m_pMySkillTree[i][j][k];
-						m_pMySkillTree[i][j][k] = NULL;
-					}
-
-		if ( (CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo != NULL) && (CN3UIWndBase::m_sSkillSelectInfo.UIWnd == UIWND_SKILL_TREE) )
-		{
-			delete CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo;
-			CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = NULL;
-		}*/
 }
 
 void CUISkillTreeDlg::Release()
@@ -107,7 +91,7 @@ void CUISkillTreeDlg::Release()
 	if ((CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo != NULL) && (CN3UIWndBase::m_sSkillSelectInfo.UIWnd == UIWND_SKILL_TREE))
 	{
 		delete CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo;
-		CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = NULL;
+		CN3UIWndBase::m_sSkillSelectInfo.Clear();
 	}
 }
 
@@ -337,7 +321,7 @@ bool CUISkillTreeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 
 					pDlg->SetReceiveSelectedSkill(iIndex);
 
-					CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = NULL;
+					CN3UIWndBase::m_sSkillSelectInfo.Clear();
 					pDlg->CloseIconRegistry();
 				}
 			}
@@ -388,32 +372,17 @@ bool CUISkillTreeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 
 	case UIMSG_ICON_UP:
 	{
-		if (CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo)
+		if (!CGameProcedure::s_pUIMgr->BroadcastIconDropMsg(CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo))
 		{
 			spSkillCopy = CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo;
-
-			CUIHotKeyDlg* pDlg = CGameProcedure::s_pProcMain->m_pUIHotKeyDlg;
-
-			if (!IsIn(ptCur.x, ptCur.y) && pDlg->IsIn(ptCur.x, ptCur.y) && pDlg->IsSelectedSkillInRealIconArea() && CheckSkillCanBeUse(spSkillCopy->pSkill))
-			{
-				int iIndex = pDlg->GetAreaiOrder();
-
-				pDlg->SetReceiveSelectedSkill(iIndex);
-
-				spSkillCopy = NULL;
-				pDlg->CloseIconRegistry();
-			}
-			else
-			{
-				RemoveChild(spSkillCopy->pUIIcon);
-				spSkillCopy->pUIIcon->Release();
-				delete spSkillCopy->pUIIcon;
-				spSkillCopy->pUIIcon = NULL;
-				delete spSkillCopy;
-				spSkillCopy = NULL;
-			}
+			RemoveChild(spSkillCopy->pUIIcon);
+			spSkillCopy->pUIIcon->Release();
+			delete spSkillCopy->pUIIcon;
+			spSkillCopy->pUIIcon = NULL;
+			delete spSkillCopy;
+			spSkillCopy = NULL;
 		}
-		CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = NULL;
+		CN3UIWndBase::m_sSkillSelectInfo.Clear();
 		SetState(UI_STATE_COMMON_NONE);
 	}
 	break;
@@ -1366,7 +1335,7 @@ void CUISkillTreeDlg::Close()
 		delete spSkill;
 		spSkill = NULL;
 	}
-	CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = NULL;
+	CN3UIWndBase::m_sSkillSelectInfo.Clear();
 	SetState(UI_STATE_COMMON_NONE);
 	CN3UIWndBase::AllHighLightIconFree();
 

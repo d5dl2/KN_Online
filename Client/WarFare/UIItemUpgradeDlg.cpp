@@ -498,7 +498,7 @@ bool CUIItemUpgradeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 		if (spItem->pItemExt->byMagicOrRare != 4 && spItem->pItemExt->byMagicOrRare != 5 &&
 			spItem->pItemBasic->dwEffectID2 != 255)
 		{
-			CN3UIWndBase::m_sSelectedIconInfo.pItemSelect = NULL;
+			CN3UIWndBase::m_sSelectedIconInfo.Clear();
 			CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.UIWnd = UIWND_UNKNOWN;
 			return false;
 		}
@@ -546,7 +546,7 @@ bool CUIItemUpgradeDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 		if (spItem->pItemExt->byMagicOrRare != 4 && spItem->pItemExt->byMagicOrRare != 5 &&
 			spItem->pItemBasic->dwEffectID2 != 255)
 		{
-			CN3UIWndBase::m_sSelectedIconInfo.pItemSelect = NULL;
+			CN3UIWndBase::m_sSelectedIconInfo.Clear();
 			CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.UIWnd = UIWND_UNKNOWN;
 			return false;
 		}

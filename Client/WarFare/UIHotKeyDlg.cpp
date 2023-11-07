@@ -278,7 +278,7 @@ bool CUIHotKeyDlg::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 
 				CloseIconRegistry();
 			}
-			CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = NULL;
+			CN3UIWndBase::m_sSkillSelectInfo.Clear();
 			SetState(UI_STATE_COMMON_NONE);
 			break;
 
@@ -869,11 +869,26 @@ int CUIHotKeyDlg::GetCountCurPageIndex(__IconItemSkill* spSkill)
 	return GetTooltipCurPageIndex(spSkill);
 }
 
+void CUIHotKeyDlg::RemoveIcon(int iOrder)
+{
+	if (m_pMyHotkey[m_iCurPage][iOrder])
+	{
+		__IconItemSkill* spSkill = m_pMyHotkey[m_iCurPage][iOrder];
+		RemoveChild(spSkill->pUIIcon);
+		spSkill->pUIIcon->Release();
+		delete spSkill->pUIIcon;
+		spSkill->pUIIcon = NULL;
+		delete spSkill;
+		spSkill = NULL;
+		m_pMyHotkey[m_iCurPage][iOrder] = NULL;
+	}
+}
+
 bool CUIHotKeyDlg::ReceiveIconDrop(__IconItemSkill* spItem, POINT ptCur)
 {
 	bool bFound = false;
 	// 내가 가졌던 아이콘이 아니면..
-	if ( CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.UIWnd != UIWND_INVENTORY )
+	if ( CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.UIWnd != UIWND_INVENTORY && CN3UIWndBase::m_sSkillSelectInfo.UIWnd != UIWND_SKILL_TREE)
 		return false;
 	else
 	{
@@ -895,60 +910,63 @@ bool CUIHotKeyDlg::ReceiveIconDrop(__IconItemSkill* spItem, POINT ptCur)
 
 		__IconItemSkill* spSkill, *spItem;
 
-		// 기존 아이콘이 있다면..
-		if ( m_pMyHotkey[m_iCurPage][iOrder] )
+		if (CN3UIWndBase::m_sSelectedIconInfo.pItemSelect || CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo)
 		{
-			// 기존 아이콘을 삭제한다..
-			spSkill = m_pMyHotkey[m_iCurPage][iOrder];
+			if (CN3UIWndBase::m_sSelectedIconInfo.pItemSelect)
+			{
+				spItem = CN3UIWndBase::m_sSelectedIconInfo.pItemSelect;
 
-			// 매니저에서 제거..
-			RemoveChild(spSkill->pUIIcon);
+				__TABLE_UPC_SKILL* pUSkill = CGameBase::s_pTbl_Skill.Find(spItem->pItemBasic->dwEffectID1);
+				if (pUSkill == NULL) return false;
+				if (pUSkill->dwID < UIITEM_TYPE_SONGPYUN_ID_MIN) return false;
 
-			// 리소스 제거..
-			spSkill->pUIIcon->Release();
-			delete spSkill->pUIIcon;
-			spSkill->pUIIcon = NULL;
-			delete spSkill;
-			spSkill = NULL;
-			m_pMyHotkey[m_iCurPage][iOrder] = NULL;
+				spSkill = new __IconItemSkill();
+				spSkill->pSkill = pUSkill;
+
+				// 아이콘 이름 만들기.. ^^
+				std::vector<char> buffer(256, NULL);
+				sprintf(&buffer[0], "UI\\skillicon_%.2d_%d.dxt", spItem->pItemBasic->dwEffectID1 % 100, spItem->pItemBasic->dwEffectID1 / 100);
+				spSkill->szIconFN = &buffer[0];
+
+				// 아이콘 로드하기.. ^^
+				spSkill->pUIIcon = new CN3UIIcon;
+				spSkill->pUIIcon->Init(this);
+				spSkill->pUIIcon->SetTex(spSkill->szIconFN);
+				spSkill->pUIIcon->SetUVRect(0, 0, 1.0f, 1.0f);
+				spSkill->pUIIcon->SetUIType(UI_TYPE_ICON);
+				spSkill->pUIIcon->SetStyle(UISTYLE_ICON_SKILL);
+
+				RemoveIcon(iOrder);
+				m_pMyHotkey[m_iCurPage][iOrder] = spSkill;
+			}
+			else if (CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo)
+			{
+				spSkill = CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo;
+
+				RemoveIcon(iOrder);
+				m_pMyHotkey[m_iCurPage][iOrder] = CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo;
+				m_pMyHotkey[m_iCurPage][iOrder]->szIconFN = CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo->szIconFN;
+				m_pMyHotkey[m_iCurPage][iOrder]->pUIIcon->SetParent(this);
+
+				CN3UIWndBase::m_sSkillSelectInfo.Clear();
+			}
+
+			uint32_t bitMask = UISTYLE_ICON_SKILL;
+			if (!CGameProcedure::s_pProcMain->m_pMagicSkillMng->CheckValidSkillMagic(spSkill->pSkill))
+				bitMask |= UISTYLE_DISABLE_SKILL;
+			spSkill->pUIIcon->SetStyle(bitMask);
+
+			if (pArea)
+			{
+				spSkill->pUIIcon->SetRegion(pArea->GetRegion());
+				spSkill->pUIIcon->SetMoveRect(pArea->GetRegion());
+			}
+
+			
+
+			CloseIconRegistry();
+			return true;
 		}
-
-		spItem = CN3UIWndBase::m_sSelectedIconInfo.pItemSelect;
-
-		__TABLE_UPC_SKILL* pUSkill = CGameBase::s_pTbl_Skill.Find(spItem->pItemBasic->dwEffectID1);
-		if ( pUSkill == NULL ) return false;
-		if ( pUSkill->dwID < UIITEM_TYPE_SONGPYUN_ID_MIN) return false;
-
-		spSkill = new __IconItemSkill();
-		spSkill->pSkill = pUSkill;
-
-		// 아이콘 이름 만들기.. ^^
-		std::vector<char> buffer(256, NULL);
-		sprintf(&buffer[0],	"UI\\skillicon_%.2d_%d.dxt", spItem->pItemBasic->dwEffectID1%100, spItem->pItemBasic->dwEffectID1/100);
-		spSkill->szIconFN = &buffer[0];
-
-		// 아이콘 로드하기.. ^^
-		spSkill->pUIIcon = new CN3UIIcon;
-		spSkill->pUIIcon->Init(this);
-		spSkill->pUIIcon->SetTex(spSkill->szIconFN);
-		spSkill->pUIIcon->SetUVRect(0,0,1.0f, 1.0f);
-		spSkill->pUIIcon->SetUIType(UI_TYPE_ICON);
-		spSkill->pUIIcon->SetStyle(UISTYLE_ICON_SKILL);
-
-		uint32_t bitMask = UISTYLE_ICON_SKILL;
-		if (!CGameProcedure::s_pProcMain->m_pMagicSkillMng->CheckValidSkillMagic(spSkill->pSkill))
-			bitMask |= UISTYLE_DISABLE_SKILL;
-		spSkill->pUIIcon->SetStyle(bitMask);
-
-		if ( pArea )
-		{
-			spSkill->pUIIcon->SetRegion(pArea->GetRegion());
-			spSkill->pUIIcon->SetMoveRect(pArea->GetRegion());
-		}
-
-		m_pMyHotkey[m_iCurPage][iOrder] = spSkill;
-
-		CloseIconRegistry();
 	}
 
 	return false;

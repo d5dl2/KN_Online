@@ -94,6 +94,10 @@ struct __InfoSelectedIcon	{
 								__UIWndIconInfo		UIWndSelect;
 								__IconItemSkill*	pItemSelect;					
 								
+								void Clear()
+								{
+									memset(this, 0, sizeof(__InfoSelectedIcon));
+								}
 								__InfoSelectedIcon() { memset(this, 0, sizeof(__InfoSelectedIcon)); }
 							};								
 
@@ -113,6 +117,12 @@ struct __SkillSelectInfo	{
 								e_UIWND				UIWnd;
 								int					iOrder;
 								__IconItemSkill*	pSkillDoneInfo;
+
+								void Clear()
+								{
+									memset(this, 0, sizeof(__SkillSelectInfo));
+								}
+								__SkillSelectInfo() { memset(this, 0, sizeof(__SkillSelectInfo)); }
 							};
 
 const int UIITEM_TYPE_ONLYONE = 0;

@@ -31,6 +31,8 @@
 #include "N3UIEdit.h"
 #include "N3SndObj.h"
 
+#include "MagicSkillMng.h"
+
 #include "resource.h"
 
 #ifdef _DEBUG
@@ -1019,8 +1021,43 @@ inline	bool CUIInventory::InvOpsSomething(__IconItemSkill* spItem)
 	if (!spItem) return false;
 	CN3UIArea* pArea = NULL;
 
-	// 검사한다..성공이면 서버에게 보냄..
-	if (CheckIconDropIfSuccessSendToServer(spItem))
+	__TABLE_UPC_SKILL* pUSkill = CGameBase::s_pTbl_Skill.Find(spItem->pItemBasic->dwEffectID1);
+	if (pUSkill)
+	{
+		CUIHotKeyDlg* pDlg = CGameProcedure::s_pProcMain->m_pUIHotKeyDlg;
+		int iIndex;
+		if (pDlg->GetEmptySlotIndex(iIndex))
+		{
+			__IconItemSkill* spSkillCopy = new __IconItemSkill();
+			spSkillCopy->pSkill = pUSkill;
+
+			std::vector<char> buffer(256, NULL);
+			sprintf(&buffer[0], "UI\\skillicon_%.2d_%d.dxt", spItem->pItemBasic->dwEffectID1 % 100, spItem->pItemBasic->dwEffectID1 / 100);
+			spSkillCopy->szIconFN = &buffer[0];
+
+			// 아이콘 로드하기.. ^^
+			spSkillCopy->pUIIcon = new CN3UIIcon;
+			spSkillCopy->pUIIcon->Init(this);
+			spSkillCopy->pUIIcon->SetTex(spSkillCopy->szIconFN);
+			spSkillCopy->pUIIcon->SetUVRect(0, 0, 1, 1);
+			spSkillCopy->pUIIcon->SetUIType(UI_TYPE_ICON);
+
+			uint32_t bitMask = UISTYLE_ICON_SKILL;
+			if (!CGameProcedure::s_pProcMain->m_pMagicSkillMng->CheckValidSkillMagic(spSkillCopy->pSkill))
+				bitMask |= UISTYLE_DISABLE_SKILL;
+			spSkillCopy->pUIIcon->SetStyle(bitMask);
+
+			// Save Select Info..
+			CN3UIWndBase::m_sSkillSelectInfo.UIWnd = UIWND_INVENTORY;
+			CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = spSkillCopy;
+
+			pDlg->SetReceiveSelectedSkill(iIndex);
+
+			CN3UIWndBase::m_sSkillSelectInfo.Clear();
+			pDlg->CloseIconRegistry();
+		}
+	}
+	else if (CheckIconDropIfSuccessSendToServer(spItem))
 	{
 		// 아이콘 이동.. Source.. 같은 아이콘 내에서 움직이는 거면.. 굳이 제거하고 추가할  필요없이 이동만 하면 된다..
 		if (CN3UIWndBase::m_sRecoveryJobInfo.pItemSource)
@@ -1396,6 +1433,7 @@ void CUIInventory::IconRestore()
 		}
 		break;
 	}
+	CN3UIWndBase::m_sSelectedIconInfo.Clear();
 }
 
 int CUIInventory::GetIndexInArea(POINT pt)
@@ -1534,13 +1572,9 @@ bool CUIInventory::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
 
 	case UIMSG_ICON_UP:
 		// 아이콘 매니저 윈도우들을 돌아 다니면서 검사..
-		if (!CGameProcedure::s_pUIMgr->BroadcastIconDropMsg(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect))
-			// 아이콘 위치 원래대로..
-			IconRestore();
-		else
-		{
+		if (CGameProcedure::s_pUIMgr->BroadcastIconDropMsg(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect))
 			if (CN3UIWndBase::m_sSelectedIconInfo.pItemSelect) PlayItemSound(CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->pItemBasic);
-		}
+		IconRestore();
 		SetState(UI_STATE_COMMON_NONE);
 		break;
 
