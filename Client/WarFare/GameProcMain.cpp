@@ -3572,7 +3572,7 @@ void CGameProcMain::MsgRecv_MyInfo_HP(Packet& pkt)
 	{
 		CPlayerBase* pAttacker = CGameProcedure::s_pProcMain->CharacterGetByID(attackerId, false);
 
-		if (pAttacker && pAttacker->PlayerType() == PLAYER_BASE)
+		if (pAttacker && pAttacker->PlayerType() == PLAYER_OTHER)
 		{
 			std::string szFmt; ::_LoadStringFromResource(IDS_MSG_FMT_HP_LOST_FROM_PLAYER, szFmt);
 			sprintf(szBuf, szFmt.c_str(), pAttacker->m_InfoBase.szID.c_str(), -iHPChange);
