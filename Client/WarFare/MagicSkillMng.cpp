@@ -2264,8 +2264,8 @@ void CMagicSkillMng::MsgRecv_Fail(Packet& pkt)
 			s_pPlayer->m_dwMagicID = 0xffffffff;
 			m_pGameProcMain->CommandSitDown(false, false); // 혹시라도 앉아있음 일으켜 세운다..
 
-			std::string buff = "IDS_SKILL_FAIL_CASTING";
-			//::_LoadStringFromResource(IDS_SKILL_FAIL_CASTING, buff);
+			std::string buff;
+			::_LoadStringFromResource(IDS_SKILL_FAIL_CASTING, buff);
 			m_pGameProcMain->MsgOutput(buff, 0xffff3b3b);
 		}
 		return;
