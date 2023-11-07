@@ -2655,7 +2655,7 @@ void CUIInventory::ItemDestroyOK()
 
 	CAPISocket::MP_AddByte(byBuff, iOffset, WIZ_ITEM_REMOVE);					// 게임 스타트 패킷 커멘드..
 
-	switch (CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.UIWndDistrict)
+	switch (CN3UIWndBase::m_sRecoveryJobInfo.UIWndSourceStart.UIWndDistrict)
 	{
 	case UIWND_DISTRICT_INVENTORY_SLOT:
 		CAPISocket::MP_AddByte(byBuff, iOffset, 0x01);						// 아이디 길이 패킷에 넣기..
@@ -2664,9 +2664,9 @@ void CUIInventory::ItemDestroyOK()
 		CAPISocket::MP_AddByte(byBuff, iOffset, 0x02);						// 아이디 길이 패킷에 넣기..
 		break;
 	}
-	CAPISocket::MP_AddByte(byBuff, iOffset, CN3UIWndBase::m_sSelectedIconInfo.UIWndSelect.iOrder);	// 아이디 길이 패킷에 넣기..
-	CAPISocket::MP_AddDword(byBuff, iOffset, CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->pItemBasic->dwID +
-		CN3UIWndBase::m_sSelectedIconInfo.pItemSelect->pItemExt->dwID);	// 아이디 문자열 패킷에 넣기..
+	CAPISocket::MP_AddByte(byBuff, iOffset, CN3UIWndBase::m_sRecoveryJobInfo.UIWndSourceStart.iOrder);	// 아이디 길이 패킷에 넣기..
+	CAPISocket::MP_AddDword(byBuff, iOffset, CN3UIWndBase::m_sRecoveryJobInfo.pItemSource->pItemBasic->dwID +
+		CN3UIWndBase::m_sRecoveryJobInfo.pItemSource->pItemExt->dwID);	// 아이디 문자열 패킷에 넣기..
 
 	CGameProcedure::s_pSocket->Send(byBuff, iOffset);
 
