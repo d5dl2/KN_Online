@@ -1022,42 +1022,8 @@ inline	bool CUIInventory::InvOpsSomething(__IconItemSkill* spItem)
 	CN3UIArea* pArea = NULL;
 
 	__TABLE_UPC_SKILL* pUSkill = CGameBase::s_pTbl_Skill.Find(spItem->pItemBasic->dwEffectID1);
-	if (pUSkill)
-	{
-		CUIHotKeyDlg* pDlg = CGameProcedure::s_pProcMain->m_pUIHotKeyDlg;
-		int iIndex;
-		if (pDlg->GetEmptySlotIndex(iIndex))
-		{
-			__IconItemSkill* spSkillCopy = new __IconItemSkill();
-			spSkillCopy->pSkill = pUSkill;
-
-			std::vector<char> buffer(256, NULL);
-			sprintf(&buffer[0], "UI\\skillicon_%.2d_%d.dxt", spItem->pItemBasic->dwEffectID1 % 100, spItem->pItemBasic->dwEffectID1 / 100);
-			spSkillCopy->szIconFN = &buffer[0];
-
-			// 아이콘 로드하기.. ^^
-			spSkillCopy->pUIIcon = new CN3UIIcon;
-			spSkillCopy->pUIIcon->Init(this);
-			spSkillCopy->pUIIcon->SetTex(spSkillCopy->szIconFN);
-			spSkillCopy->pUIIcon->SetUVRect(0, 0, 1, 1);
-			spSkillCopy->pUIIcon->SetUIType(UI_TYPE_ICON);
-
-			uint32_t bitMask = UISTYLE_ICON_SKILL;
-			if (!CGameProcedure::s_pProcMain->m_pMagicSkillMng->CheckValidSkillMagic(spSkillCopy->pSkill))
-				bitMask |= UISTYLE_DISABLE_SKILL;
-			spSkillCopy->pUIIcon->SetStyle(bitMask);
-
-			// Save Select Info..
-			CN3UIWndBase::m_sSkillSelectInfo.UIWnd = UIWND_INVENTORY;
-			CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = spSkillCopy;
-
-			pDlg->SetReceiveSelectedSkill(iIndex);
-
-			CN3UIWndBase::m_sSkillSelectInfo.Clear();
-			pDlg->CloseIconRegistry();
-		}
-	}
-	else if (CheckIconDropIfSuccessSendToServer(spItem))
+	
+	if (CheckIconDropIfSuccessSendToServer(spItem))
 	{
 		// 아이콘 이동.. Source.. 같은 아이콘 내에서 움직이는 거면.. 굳이 제거하고 추가할  필요없이 이동만 하면 된다..
 		if (CN3UIWndBase::m_sRecoveryJobInfo.pItemSource)
@@ -1139,6 +1105,41 @@ inline	bool CUIInventory::InvOpsSomething(__IconItemSkill* spItem)
 		CN3UIWndBase::AllHighLightIconFree();
 		SetState(UI_STATE_COMMON_NONE);
 		return true;
+	}
+	else if (pUSkill)
+	{
+		CUIHotKeyDlg* pDlg = CGameProcedure::s_pProcMain->m_pUIHotKeyDlg;
+		int iIndex;
+		if (pDlg->GetEmptySlotIndex(iIndex))
+		{
+			__IconItemSkill* spSkillCopy = new __IconItemSkill();
+			spSkillCopy->pSkill = pUSkill;
+
+			std::vector<char> buffer(256, NULL);
+			sprintf(&buffer[0], "UI\\skillicon_%.2d_%d.dxt", spItem->pItemBasic->dwEffectID1 % 100, spItem->pItemBasic->dwEffectID1 / 100);
+			spSkillCopy->szIconFN = &buffer[0];
+
+			// 아이콘 로드하기.. ^^
+			spSkillCopy->pUIIcon = new CN3UIIcon;
+			spSkillCopy->pUIIcon->Init(this);
+			spSkillCopy->pUIIcon->SetTex(spSkillCopy->szIconFN);
+			spSkillCopy->pUIIcon->SetUVRect(0, 0, 1, 1);
+			spSkillCopy->pUIIcon->SetUIType(UI_TYPE_ICON);
+
+			uint32_t bitMask = UISTYLE_ICON_SKILL;
+			if (!CGameProcedure::s_pProcMain->m_pMagicSkillMng->CheckValidSkillMagic(spSkillCopy->pSkill))
+				bitMask |= UISTYLE_DISABLE_SKILL;
+			spSkillCopy->pUIIcon->SetStyle(bitMask);
+
+			// Save Select Info..
+			CN3UIWndBase::m_sSkillSelectInfo.UIWnd = UIWND_INVENTORY;
+			CN3UIWndBase::m_sSkillSelectInfo.pSkillDoneInfo = spSkillCopy;
+
+			pDlg->SetReceiveSelectedSkill(iIndex);
+
+			CN3UIWndBase::m_sSkillSelectInfo.Clear();
+			pDlg->CloseIconRegistry();
+		}
 	}
 	else
 	{
