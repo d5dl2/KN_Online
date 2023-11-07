@@ -132,7 +132,7 @@ void CN3UIIcon::SetStyleAsCooldown(float cd_in) {
 		CN3UIBase::SetStyle(UISTYLE_ICON_ON_COOLDOWN | CN3UIBase::GetStyle());
 	}
 	else {
-		CN3UIBase::SetStyle(UISTYLE_ICON_SKILL);
+		CN3UIBase::SetStyle(CN3UIBase::GetStyle());
 	}
 }
 
