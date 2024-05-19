@@ -93,7 +93,6 @@ std::string	CGameProcedure::s_szAccount = ""; // °èÁ¤ ¹®ÀÚ¿­..
 std::string	CGameProcedure::s_szPassWord = ""; // °èÁ¤ ºñ¹ø..
 std::string	CGameProcedure::s_szServer = ""; // ¼­¹ö ¹®ÀÚ¿­..
 bool CGameProcedure::m_bCursorLocked = false;
-HWND CGameProcedure::s_hWndSubSocket = NULL; // ¼­ºê ¼ÒÄÏ¿ë À©µµ¿ì ÇÚµé..
 int	CGameProcedure::s_iChrSelectIndex = 0;
 bool CGameProcedure::s_bNeedReportConnectionClosed = false; // ¼­¹öÁ¢¼ÓÀÌ ²÷¾îÁø°É º¸°íÇØ¾ß ÇÏ´ÂÁö..
 bool CGameProcedure::s_bWindowed = false; // Ã¢¸ðµå ½ÇÇà??
@@ -126,14 +125,13 @@ void CGameProcedure::Init()
 	s_pUIMgr->SetFocusedUI(NULL);
 }
 
-void CGameProcedure::StaticMemberInit(HINSTANCE hInstance, HWND hWndMain, HWND hWndSub)
+void CGameProcedure::StaticMemberInit(HINSTANCE hInstance, HWND hWndMain)
 {
 #if _DEBUG 
 	s_bWindowed = true;
 #endif 
 
 	s_hWndBase = hWndMain;
-	s_hWndSubSocket = hWndSub; // ¼­ºê ¼ÒÄÏ¿ë À©µµ¿ì ÇÚµé..
 
 	s_pEng = new CGameEng();
 	if(false == s_pEng->Init(s_bWindowed, s_hWndBase, CN3Base::s_Options.iViewWidth, CN3Base::s_Options.iViewHeight, CN3Base::s_Options.iViewColorDepth, TRUE)) exit(-1);

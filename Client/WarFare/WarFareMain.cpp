@@ -162,32 +162,6 @@ LRESULT CALLBACK WndProcMain(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 }
 
 //-----------------------------------------------------------------------------
-LRESULT CALLBACK WndProcSub(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-	if (message == WM_SOCKETMSG) {
-		switch (WSAGETSELECTEVENT(lParam))
-		{
-		case FD_CONNECT: {
-		} break;
-		case FD_ACCEPT: {
-
-		} break;
-		case FD_CLOSE: {
-
-		} break;
-		case FD_READ: {
-			CGameProcedure::s_pSocketSub->Receive();
-		} break;
-		default: {
-			__ASSERT(0, "WM_SOCKETMSG: unknown socket flag.");
-		} break;
-		}
-	}
-
-	return DefWindowProc(hWnd, message, wParam, lParam);
-}
-
-
-//-----------------------------------------------------------------------------
 HWND CreateMainWindow(HINSTANCE hInstance)
 {
 	WNDCLASS wc;
@@ -222,36 +196,6 @@ HWND CreateMainWindow(HINSTANCE hInstance)
 		rect.top, //0, 0,
 		CN3Base::s_Options.iViewWidth,
 		CN3Base::s_Options.iViewHeight,
-		NULL, NULL, hInstance, NULL
-	);
-}
-
-//-----------------------------------------------------------------------------
-HWND CreateSubWindow(HINSTANCE hInstance)
-{
-	WNDCLASS wc;
-
-	wc.style = 0;
-	wc.lpfnWndProc = (WNDPROC)WndProcSub;
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
-	wc.hInstance = hInstance;
-	wc.hIcon = NULL;
-	wc.hCursor = NULL;
-	wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
-	wc.lpszMenuName = NULL;
-	wc.lpszClassName = "Knight OnLine Sub";
-
-	if (::RegisterClass(&wc) == 0) {
-		CLogWriter::Write("Cannot register window class.");
-		exit(-1);
-	}
-
-	DWORD style = WS_POPUP;
-	return ::CreateWindow(
-		"Knight OnLine Sub",
-		"Knight OnLine Sub",
-		style, 0, 0, 0, 0,
 		NULL, NULL, hInstance, NULL
 	);
 }
@@ -337,20 +281,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 	srand((uint32_t)time(NULL));
 
-	// NOTE: create the sub window
-	HWND hWndSub = CreateSubWindow(hInstance);
-
 	// NOTE: create the main window
 	HWND hWndMain = CreateMainWindow(hInstance);
 
 	// NOTE: check for success
-	if (hWndMain == NULL || hWndSub == NULL) {
+	if (hWndMain == NULL) {
 		fprintf(stderr, "Cannot create window.");
 		Sleep(1000 * 5);
 		exit(-1);
 	}
 
-	::ShowWindow(hWndSub, SW_HIDE);
 	::ShowWindow(hWndMain, nShowCmd);
 
 	// NOTE: set the main window to active
@@ -359,7 +299,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	CGameProcedure::s_bWindowed = true;
 
 	// NOTE: allocate the static members
-	CGameProcedure::StaticMemberInit(hInstance, hWndMain, hWndSub);
+	CGameProcedure::StaticMemberInit(hInstance, hWndMain);
 
 	// NOTE: set the games current procedure to s_pProcLogIn
 	CGameProcedure::ProcActiveSet((CGameProcedure*)CGameProcedure::s_pProcLogIn);

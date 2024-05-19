@@ -90,7 +90,6 @@ public:
 	static int						s_iChrSelectIndex; // 이계정의 몇번째 캐릭인지...??
 
 	static bool		m_bCursorLocked;
-	static HWND		s_hWndSubSocket; // 서브 소켓용 윈도우 핸들..
 
 	static bool		s_bNeedReportConnectionClosed; // 서버접속이 끊어진걸 보고해야 하는지..
 	static bool		s_bWindowed; // 창모드 실행??
@@ -131,7 +130,7 @@ public:
 	virtual void ProcessUIKeyInput(bool bEnable = true);
 
 	static bool	IsUIKeyOperated();
-	static void	StaticMemberInit(HINSTANCE hInstance, HWND hWndMain, HWND hWndSub);
+	static void	StaticMemberInit(HINSTANCE hInstance, HWND hWndMain);
 
 	static void StaticMemberRelease();
 
