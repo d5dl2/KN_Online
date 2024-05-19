@@ -14,6 +14,7 @@
 #include "MagicSkillMng.h"
 #include "UIManager.h"
 #include "UIInventory.h"
+#include "N3Time.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -319,9 +320,8 @@ void CUIHotKeyDlg::Render()
 			UISkillCooldownList::iterator itr;
 			itr = CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.find(m_pMyHotkey[m_iCurPage][k]->pSkill->dwID);
 			if (itr != CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.end()) {
-				float recasttime = m_pMyHotkey[m_iCurPage][k]->pSkill->iReCastTime / 10;
-				float t = CN3Base::TimeGet();
-				float diff = t - itr->second;
+				float recasttime = m_pMyHotkey[m_iCurPage][k]->pSkill->iReCastTime * 100;
+				float diff = CN3Time::TimeGetMs() - itr->second;
 				if (diff > recasttime) diff = recasttime;
 				cd = (((recasttime - diff) / (float)recasttime) * 100);
 			}
@@ -736,11 +736,11 @@ void CUIHotKeyDlg::DoOperate(__IconItemSkill*	pUISkill)
 
 	UISkillCooldownList::iterator itr;
 	bool skillCanBeUse = true;
-	float diff = 1;
+	long long diff = 1;
 	itr = CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.find(pUISkill->pSkill->dwID);
 	if (itr != CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.end()) {
-		diff = CN3Base::TimeGet() - itr->second;
-		skillCanBeUse = diff > pUISkill->pSkill->iReCastTime / 10.0;
+		diff = CN3Time::TimeGetMs() - itr->second;
+		skillCanBeUse = diff > pUISkill->pSkill->iReCastTime * 100;
 	}
 	if (skillCanBeUse) {
 		if (pUISkill->pSkill->iReCastTime != 0) {

@@ -21,6 +21,7 @@
 #include "N3SndObj.h"
 #include "N3SndObjStream.h"
 #include "N3ShapeExtra.h"
+#include "N3Time.h"
 
 
 #define PLAYER_SKILL_REQUEST_INTERVAL	0.7f
@@ -1425,13 +1426,13 @@ void CMagicSkillMng::StartSkillMagicAtTargetPacket(__TABLE_UPC_SKILL* pSkill, in
 		CGameProcedure::s_pFX->TriggerBundle(SourceID, spart1, pSkill->iSelfFX1, SourceID, spart1, -1);
 		if (spart2 != 0) CGameProcedure::s_pFX->TriggerBundle(SourceID, spart2, pSkill->iSelfFX1, SourceID, spart2, -2);
 		if (pSkill->iReCastTime != 0) {
-			CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, CN3Base::TimeGet()));
+			CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, CN3Time::TimeGetMs()));
 		}
 		return;
 	}
 	else if (pSkill->iCastTime <= 0 && pSkill->iReCastTime > 0)
 	{
-		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, CN3Base::TimeGet()));
+		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, CN3Time::TimeGetMs()));
 	}
 
 	m_pGameProcMain->CommandSitDown(false, false); // 혹시라도 앉아있음 일으켜 세운다..
@@ -1669,7 +1670,7 @@ void CMagicSkillMng::SuccessCast(__TABLE_UPC_SKILL* pSkill, CPlayerBase* pTarget
 {
 
 	if (pSkill->iReCastTime != 0) {
-		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, CN3Base::TimeGet()));
+		CGameProcedure::s_pProcMain->m_pMagicSkillMng->m_UISkillCooldownList.insert(std::make_pair(pSkill->dwID, CN3Time::TimeGetMs()));
 	}
 	s_pPlayer->m_dwMagicID = 0xffffffff;
 	s_pPlayer->m_fCastingTime = 0.0f;

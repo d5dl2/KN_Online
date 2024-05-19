@@ -108,6 +108,7 @@
     <ClInclude Include="N3TableBase.h" />
     <ClInclude Include="N3TerrainDef.h" />
     <ClInclude Include="N3Texture.h" />
+    <ClInclude Include="N3Time.h" />
     <ClInclude Include="N3Transform.h" />
     <ClInclude Include="N3TransformCollision.h" />
     <ClInclude Include="N3UIArea.h" />
