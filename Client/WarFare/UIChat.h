@@ -56,6 +56,8 @@ protected:
 	CN3UIBase*		m_pBtn_Check;
 	CN3UIBase*		m_pBtn_Fold;
 
+	CN3UIBase*		m_pArea_Resize;
+
 	enum e_ChatMode	m_eChatMode;
 
 	bool			m_bChatNormal;
@@ -82,7 +84,11 @@ protected:
 	void			AddLineBuffer(const std::string& szString, D3DCOLOR color);	// line 버퍼를 만들어준다.(너무 길면 알아서 2줄로 만들어준다.)
 	void			RecalcLineBuffers();		// 채팅창 사이즈가 변했을때 호출해주면 line buffer를 다시 계산해서 넣어준다.
 	void			CreateLines();
-
+	int				minWidth;
+	int				minHeight;
+	int				maxWidth;
+	int				maxHeight;
+	bool			resizing = false;
 // Operations
 public:
 	void			SetNoticeTitle(const std::string& szString, D3DCOLOR color);
@@ -105,7 +111,9 @@ public:
 	void				AddChatMsg(e_ChatMode eCM, const std::string& szString, D3DCOLOR color = 0xffffffff);		// 채팅 메세지를 저장하고 알맞은 형태로 화면에 출력해준다.
 	void				AddContinueMsg(e_ChatMode eCM, const std::string& szString, D3DCOLOR color = 0xffffffff);
 	void				AdjustScroll(); // 스크롤 위치등 조정..
+	virtual uint32_t	MouseProc(uint32_t dwFlags, const POINT& ptCur, const POINT& ptOld);
 
+	bool			Resize(int leftOffset, int topOffset);
 	BOOL			IsChatMode();
 	void			SetFocus();
 	void			KillFocus();

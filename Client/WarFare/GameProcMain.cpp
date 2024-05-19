@@ -3888,12 +3888,14 @@ void CGameProcMain::InitUI()
 
 	m_pUIMsgDlg2->Init(s_pUIMgr);
 	m_pUIMsgDlg2->LoadFromFile(pTbl->szMsgOutput2);
+	CGameProcedure::UIPostData_Read(UI_POST_WND_INFO, m_pUIMsgDlg2, rc.right, rc.top);
 	m_pUIMsgDlg2->SetStyle(UISTYLE_FOCUS_UNABLE | UISTYLE_HIDE_UNABLE);
 	m_pUIMsgDlg2->SetVisibleWithNoSound(false);
 
 	// 채팅창과 메시지 창 위치 맞추기..
 	m_pUIChatDlg->MoveOffset(0, -1);
 	m_pUIMsgDlg->MoveOffset(0, -1);
+	m_pUIMsgDlg2->MoveOffset(0, -1);
 
 	m_pUIStateBarAndMiniMap->Init(s_pUIMgr);
 	m_pUIStateBarAndMiniMap->LoadFromFile(pTbl->szStateBar);

@@ -6,7 +6,7 @@
 #include "UIChat.h"
 #include "PacketDef.h"
 #include "GameProcMain.h"
-#include "UIMessageWnd.h"
+//#include "UIMessageWnd.h"
 #include "UIManager.h"
 
 #include "N3UIString.h"
@@ -38,6 +38,7 @@ CUIChat::CUIChat()													//생성자 와 파괴자에서 Release안 불러 주나??
 	m_pNoticeTitle = NULL;
 	m_pBtn_Fold = NULL;
 	m_pEdit = NULL;													//son, chat_in
+	m_pArea_Resize = NULL;
 
 	m_bChatNormal = true;
 	m_bChatPrivate = true;
@@ -105,6 +106,7 @@ void CUIChat::Release()
 	m_pBtn_KnightsOrGuild = NULL;
 	m_pBtn_Shout = NULL;
 	m_pBtn_Fold = NULL;
+	m_pArea_Resize = NULL;
 }
 
 bool CUIChat::ReceiveMessage(CN3UIBase* pSender, uint32_t dwMsg)
@@ -262,7 +264,13 @@ bool CUIChat::Load(HANDLE hFile)
 	m_pBtn_Check = GetChildByID("btn_check_normal");		__ASSERT(m_pBtn_Check, "NULL UI Component!!");
 	m_pBtn_Fold = GetChildByID("btn_off");				__ASSERT(m_pBtn_Fold, "NULL UI Component!!");
 
+	m_pArea_Resize = GetChildByID("area_resize");				__ASSERT(m_pArea_Resize, "NULL UI Component!!");
 	this->ChangeChattingMode(N3_CHAT_NORMAL); // 보통 채팅 모드이다..
+	auto rect = GetRegion();
+	minWidth = rect.right - rect.left;
+	minHeight = rect.bottom - rect.top;
+	maxWidth = 1200;
+	maxHeight = 800;
 
 	return true;
 }
@@ -380,6 +388,54 @@ void CUIChat::AdjustScroll()
 
 	// 스크롤바에 맞는 채팅 Line 설정
 	SetTopLine(iCurLinePos);
+}
+
+bool CUIChat::Resize(int rightOffset, int topOffset)
+{
+	if (minWidth > (m_rcRegion.right + rightOffset) - m_rcRegion.left ||
+		maxWidth < (m_rcRegion.right + rightOffset) - m_rcRegion.left)
+		rightOffset = 0;
+	if (minHeight > m_rcRegion.bottom - (m_rcRegion.top + topOffset) ||
+		maxHeight < m_rcRegion.bottom - (m_rcRegion.top + topOffset))
+		topOffset = 0;
+
+	if (0 == topOffset && 0 == rightOffset) return FALSE;
+
+	m_rcRegion.right += rightOffset;
+	m_rcRegion.top += topOffset;
+
+	m_pArea_Resize->MoveOffset(rightOffset, topOffset);
+	/*CustomResize(m_pImageBcgrnd, leftOffset, topOffset);
+	CustomResize(m_pChatOut, leftOffset, topOffset);
+	m_pBtnScrollBarLeftUp->MoveOffset(0, topOffset);
+	CustomResize(m_pTrackBarScrollBarRight, 0, topOffset);*/
+
+
+	m_rcChatOutRegion = m_pChatOut->GetRegion();
+	m_rcChatOutRegion.left += m_pArea_Resize->GetWidth();
+
+	CreateLines();	// 채팅 라인을 몇줄 들어갈지 계산하고 다시 만든다.
+	RecalcLineBuffers();	// 라인 버퍼를 다 지우고 다시 만들어주고 글씨를 표시한다.
+
+	return TRUE;
+}
+
+uint32_t CUIChat::MouseProc(uint32_t dwFlags, const POINT& ptCur, const POINT& ptOld)
+{
+	if (m_pArea_Resize->IsIn(ptCur.x, ptCur.y) && dwFlags & UI_MOUSE_LBDOWN)
+		resizing = true;
+	if (dwFlags & UI_MOUSE_LBCLICKED)
+		resizing = false;
+
+	if (resizing)
+	{
+		auto diffX = ptCur.x - ptOld.x;
+		auto diffY = ptCur.y - ptOld.y;
+		if (Resize(diffX, diffY))
+			return UI_MOUSEPROC_DONESOMETHING;
+	}
+
+	return CN3UIBase::MouseProc(dwFlags, ptCur, ptOld);
 }
 
 //void CUIChat::AddLineBuffer(e_ChatBuffer eCB, const std::string& szString, D3DCOLOR color)
