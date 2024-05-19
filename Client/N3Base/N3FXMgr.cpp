@@ -156,6 +156,57 @@ void CN3FXMgr::TriggerBundle(int SourceID, int SourceJoint, int FXID, __Vector3 
 	}
 }
 
+void CN3FXMgr::TriggerBundle(CN3Chr* source, int SourceJoint, int FXID, __Vector3 TargetPos, int idx, int MoveType, uint32_t iVer)
+{
+	__TABLE_FX* pFX = s_pTbl_FXSource.Find(FXID);
+	if (!pFX) return;
+
+	char buff[MAX_PATH];
+	sprintf(buff, pFX->szFN.c_str());
+	_strlwr(buff);
+	std::string strTmp = buff;
+
+	stlMAP_BUNDLEORIGIN_IT itOrigin = m_OriginBundle.find(strTmp);
+
+	if (itOrigin != m_OriginBundle.end())	//같은 효과가 있다..
+	{
+		LPFXBUNDLEORIGIN pSrc = itOrigin->second;
+		CN3FXBundleGame* pBundle = new CN3FXBundleGame;
+
+		pBundle->SetPreBundlePos(source, SourceJoint);
+		pSrc->pBundle->Duplicate(pBundle);
+		pBundle->m_iID = FXID;
+		pBundle->m_iIdx = idx;
+		pBundle->m_iMoveType = MoveType;
+		pBundle->m_iSourceJoint = SourceJoint;
+
+		pBundle->Trigger(source, TargetPos, pFX->dwSoundID);
+		m_ListBundle.push_back(pBundle);
+		pSrc->iNum++;
+	}
+	else	//같은 효과가 없다..
+	{
+		LPFXBUNDLEORIGIN pSrc = new FXBUNDLEORIGIN;
+		pSrc->pBundle = new CN3FXBundleGame;
+		pSrc->pBundle->LoadFromFile(pFX->szFN, iVer);
+
+		CN3FXBundleGame* pBundle = new CN3FXBundleGame;
+
+		pBundle->SetPreBundlePos(source, SourceJoint);
+		pSrc->pBundle->Duplicate(pBundle);
+		pBundle->m_iID = FXID;
+		pBundle->m_iIdx = idx;
+		pBundle->m_iMoveType = MoveType;
+		pBundle->m_iSourceJoint = SourceJoint;
+
+		pBundle->Trigger(source, TargetPos, pFX->dwSoundID);
+		m_ListBundle.push_back(pBundle);
+
+		pSrc->iNum++;
+		m_OriginBundle.insert(stlMAP_BUNDLEORIGIN_VALUE(strTmp, pSrc));
+	}
+}
+
 
 //
 //
@@ -559,7 +610,9 @@ void CN3FXMgr::Tick()
 						}
 					}
 				}
-				
+
+
+#ifndef FxEditor
 				// Object 와 충돌 체크..
 				if(bCol == false &&
 					true == ACT_WORLD->CheckCollisionWithShape(pBundle->m_vPos, pBundle->m_vDir, pBundle->m_fVelocity * CN3Base::s_fSecPerFrm, &vCol))
@@ -653,8 +706,10 @@ void CN3FXMgr::Tick()
 								
 					CGameProcedure::s_pSocket->Send(byBuff, iOffset); // 보낸다..
 				}
+
+#endif
 			}
-		}			
+		}		
 		pBundle->Tick();
 		it++;
 	}

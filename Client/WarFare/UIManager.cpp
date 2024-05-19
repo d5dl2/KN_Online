@@ -1,7 +1,7 @@
 // UIManager.cpp: implementation of the CUIManager class.
 //
 //////////////////////////////////////////////////////////////////////
-
+//#define DEBUG_STATISTICS
 //#include "stdafx.h"
 #include "LocalInput.h"
 #include "N3UIWndBase.h"
