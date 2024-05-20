@@ -37,9 +37,6 @@ CN3UIImage::~CN3UIImage()
 	if (m_pAnimImagesRef) { delete[] m_pAnimImagesRef; m_pAnimImagesRef = NULL; }
 }
 
-D3DVERTEX2* CN3UIImage::v_coordinates = new D3DVERTEX2[17];
-#define COOLDOWN_COLOR_BLACK D3DCOLOR_RGBA(255, 120, 170, 127)
-
 void CN3UIImage::Release()
 {
 	CN3UIBase::Release();
@@ -59,7 +56,6 @@ void CN3UIImage::Init(CN3UIBase* pParent)
 {
 	CN3UIBase::Init(pParent);
 	CreateVB();
-	initCoordinateArray();
 }
 
 bool CN3UIImage::CreateVB()
@@ -68,30 +64,6 @@ bool CN3UIImage::CreateVB()
 	if (m_pVB) { m_pVB->Release(); m_pVB = NULL; }
 	hr = s_lpD3DDev->CreateVertexBuffer(4 * sizeof(__VertexTransformed), 0, FVF_TRANSFORMED, D3DPOOL_MANAGED, &m_pVB, NULL);
 	return SUCCEEDED(hr);
-}
-
-void CN3UIImage::initCoordinateArray() {
-
-	if (v_coordinates[0].x == 16) return;
-
-	v_coordinates[0].Set(16, 16, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[1].Set(0, 0, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[2].Set(16, 0, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[3].Set(0, 16, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[4].Set(0, 0, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[5].Set(0, 32, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[6].Set(0, 16, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[7].Set(16, 32, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[8].Set(0, 32, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[9].Set(32, 32, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[10].Set(16, 32, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[11].Set(32, 16, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[12].Set(32, 32, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[13].Set(32, 0, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[14].Set(32, 16, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[15].Set(32, 0, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-	v_coordinates[16].Set(32, 0, 0.9f, 1.0f, COOLDOWN_COLOR_BLACK);
-
 }
 
 
@@ -205,95 +177,101 @@ void CN3UIImage::RenderIconWrapper()
 	CN3UIBase::Render();
 }
 
-void CN3UIImage::RenderIconWrapperWithCd(float percent)
+POINT CalculateCoordinate(float percent, float right, float top, float left, float bottom)
+{
+	float radius = right - left;
+	POINT p;
+	if (percent <= 87.5 && percent >= 62.5)
+	{
+		p.x = right;
+		p.y = bottom - (percent - 62.5) / 25 * radius;
+	}
+	else if (percent <= 62.5 && percent >= 37.5)
+	{
+		p.x = left + (percent - 37.5) / 25 * radius;
+		p.y = bottom;
+	}
+	else if (percent <= 37.5 && percent >= 12.5)
+	{
+		p.x = left;
+		p.y = top + (percent - 12.5) / 25 * radius;
+	}
+	else
+	{
+		if (percent >= 87.5)
+			percent -= 87.5;
+		else
+			percent += 12.5;
+
+		p.x = right - percent / 25 * radius;
+		p.y = top;
+	}
+
+	return p;
+}
+
+
+void CN3UIImage::RenderIconCooldown(float percent)
 {
 	if (!m_bVisible) return;
 
-	if (m_pVB)
+	// Ýkonun merkezini ve köþelerini hesaplýyoruz
+	float left = m_rcRegion.left;
+	float bottom = m_rcRegion.bottom;
+	float right = m_rcRegion.right;
+	float top = m_rcRegion.top;
+	float centerX = (left + right) / 2.0f;
+	float centerY = (top + bottom) / 2.0f;
+	float halfWidth = (right - left) / 2.0f;
+	float halfHeight = (bottom - top) / 2.0f;
+	POINT p = CalculateCoordinate(percent, m_rcRegion.right, m_rcRegion.top, m_rcRegion.left, m_rcRegion.bottom);
+
+	const D3DVERTEX2 fixedVertices[COOLDOWN_FIXED_VERTICE_COUNT] = {
+		{ right, top, 0.0f, 1.0f, GetColor()},
+		{ right, top + halfHeight, 0.0f, 1.0f, GetColor() },
+		{ right, bottom, 0.0f, 1.0f, GetColor() },
+		{ left + halfWidth, bottom, 0.0f, 1.0f, GetColor() },
+		{ left, bottom, 0.0f, 1.0f, GetColor() },
+		{ left, top + halfHeight, 0.0f, 1.0f, GetColor() },
+		{ left, top, 0.0f, 1.0f, GetColor() }
+	};
+
+	// Vertex verilerini tutmak için dizi oluþturuyoruz
+	const int numVertices = percent / 12.5 + 1; 
+	D3DVERTEX2* vertices = new D3DVERTEX2[numVertices + 2];
+	memset(vertices, 0, sizeof(vertices));
+	// Ýlk vertex merkez noktasý olacak
+	vertices[0] = { centerX, centerY, 0.0f, 1.0f, GetColor() };
+	// Son vertex tepe noktasý olacak
+	vertices[numVertices + 1] = { centerX, (float)m_rcRegion.top, 0.0f, 1.0f, GetColor() };
+	// percent'e göre hesaplanmýþ 1 adet vertex olacak
+	auto index = 1;
+	vertices[index++] = {(float)p.x, (float)p.y, 0.0f, 1.0f, GetColor()};
+
+	// kalan vertexler, daha önceden belirli olan vertexlerden kopyalanacak
+	int startIndex = COOLDOWN_FIXED_VERTICE_COUNT - (int)(percent / 12.5);
+	for (size_t i = startIndex; i < COOLDOWN_FIXED_VERTICE_COUNT; i++)
 	{
-		int pointCount = (percent) / 12.5;
-		int vertexCount = pointCount * 2 + 1;
-		float cx, cy;
-		D3DVERTEX2* vertexData = new D3DVERTEX2[vertexCount + 4];
-
-		for (int i = 0; i < vertexCount; i++) {
-			vertexData[i] = v_coordinates[i];
-			vertexData[i].x += (float)m_rcRegion.left;
-			vertexData[i].y += (float)m_rcRegion.top;
-		}
-
-
-		if (percent <= 87.5 && percent > 62.5) {
-			cx = 32;
-			cy = 32 * (0 + (float)((25 - (percent - 62.5)) / 25));
-			vertexData[vertexCount + 1] = v_coordinates[vertexCount + 1];
-			vertexData[vertexCount + 1].x += (float)m_rcRegion.left;
-			vertexData[vertexCount + 1].y += (float)m_rcRegion.top;
-			D3DVERTEX2 d_nextIndex = { cx + (float)m_rcRegion.left, cy - 0.1f + (float)m_rcRegion.top, UI_DEFAULT_Z,1.0f, COOLDOWN_COLOR_BLACK };
-			vertexData[vertexCount] = d_nextIndex;
-			vertexData[vertexCount + 2] = d_nextIndex;
-			vertexData[vertexCount + 3] = d_nextIndex;
-			vertexData[vertexCount + 2].y += 0.1f;
-		}
-		if (percent <= 62.5 && percent > 37.5) {
-			cx = 32 * (1 - (float)((25 - (percent - 37.5)) / 25));
-			cy = 32;
-			vertexData[vertexCount + 1] = v_coordinates[vertexCount + 1];
-			vertexData[vertexCount + 1].x += (float)m_rcRegion.left;
-			vertexData[vertexCount + 1].y += (float)m_rcRegion.top;
-			D3DVERTEX2 d_nextIndex = { cx - 0.1f + (float)m_rcRegion.left, cy + (float)m_rcRegion.top, UI_DEFAULT_Z,UI_DEFAULT_RHW, COOLDOWN_COLOR_BLACK };
-			vertexData[vertexCount] = d_nextIndex;
-			vertexData[vertexCount + 2] = d_nextIndex;
-			vertexData[vertexCount + 3] = d_nextIndex;
-			vertexData[vertexCount + 2].x += 0.1f;
-		}
-		if (percent <= 37.5 && percent > 12.5) {
-			cx = 0;
-			cy = 32 * (1 - (float)((25 - (percent - 12.5)) / 25));
-			vertexData[vertexCount + 1] = v_coordinates[vertexCount + 1];
-			vertexData[vertexCount + 1].x += (float)m_rcRegion.left;
-			vertexData[vertexCount + 1].y += (float)m_rcRegion.top;
-			D3DVERTEX2 d_nextIndex = { cx + (float)m_rcRegion.left, cy - 0.1f + (float)m_rcRegion.top, UI_DEFAULT_Z,UI_DEFAULT_RHW, COOLDOWN_COLOR_BLACK };
-			vertexData[vertexCount] = d_nextIndex;
-			vertexData[vertexCount + 2] = d_nextIndex;
-			vertexData[vertexCount + 3] = d_nextIndex;
-			vertexData[vertexCount + 2].y += 0.1f;
-		}
-		if (percent <= 12.5) {
-			cx = 32 * (0 + (float)((12.5 - percent) / 25));
-			cy = 0;
-			vertexData[vertexCount + 1] = v_coordinates[vertexCount + 1];
-			vertexData[vertexCount + 1].x += (float)m_rcRegion.left;
-			vertexData[vertexCount + 1].y += (float)m_rcRegion.top;
-			D3DVERTEX2 d_nextIndex = { cx - 0.1f + (float)m_rcRegion.left, cy + (float)m_rcRegion.top, UI_DEFAULT_Z,UI_DEFAULT_RHW, COOLDOWN_COLOR_BLACK };
-			vertexData[vertexCount] = d_nextIndex;
-			vertexData[vertexCount + 2] = d_nextIndex;
-			vertexData[vertexCount + 3] = d_nextIndex;
-			vertexData[vertexCount + 2].x += 0.1f;
-		}
-		if (percent > 87.5) {
-			cx = 32 * (0.5 + (float)((12.5 - (percent - 87.5)) / 25));
-			cy = 0;
-			vertexData[vertexCount + 1] = v_coordinates[vertexCount + 1];
-			vertexData[vertexCount + 1].x += (float)m_rcRegion.left;
-			vertexData[vertexCount + 1].y += (float)m_rcRegion.top;
-			D3DVERTEX2 d_nextIndex = { cx - 0.1f + (float)m_rcRegion.left, cy + (float)m_rcRegion.top, UI_DEFAULT_Z,UI_DEFAULT_RHW, COOLDOWN_COLOR_BLACK };
-			vertexData[vertexCount] = d_nextIndex;
-			vertexData[vertexCount + 2] = d_nextIndex;
-			vertexData[vertexCount + 3] = d_nextIndex;
-			vertexData[vertexCount + 2].x += 0.1f;
-		}
-		s_lpD3DDev->SetTexture(0, NULL);
-		s_lpD3DDev->SetFVF(FVF_TRANSFORMEDCOLOR);
-		s_lpD3DDev->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, vertexCount + 2, vertexData, sizeof(D3DVERTEX2));
-
-
-		delete[] vertexData;
+		vertices[index++] = { fixedVertices[i].x, fixedVertices[i].y, fixedVertices[i].z, fixedVertices[i].rhw, fixedVertices[i].color };
 	}
+
+	s_lpD3DDev->SetTexture(0, NULL);
+	s_lpD3DDev->SetFVF(FVF_TRANSFORMEDCOLOR);
+	s_lpD3DDev->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, numVertices + 1, vertices, sizeof(D3DVERTEX2));
+	delete[] vertices;
+
+	D3DVERTEX2 sparkVertices[4];
+	sparkVertices[0] = { centerX, centerY, 0.0f, 1.0f, COOLDOWN_SPARK_COLOR };
+	sparkVertices[1] = { (float)p.x, (float)p.y, 0.0f, 1.0f, COOLDOWN_SPARK_COLOR };
+	sparkVertices[2] = sparkVertices[0];
+	sparkVertices[3] = { centerX, (float)m_rcRegion.top, 0.0f, 1.0f, COOLDOWN_SPARK_COLOR };
+	s_lpD3DDev->SetTexture(0, NULL);
+	s_lpD3DDev->SetFVF(FVF_TRANSFORMEDCOLOR);
+	s_lpD3DDev->DrawPrimitiveUP(D3DPT_LINELIST, 2, sparkVertices, sizeof(D3DVERTEX2));
+
 
 	CN3UIBase::Render();
 }
-
 
 BOOL CN3UIImage::MoveOffset(int iOffsetX, int iOffsetY)
 {

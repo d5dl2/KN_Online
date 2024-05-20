@@ -325,7 +325,7 @@ void CUIHotKeyDlg::Render()
 				if (diff > recasttime) diff = recasttime;
 				cd = (((recasttime - diff) / (float)recasttime) * 100);
 			}
-			m_pMyHotkey[m_iCurPage][k]->pUIIcon->SetStyleAsCooldown(cd);
+			m_pMyHotkey[m_iCurPage][k]->pUIIcon->SetStyleAsCooldown(cd, UISTYLE_ICON_ON_COOLDOWN);
 
 			m_pMyHotkey[m_iCurPage][k]->pUIIcon->Render();
 

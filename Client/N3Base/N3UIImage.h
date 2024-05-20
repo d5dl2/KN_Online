@@ -10,7 +10,12 @@
 #endif // _MSC_VER > 1000
 
 #include "N3UIBase.h"
-
+#define COOLDOWN_COLOR D3DCOLOR_RGBA(255, 120, 170, 150)
+#define TIMER_COLOR D3DCOLOR_RGBA(255, 120, 170, 65)
+#define COOLDOWN_SPARK_COLOR D3DCOLOR_RGBA(50, 255, 50, 255)
+#define DISABLE_COLOR D3DCOLOR_RGBA(40,40, 40, 160)
+#define DURABILITY_EXHAUST_COLOR D3DCOLOR_RGBA(200, 20, 20, 100)
+#define COOLDOWN_FIXED_VERTICE_COUNT 7
 
 struct D3DVERTEX2 : public __Vector3
 {
@@ -71,15 +76,11 @@ public:
 	virtual void	Tick();									// Tick
 	virtual void	Render();								// 그리기
 	virtual void	RenderIconWrapper();
-	virtual void	RenderIconWrapperWithCd(float cd);
+	virtual void	RenderIconCooldown(float percent);
 	virtual void	Init(CN3UIBase* pParent);				// 초기화
 	virtual bool	Load(HANDLE hFile);
 
 	virtual void	operator = (const CN3UIImage& other);
-
-	//static D3DVERTEX2 v_coordinates[15];
-
-	static void initCoordinateArray(); 
 protected:
 	bool			CreateVB();								// 4개의 vertex를 가진 vertex buffer 생성
 	virtual void	SetVB();								// vertex buffer 다시 세팅

@@ -7,6 +7,7 @@
 #include "..\WarFare\N3UIWndBase.h"
 #include "..\WarFare\GameProcedure.h"
 #include "..\WarFare\UIImageTooltipDlg.h"
+#include "..\N3Base\N3UIImage.h"
 
 #ifdef _N3GAME
 #include "..\WarFare\N3UIWndBase.h"
@@ -124,15 +125,15 @@ uint32_t CN3UIIcon::MouseProc(uint32_t dwFlags, const POINT& ptCur, const POINT&
 	return dwRet;
 }
 
-void CN3UIIcon::SetStyleAsCooldown(float cd_in) {
+void CN3UIIcon::SetStyleAsCooldown(float cooldownPercent, uint32_t dwStyle) {
 
-	cd = cd_in;
+	fCooldownPercent = cooldownPercent;
 
-	if (cd > 0) {
-		CN3UIBase::SetStyle(UISTYLE_ICON_ON_COOLDOWN | CN3UIBase::GetStyle());
+	if (fCooldownPercent > 0) {
+		CN3UIBase::SetStyle(dwStyle | CN3UIBase::GetStyle());
 	}
 	else {
-		CN3UIBase::SetStyle(CN3UIBase::GetStyle());
+		CN3UIBase::SetStyle(CN3UIBase::GetStyle() & dwStyle ? CN3UIBase::GetStyle() - dwStyle : CN3UIBase::GetStyle());
 	}
 }
 
@@ -152,33 +153,25 @@ void CN3UIIcon::Render()
 
 	CN3UIImage::Render();
 
-	if (m_dwStyle & UISTYLE_DISABLE_SKILL)
+	if (m_dwStyle & UISTYLE_DISABLE_SKILL || m_dwStyle & UISTYLE_DURABILITY_EXHAUST)
 	{
 		CN3UIWndBase::m_pSelectionImage->SetVisible(true);
 		CN3UIWndBase::m_pSelectionImage->SetRegion(GetRegion());
 		m_dc = CN3UIWndBase::m_pSelectionImage->GetColor();
-		CN3UIWndBase::m_pSelectionImage->SetColor(D3DCOLOR_RGBA(40,40, 40, 160));
+		CN3UIWndBase::m_pSelectionImage->SetColor(m_dwStyle & UISTYLE_DISABLE_SKILL ? DISABLE_COLOR : DURABILITY_EXHAUST_COLOR);
 		CN3UIWndBase::m_pSelectionImage->RenderIconWrapper();
 		CN3UIWndBase::m_pSelectionImage->SetColor(m_dc);
 		CN3UIWndBase::m_pSelectionImage->SetVisible(false);
 	}
 
-	if( m_dwStyle & UISTYLE_DURABILITY_EXHAUST )
+	if (m_dwStyle & UISTYLE_ICON_ON_COOLDOWN || m_dwStyle & UISTYLE_ICON_TIMER)
 	{
 		CN3UIWndBase::m_pSelectionImage->SetVisible(true);
 		CN3UIWndBase::m_pSelectionImage->SetRegion(GetRegion());
 		m_dc = CN3UIWndBase::m_pSelectionImage->GetColor();
-		CN3UIWndBase::m_pSelectionImage->SetColor(D3DCOLOR_RGBA(200, 20, 20, 100));
-		CN3UIWndBase::m_pSelectionImage->RenderIconWrapper();
+		CN3UIWndBase::m_pSelectionImage->SetColor(m_dwStyle & UISTYLE_ICON_ON_COOLDOWN ? COOLDOWN_COLOR : TIMER_COLOR);
+		CN3UIWndBase::m_pSelectionImage->RenderIconCooldown(fCooldownPercent);
 		CN3UIWndBase::m_pSelectionImage->SetColor(m_dc);
-		CN3UIWndBase::m_pSelectionImage->SetVisible(false);
-	}
-
-	if (m_dwStyle & UISTYLE_ICON_ON_COOLDOWN)
-	{
-		CN3UIWndBase::m_pSelectionImage->SetVisible(true);
-		CN3UIWndBase::m_pSelectionImage->SetRegion(GetRegion());
-		CN3UIWndBase::m_pSelectionImage->RenderIconWrapperWithCd(cd);
 		CN3UIWndBase::m_pSelectionImage->SetVisible(false);
 	}
 }

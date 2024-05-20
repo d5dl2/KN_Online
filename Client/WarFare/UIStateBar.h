@@ -23,6 +23,7 @@ struct __DurationMagicImg
 	uint32_t		dwSkillID;
 	class CN3UIDBCLButton* pIcon;
 	float		fDuration;
+	float		fTotal;
 };
 
 typedef std::list<__PositionInfo>::iterator it_PositionInfo;

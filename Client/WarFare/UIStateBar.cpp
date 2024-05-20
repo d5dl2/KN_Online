@@ -432,18 +432,7 @@ void CUIStateBar::Render()
 
 		CN3Base::s_lpD3DDev->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, vOutLines, sizeof(__VertexTransformedColor));
 		CN3Base::s_lpD3DDev->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, vPositions, sizeof(__VertexTransformedColor));
-	}
-
-	//Render..
-	//m_pMagic.clear();
-	it_MagicImg itMagic, iteMagic;
-	iteMagic = m_pMagic.end();
-	for(itMagic = m_pMagic.begin(); itMagic!=iteMagic; itMagic++)
-	{
-		__DurationMagicImg* pMagicImg = (*itMagic);
-		pMagicImg->pIcon->Render();
-	}
-	
+	}	
 	CN3Base::s_lpD3DDev->SetRenderState(D3DRS_ZENABLE, dwZ);
 	CN3Base::s_lpD3DDev->SetRenderState(D3DRS_FOGENABLE, dwFog);
 	CN3Base::s_lpD3DDev->SetRenderState(D3DRS_ALPHABLENDENABLE, dwAlpha);
@@ -565,6 +554,11 @@ void CUIStateBar::TickMagicIcon()
 		else if (pMagicImg->fDuration <= 10.0f)
 		{
 			pMagicImg->pIcon->SetVisible(pMagicImg->fDuration - (int)pMagicImg->fDuration<0.5f);
+		}
+
+		if (pMagicImg->fDuration > 0.0f)
+		{
+			pMagicImg->pIcon->SetStyleAsCooldown(pMagicImg->fDuration / pMagicImg->fTotal * 100, UISTYLE_ICON_TIMER);
 		}
 	}
 
@@ -693,6 +687,7 @@ void CUIStateBar::AddMagic(__TABLE_UPC_SKILL* pSkill, float fDuration)
 	pMagicImg->fDuration = fDuration;
 	pMagicImg->pIcon = new CN3UIDBCLButton;
 	pMagicImg->dwSkillID = pSkill->dwID;
+	pMagicImg->fTotal = fDuration;
 
 	CN3UIDBCLButton* pIcon = pMagicImg->pIcon;
 	pIcon->Init(this);

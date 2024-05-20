@@ -169,6 +169,7 @@ const uint32_t UISTYLE_ICON_HIGHLIGHT				= 0x00001000;	// No highlight Icon..
 const uint32_t UISTYLE_DURABILITY_EXHAUST			= 0x00002000;	// Durability exhausted Icon.. 
 const uint32_t UISTYLE_DISABLE_SKILL	= 0x00004000;	// Disable Skill Icon..
 const uint32_t UISTYLE_ICON_ON_COOLDOWN = 0x00008000;	// Cooldown Icon..
+const uint32_t UISTYLE_ICON_TIMER = 0x00020000;	// Timer Icon for buff expiration..
 const uint32_t UISTYLE_ICON_NO_HIGHLIGHT			= 0x00000000;	// Highlight Icon..
 
 // structures
